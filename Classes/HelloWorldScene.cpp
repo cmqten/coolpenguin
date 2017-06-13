@@ -8,7 +8,9 @@ using namespace cocostudio::timeline;
 using namespace std;
 
 Scene* HelloWorld::createScene() {
-    auto scene = Scene::create();
+    auto scene = Scene::createWithPhysics();
+    scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
+    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     auto layer = HelloWorld::create();
     scene->addChild(layer);
     return scene;
@@ -22,6 +24,7 @@ bool HelloWorld::init() {
 
     auto penguin = Sprite::create("penguin_glasses.png");
     penguin->setPosition(480, 320);
+
     this->addChild(penguin);
 
     auto mouseListener = EventListenerMouse::create();
@@ -34,8 +37,27 @@ bool HelloWorld::init() {
         penguin->setRotation(atan2(det, dot) * 180 / M_PI);
     };
 
+    auto keyListener = EventListenerKeyboard::create();
+    keyListener->onKeyPressed = [this, penguin](EventKeyboard::KeyCode keyCode,
+        Event* event) {
+        if (keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
+            auto fish = Sprite::create("fish.png");
+            fish->setPosition(Vec2(480, 320));
+            auto fbody = PhysicsBody::createBox(Size(36, 60));
+            fish->setPhysicsBody(fbody);
+            fish->setRotation(penguin->getRotation());
+            float rad = (90 - penguin->getRotation()) * M_PI / 180;
+            fbody->setVelocity(Vec2(5000 * cosf(rad), 5000 * sinf(rad)));
+            this->addChild(fish);
+        }
+    };
+
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         mouseListener, this);
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
+        keyListener, this);
+
+    return true;
 }
 
 void update(float delta) {

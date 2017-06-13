@@ -30,7 +30,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         glview = GLViewImpl::createWithRect("HelloCpp", Rect(0, 0, 960, 640));
         director->setOpenGLView(glview);
     }
-    glview->setCursorVisible(false);
+    //glview->setCursorVisible(false);
 
     director->getOpenGLView()->setDesignResolutionSize(960, 640, ResolutionPolicy::SHOW_ALL);
 
