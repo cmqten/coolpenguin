@@ -1,0 +1,12 @@
+proj.*/
+!proj.win32
+cocos2d/
+cocosstudio/
+*.db
+*.ccs
+*.udf
+CMakeLists.txt
+*.cfg
+.cocos-project.json
+config.json
+*.xcf
