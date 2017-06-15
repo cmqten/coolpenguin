@@ -1,20 +1,15 @@
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "PenguinGame.h"
 
 USING_NS_CC;
 
-AppDelegate::AppDelegate() {
+AppDelegate::AppDelegate() {}
 
-}
-
-AppDelegate::~AppDelegate() 
-{
-}
+AppDelegate::~AppDelegate() {}
 
 //if you want a different context,just modify the value of glContextAttrs
 //it will takes effect on all platforms
-void AppDelegate::initGLContextAttrs()
-{
+void AppDelegate::initGLContextAttrs() {
     //set OpenGL context attributions,now can only set six attributions:
     //red,green,blue,alpha,depth,stencil
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
@@ -43,7 +38,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     FileUtils::getInstance()->addSearchPath("res");
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    auto scene = PenguinGame::createScene();
 
     // run
     director->runWithScene(scene);
