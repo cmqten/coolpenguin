@@ -1,6 +1,6 @@
 #include "GameEntity.h"
 
-USING_NS_CC;
+using namespace cocos2d;
 using namespace cocostudio::timeline;
 using namespace std;
 

@@ -31,7 +31,7 @@ protected:
     /**
     @param pBody : physics body
     */
-    GameEntity(cocos2d::PhysicsBody* pBody);
+    explicit GameEntity(cocos2d::PhysicsBody* pBody);
 
     /** 
     Animates this entity
