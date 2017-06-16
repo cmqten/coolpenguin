@@ -1,11 +1,11 @@
 proj.*/
 !proj.win32
+!proj.linux
 cocos2d/
 cocosstudio/
 *.db
 *.ccs
 *.udf
-CMakeLists.txt
 *.cfg
 .cocos-project.json
 config.json

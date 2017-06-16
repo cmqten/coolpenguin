@@ -31,6 +31,9 @@ void Cannon::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
         case EventKeyboard::KeyCode::KEY_S:
             this->shoot(Projectile::ProjectileType::ICECREAM);
             break;
+
+        default:
+            break;
     }
 }
 
