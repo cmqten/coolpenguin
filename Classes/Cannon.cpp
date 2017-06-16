@@ -51,16 +51,25 @@ void Cannon::shoot(Projectile::ProjectileType projType) {
     Projectile* proj;
     switch (projType) {
         case Projectile::ProjectileType::FISH:
+#ifdef _DEBUG
+            CCLOG("fish");
+#endif // _DEBUG
             proj = Projectile::createFish();
             this->fishCount++;
             break;
 
         case Projectile::ProjectileType::ICECREAM:
+#ifdef _DEBUG
+            CCLOG("ice cream");
+#endif // _DEBUG
             proj = Projectile::createIceCream();
             this->iceCreamCount++;
             break;
 
         default:
+#ifdef _DEBUG
+            CCLOG("null");
+#endif // _DEBUG
             proj = nullptr;
             break;
     }

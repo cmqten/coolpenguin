@@ -1,6 +1,5 @@
 #include "PenguinGame.h"
-#include <cmath>
-#include "cocostudio/CocoStudio.h"
+#include "editor-support/cocostudio/CocoStudio.h"
 #include "TNodeReader.h"
 
 #define RAD(deg) (deg) * M_PI / 180
@@ -28,7 +27,7 @@ Scene* PenguinGame::createScene() {
 
 void PenguinGame::onEnter() {
     Node::onEnter();
-    this->getChildByName("bg")->setZOrder(-2);
+    this->getChildByName("bg")->setLocalZOrder(-2);
 
     // cannon
     this->_cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));

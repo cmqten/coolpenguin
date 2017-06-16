@@ -8,7 +8,7 @@
 
 class Projectile : public GameEntity {
 public:
-    static enum ProjectileType {FISH, ICECREAM};
+    enum class ProjectileType {FISH, ICECREAM};
 
     /* Creates a fish projectile */
     static Projectile* createFish();

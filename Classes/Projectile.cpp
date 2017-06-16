@@ -9,7 +9,7 @@ Projectile* Projectile::createFish() {
         []()->PhysicsBody* {
         /* Lambda so more details to the PhysicsBody can be added later */
         return PhysicsBody::createBox(Size(12, 12));
-    }(), FISH);
+    }(), ProjectileType::FISH);
 
     if (!proj || !proj->init()) {
         CC_SAFE_DELETE(proj);
@@ -24,7 +24,7 @@ Projectile* Projectile::createIceCream() {
         []()->PhysicsBody* { 
             /* Lambda so more details to the PhysicsBody can be added later */
             return PhysicsBody::createBox(Size(12, 12));
-        }(), ICECREAM);
+        }(), ProjectileType::ICECREAM);
 
     if (!proj || !proj->init()) {
         CC_SAFE_DELETE(proj);

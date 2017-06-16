@@ -2,8 +2,8 @@
 #define __T_NODE_READER_H__
 
 #include "cocos2d.h"
-#include "cocostudio/CocosStudioExport.h"
-#include "cocostudio/WidgetReader/NodeReader/NodeReader.h"
+#include "editor-support/cocostudio/CocosStudioExport.h"
+#include "editor-support/cocostudio/WidgetReader/NodeReader/NodeReader.h"
 
 /**
 A generic reader for Node and its subclasses. The class type passed into the 

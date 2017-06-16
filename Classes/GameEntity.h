@@ -2,7 +2,7 @@
 #define __GAME_ENTITY_H__
 
 #include "cocos2d.h"
-#include "cocostudio/CocoStudio.h"
+#include "editor-support/cocostudio/CocoStudio.h"
 
 /**
 A single entity in the game world. 
