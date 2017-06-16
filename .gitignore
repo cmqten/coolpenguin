@@ -10,3 +10,9 @@ cocosstudio/
 .cocos-project.json
 config.json
 *.xcf
+*.cmake
+bin/
+lib/
+CMakeFiles/
+Makefile
+CMakeCache.txt
