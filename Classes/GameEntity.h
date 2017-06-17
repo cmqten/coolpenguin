@@ -16,7 +16,7 @@ public:
     by the world's updateWorld() method. Allow for semi-fixed timestep to be 
     implemented. 
     */
-    virtual void updateEntity(float delta) = 0;
+    virtual void updateEntity(float delta) {};
 
 protected:
     /* Animation data */

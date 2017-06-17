@@ -3,11 +3,12 @@
 
 #include "cocos2d.h"
 #include "Cannon.h"
+#include "IPhysics.h"
 
 /**
 Main game
 */
-class PenguinGame : public cocos2d::Layer {
+class PenguinGame : public cocos2d::Layer, public IPhysics {
 public:
     static cocos2d::Scene* createScene();
 
@@ -24,6 +25,16 @@ public:
 
     /* Callback function for when the mouse is moved */
     void onMouseMove(cocos2d::EventMouse* event);
+
+    virtual bool onContactBegin(cocos2d::PhysicsContact& contact);
+
+    virtual bool onContactPreSolve(cocos2d::PhysicsContact& contact,
+        cocos2d::PhysicsContactPreSolve& solve) { return false; };
+
+    virtual void onContactPostSolve(cocos2d::PhysicsContact& contact,
+        const cocos2d::PhysicsContactPostSolve& solve) {};
+
+    virtual void onContactSeparate(cocos2d::PhysicsContact& contact) {};
 
 private:
     /* Pointer to cannon */

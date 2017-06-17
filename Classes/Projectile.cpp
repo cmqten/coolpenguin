@@ -7,9 +7,13 @@ using namespace std;
 Projectile* Projectile::createFish() {
     auto proj = new (nothrow) Projectile("img/fish_r.png",
         []()->PhysicsBody* {
-        /* Lambda so more details to the PhysicsBody can be added later */
-        return PhysicsBody::createBox(Size(12, 12));
-    }(), ProjectileType::FISH);
+            auto body = PhysicsBody::createBox(Size(12, 12));
+            body->getShapes().at(0)->setSensor(true);
+            body->setCategoryBitmask(0x2);
+            body->setCollisionBitmask(0x0);
+            body->setContactTestBitmask(0x3);
+            return body;
+        }(), ProjectileType::FISH);
 
     if (!proj || !proj->init()) {
         CC_SAFE_DELETE(proj);
@@ -22,8 +26,12 @@ Projectile* Projectile::createFish() {
 Projectile* Projectile::createIceCream() {
     auto proj = new (nothrow) Projectile("img/ice_cream_r.png", 
         []()->PhysicsBody* { 
-            /* Lambda so more details to the PhysicsBody can be added later */
-            return PhysicsBody::createBox(Size(12, 12));
+            auto body = PhysicsBody::createBox(Size(12, 12));
+            body->getShapes().at(0)->setSensor(true);
+            body->setCategoryBitmask(0x2);
+            body->setCollisionBitmask(0x0);
+            body->setContactTestBitmask(0x3);
+            return body;
         }(), ProjectileType::ICECREAM);
 
     if (!proj || !proj->init()) {
@@ -48,4 +56,9 @@ void Projectile::launch(float angle) const {
     x and y components are calculated using math magic */
     this->getPhysicsBody()->setVelocity(Vec2(_velocity * cosf(RAD(angle)), 
         _velocity * sinf(RAD(angle))));
+}
+
+bool Projectile::onContactBegin(cocos2d::PhysicsContact& contact) {
+    this->removeFromParentAndCleanup(true);
+    return false;
 }

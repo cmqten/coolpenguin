@@ -1,5 +1,6 @@
 #include "PenguinGame.h"
 #include "editor-support/cocostudio/CocoStudio.h"
+#include "StatsUI.h"
 #include "TNodeReader.h"
 
 #define RAD(deg) (deg) * M_PI / 180
@@ -14,6 +15,8 @@ Scene* PenguinGame::createScene() {
         (ObjectFactory::Instance)TNodeReader<PenguinGame>::getInstance);
     CSLoader::getInstance()->registReaderObject("CannonReader",
         (ObjectFactory::Instance)TNodeReader<Cannon>::getInstance);
+    CSLoader::getInstance()->registReaderObject("StatsUIReader",
+        (ObjectFactory::Instance)TNodeReader<StatsUI>::getInstance);
 
     auto scene = Scene::createWithPhysics();
     auto layer = CSLoader::createNode("csb/penguingame.csb");
@@ -32,6 +35,20 @@ void PenguinGame::onEnter() {
     // cannon
     this->_cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));
 
+    // border
+    auto boundaryNode = Node::create();
+    boundaryNode->setPhysicsBody([]()->PhysicsBody* {
+        auto body = PhysicsBody::createEdgeBox(Size(700, 700), PHYSICSBODY_MATERIAL_DEFAULT, 10);
+        body->getShapes().at(0)->setSensor(true);
+        body->setDynamic(false);
+        body->setCategoryBitmask(0x1);
+        body->setCollisionBitmask(0x0);
+        body->setContactTestBitmask(0x2);
+        return body;
+    }());
+    boundaryNode->setPosition(640, 320);
+    this->addChild(boundaryNode);
+
     // mouse listener
     auto mouseListener = EventListenerMouse::create();
     mouseListener->onMouseMove = CC_CALLBACK_1(PenguinGame::onMouseMove, this);
@@ -43,6 +60,13 @@ void PenguinGame::onEnter() {
     keyListener->onKeyPressed = CC_CALLBACK_2(PenguinGame::onKeyPressed, this);
     this->getEventDispatcher()->
         addEventListenerWithSceneGraphPriority(keyListener, this);
+
+    // contact listener
+    auto contactListener = EventListenerPhysicsContact::create();
+    contactListener->onContactBegin = 
+        CC_CALLBACK_1(PenguinGame::onContactBegin, this);
+    this->getEventDispatcher()->
+        addEventListenerWithSceneGraphPriority(contactListener, this);
 }
 
 void PenguinGame::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
@@ -51,4 +75,16 @@ void PenguinGame::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 
 void PenguinGame::onMouseMove(EventMouse* event) {
     this->_cannon->onMouseMove(event);
+}
+
+bool PenguinGame::onContactBegin(PhysicsContact& contact) {
+    IPhysics* entityA = dynamic_cast<IPhysics*>(contact.getShapeA()->getBody()
+        ->getOwner());
+    IPhysics* entityB = dynamic_cast<IPhysics*>(contact.getShapeB()->getBody()
+        ->getOwner());
+    if (entityA) entityA->onContactBegin(contact);
+    if (entityB) entityB->onContactBegin(contact);
+    /* Always returns false because this game doesn't involve any physics 
+    collisions at all, just contacts. */
+    return false;
 }

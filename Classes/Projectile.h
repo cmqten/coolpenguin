@@ -2,11 +2,12 @@
 #define __PROJECTILE_H__
 
 #include "GameEntity.h"
+#include "IPhysics.h"
 
 #define RAD(deg) (deg) * M_PI / 180
 #define DEG(rad) (rad) * 180 / M_PI
 
-class Projectile : public GameEntity {
+class Projectile : public GameEntity, public IPhysics {
 public:
     enum class ProjectileType {FISH, ICECREAM};
 
@@ -16,13 +17,21 @@ public:
     /* Creates an ice cream projectile */
     static Projectile* createIceCream();
 
-    /** 
+    /**
     Launches this projectile towards the specified angle
     @param angle : angle in degrees
     */
     void launch(float angle) const;
 
-    virtual void updateEntity(float delta) override {};
+    virtual bool onContactBegin(cocos2d::PhysicsContact& contact);
+
+    virtual bool onContactPreSolve(cocos2d::PhysicsContact& contact,
+        cocos2d::PhysicsContactPreSolve& solve) { return false; };
+
+    virtual void onContactPostSolve(cocos2d::PhysicsContact& contact,
+        const cocos2d::PhysicsContactPostSolve& solve) {};
+
+    virtual void onContactSeparate(cocos2d::PhysicsContact& contact) {};
 
 protected:
     /**
