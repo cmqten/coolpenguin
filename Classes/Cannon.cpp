@@ -1,5 +1,7 @@
 #include "Cannon.h"
+#include <cstdlib>
 #include "SimpleAudioEngine.h"
+#include "StatsUI.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -86,13 +88,23 @@ void Cannon::shoot(Projectile::ProjectileType projType) {
     }
 
     if (!proj) return;
+
+    // Shoots projectile
     proj->setPosition(
         60 * cosf(RAD(90 - this->getRotation())) + this->getPositionX(),
         60 * sinf(RAD(90 - this->getRotation())) + this->getPositionY());
     proj->setRotation(this->getRotation());
-    this->getParent()->addChild(proj, -1);
     proj->launch(90 - this->getRotation());
+    this->getParent()->addChild(proj, -1);
+
+    // Cannon effects
     SimpleAudioEngine::getInstance()->playEffect("sfx/cannon_shoot.wav");
     this->animate("shoot", false);
     this->disableCannon(); // Prevents rapid fire, enabled after animation
+
+    // Update stats
+    struct GameStats* stats=(struct GameStats*)malloc(sizeof(struct GameStats));
+    stats->fishCount = this->fishCount;
+    stats->iceCreamCount = this->iceCreamCount;
+    this->getEventDispatcher()->dispatchCustomEvent(UPDATE_STATS, stats);
 }

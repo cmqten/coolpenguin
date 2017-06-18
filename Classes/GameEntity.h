@@ -4,6 +4,9 @@
 #include "cocos2d.h"
 #include "editor-support/cocostudio/CocoStudio.h"
 
+#define RAD(deg) float(deg) * float(M_PI) / 180.0f
+#define DEG(rad) float(rad) * 180.0f / float(M_PI)
+
 /**
  * A single entity in the game world.
  */

@@ -21,7 +21,7 @@
     <ClCompile Include="..\Classes\GameEntity.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\PenguinGame.cpp">
+    <ClCompile Include="..\Classes\CoolPenguin.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Cannon.cpp">
@@ -47,7 +47,7 @@
     <ClInclude Include="..\Classes\TNodeReader.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\PenguinGame.h">
+    <ClInclude Include="..\Classes\CoolPenguin.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Cannon.h">

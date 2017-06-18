@@ -91,8 +91,9 @@ Projectile::Projectile(string path, PhysicsBody* pBody, ProjectileType type,
 void Projectile::launch(float angle) const {
     /* To launch the projectile at the specified velocity and angle, the 
     x and y components are calculated using math magic */
-    this->getPhysicsBody()->setVelocity(Vec2(_velocity * cosf(RAD(angle)), 
-        _velocity * sinf(RAD(angle))));
+    float xComp = _velocity * cosf(RAD(angle));
+    float yComp = _velocity * sinf(RAD(angle));
+    this->getPhysicsBody()->setVelocity(Vec2(xComp, yComp));
 }
 
 bool Projectile::onContactBegin(cocos2d::PhysicsContact& contact) {

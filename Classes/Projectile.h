@@ -4,9 +4,6 @@
 #include "GameEntity.h"
 #include "IPhysics.h"
 
-#define RAD(deg) (deg) * M_PI / 180.0f
-#define DEG(rad) (rad) * 180.0f / M_PI
-
 class Projectile : public GameEntity, public IPhysics {
 public:
     enum class ProjectileType {FISH, FISHI, ICECREAM, ICECREAMF};

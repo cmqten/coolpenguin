@@ -13,6 +13,7 @@ public:
 
     CREATE_FUNC(Cannon);
 
+    /* Called right after this object is created */
     virtual bool init() override;
 
     virtual void updateEntity(float delta) {};
