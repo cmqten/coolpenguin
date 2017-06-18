@@ -1,5 +1,4 @@
 #include "Projectile.h"
-#include <cmath>
 
 using namespace cocos2d;
 using namespace std;
@@ -23,6 +22,25 @@ Projectile* Projectile::createFish() {
     return proj;
 }
 
+Projectile* Projectile::createFishI() {
+    auto proj = new (nothrow) Projectile("img/fish_i.png",
+        []()->PhysicsBody* {
+            auto body = PhysicsBody::createBox(Size(12, 12));
+            body->getShapes().at(0)->setSensor(true);
+            body->setCategoryBitmask(0x2);
+            body->setCollisionBitmask(0x0);
+            body->setContactTestBitmask(0x3);
+            return body;
+        }(), ProjectileType::FISHI);
+
+    if (!proj || !proj->init()) {
+        CC_SAFE_DELETE(proj);
+        return nullptr;
+    }
+    proj->autorelease();
+    return proj;
+}
+
 Projectile* Projectile::createIceCream() {
     auto proj = new (nothrow) Projectile("img/ice_cream_r.png", 
         []()->PhysicsBody* { 
@@ -33,6 +51,25 @@ Projectile* Projectile::createIceCream() {
             body->setContactTestBitmask(0x3);
             return body;
         }(), ProjectileType::ICECREAM);
+
+    if (!proj || !proj->init()) {
+        CC_SAFE_DELETE(proj);
+        return nullptr;
+    }
+    proj->autorelease();
+    return proj;
+}
+
+Projectile* Projectile::createIceCreamF() {
+    auto proj = new (nothrow) Projectile("img/ice_cream_f.png",
+        []()->PhysicsBody* {
+            auto body = PhysicsBody::createBox(Size(12, 12));
+            body->getShapes().at(0)->setSensor(true);
+            body->setCategoryBitmask(0x2);
+            body->setCollisionBitmask(0x0);
+            body->setContactTestBitmask(0x3);
+            return body;
+        }(), ProjectileType::ICECREAMF);
 
     if (!proj || !proj->init()) {
         CC_SAFE_DELETE(proj);

@@ -5,17 +5,17 @@
 #include "editor-support/cocostudio/CocoStudio.h"
 
 /**
-A single entity in the game world. 
-*/
+ * A single entity in the game world.
+ */
 class GameEntity : public cocos2d::Node {
 public:
     virtual ~GameEntity();
 
     /**
-    Use this instead of update(). A custom update method which gets called 
-    by the world's updateWorld() method. Allow for semi-fixed timestep to be 
-    implemented. 
-    */
+     * Use this instead of update(). A custom update method which gets called
+     * by the world's updateWorld() method. Allow for semi-fixed timestep to be
+     * implemented.
+     */
     virtual void updateEntity(float delta) {};
 
 protected:
@@ -23,21 +23,21 @@ protected:
     cocostudio::timeline::ActionTimeline* timeline;
 
     /**
-    @param path : path to csb file
-    @param pBody : physics body
-    */
+     * @param path : path to csb file
+     * @param pBody : physics body
+     */
     GameEntity(std::string path = "", cocos2d::PhysicsBody* pBody = nullptr);
 
     /**
-    @param pBody : physics body
-    */
+     * @param pBody : physics body
+     */
     explicit GameEntity(cocos2d::PhysicsBody* pBody);
 
     /** 
-    Animates this entity
-    @param name : animation name
-    @param loop : true to loop, false to run once
-    */
+     * Animates this entity
+     * @param name : animation name
+     * @param loop : true to loop, false to run once
+     */
     void animate(std::string name, bool loop);
 };
 

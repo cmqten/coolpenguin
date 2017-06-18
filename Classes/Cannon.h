@@ -4,6 +4,9 @@
 #include "GameEntity.h"
 #include "Projectile.h"
 
+/**
+ * Cannon that shoots fish and ice cream
+ */
 class Cannon : public GameEntity {
 public:
     Cannon();
@@ -34,10 +37,10 @@ protected:
     void rotate(float x, float y);
 
     /** 
-    Shoots a projectile.
-    @param projType : an enumerator defined in the Projectile class, type of
-    projectile
-    */
+     * Shoots a projectile.
+     * @param projType : an enumerator defined in the Projectile class, type of
+     * projectile
+     */
     void shoot(Projectile::ProjectileType projType);
 
     /* Enables cannon for shooting */

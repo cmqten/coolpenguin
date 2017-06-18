@@ -4,8 +4,8 @@
 #include "cocos2d.h"
 
 /**
-An interface for physics callbacks
-*/
+ * An interface for physics callbacks
+ */
 class IPhysics {
 public:
     virtual bool onContactBegin(cocos2d::PhysicsContact& contact) = 0;

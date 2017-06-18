@@ -4,8 +4,8 @@
 #include "cocos2d.h"
 
 /**
-Sidebar that displays current game stats such as score, next shot, etc...
-*/
+ * Sidebar that displays current game stats such as score, next shot, etc...
+ */
 class StatsUI : public cocos2d::Layer {
 public:
     CREATE_FUNC(StatsUI);

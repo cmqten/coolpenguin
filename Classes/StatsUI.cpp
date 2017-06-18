@@ -8,11 +8,11 @@ void StatsUI::onEnter() {
     Color4B iceBlue(0xd4, 0xf0, 0xff, 0xff);
     Color4B oceanBlue(0, 0x77, 0xbe, 0xff);
     auto bg = LayerColor::create(iceBlue, 320, 640);
-    auto border = DrawNode::create(20.0f);
-    border->drawLine(Vec2(0, 11), Vec2(321, 11), Color4F(oceanBlue));
-    border->drawLine(Vec2(0, 629), Vec2(321, 629), Color4F(oceanBlue));
-    border->drawLine(Vec2(310, 0), Vec2(310, 640), Color4F(oceanBlue));
-    border->drawLine(Vec2(11, 0), Vec2(11, 640), Color4F(oceanBlue));
+    auto border = DrawNode::create();
+    border->drawSolidRect(Vec2(0, 0), Vec2(320, 20), Color4F(oceanBlue));
+    border->drawSolidRect(Vec2(0, 620), Vec2(320, 640), Color4F(oceanBlue));
+    border->drawSolidRect(Vec2(0, 20), Vec2(20, 620), Color4F(oceanBlue));
+    border->drawSolidRect(Vec2(300, 20), Vec2(320, 620), Color4F(oceanBlue));
     this->addChild(bg, -2);
     this->addChild(border, -2);
 }

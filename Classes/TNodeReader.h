@@ -6,12 +6,12 @@
 #include "editor-support/cocostudio/WidgetReader/NodeReader/NodeReader.h"
 
 /**
-A generic reader for Node and its subclasses. The class type passed into the 
-template parameted must define the a static method create() which takes no 
-arguments and returns a pointer to a Node or a Node subclass. For example:
-
-static cocos2d::Node* create();
-*/
+ * A generic reader for Node and its subclasses. The class type passed into the
+ * template parameted must define the a static method create() which takes no
+ * arguments and returns a pointer to a Node or a Node subclass. For example:
+ *
+ * static cocos2d::Node* create();
+ */
 template <class T>
 class TNodeReader : public cocostudio::NodeReader {
 public:

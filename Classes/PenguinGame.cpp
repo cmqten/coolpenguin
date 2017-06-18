@@ -2,9 +2,6 @@
 #include "StatsUI.h"
 #include "TNodeReader.h"
 
-#define RAD(deg) (deg) * M_PI / 180
-#define DEG(rad) (rad) * 180 / M_PI
-
 using namespace cocos2d;
 using namespace std;
 
@@ -21,7 +18,7 @@ Scene* PenguinGame::createScene() {
     auto layer = CSLoader::createNode("csb/penguingame.csb");
     scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
 #ifdef _DEBUG
-    //scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 #endif
     scene->addChild(layer);
     return scene;
@@ -31,7 +28,6 @@ void PenguinGame::onEnter() {
     Node::onEnter();
     // White background
     auto bg = LayerColor::create(Color4B::WHITE, 640, 640);
-    bg->setAnchorPoint(Vec2(0, 0));
     bg->setPosition(320, 0);
     this->addChild(bg, -2);
 
