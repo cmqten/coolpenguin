@@ -9,6 +9,8 @@ Sidebar that displays current game stats such as score, next shot, etc...
 class StatsUI : public cocos2d::Layer {
 public:
     CREATE_FUNC(StatsUI);
+
+    virtual void onEnter() override;
 };
 
 #endif

@@ -26,7 +26,7 @@ cmake_policy(SET CMP0017 NEW)
 
 cmake_minimum_required(VERSION 3.1)
 
-set(APP_NAME CoolPenguin)
+set(APP_NAME coolpenguin)
 project (${APP_NAME})
 
 set(COCOS2D_ROOT ${CMAKE_SOURCE_DIR}/cocos2d)

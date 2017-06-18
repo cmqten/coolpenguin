@@ -1,5 +1,4 @@
 #include "PenguinGame.h"
-#include "editor-support/cocostudio/CocoStudio.h"
 #include "StatsUI.h"
 #include "TNodeReader.h"
 
@@ -30,7 +29,11 @@ Scene* PenguinGame::createScene() {
 
 void PenguinGame::onEnter() {
     Node::onEnter();
-    this->getChildByName("bg")->setLocalZOrder(-2);
+    // White background
+    auto bg = LayerColor::create(Color4B::WHITE, 640, 640);
+    bg->setAnchorPoint(Vec2(0, 0));
+    bg->setPosition(320, 0);
+    this->addChild(bg, -2);
 
     // cannon
     this->_cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));
@@ -38,7 +41,8 @@ void PenguinGame::onEnter() {
     // border
     auto boundaryNode = Node::create();
     boundaryNode->setPhysicsBody([]()->PhysicsBody* {
-        auto body = PhysicsBody::createEdgeBox(Size(700, 700), PHYSICSBODY_MATERIAL_DEFAULT, 10);
+        auto body = PhysicsBody::createEdgeBox(Size(700, 700),
+            PHYSICSBODY_MATERIAL_DEFAULT, 10);
         body->getShapes().at(0)->setSensor(true);
         body->setDynamic(false);
         body->setCategoryBitmask(0x1);
