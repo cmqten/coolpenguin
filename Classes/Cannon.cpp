@@ -1,5 +1,4 @@
 #include "Cannon.h"
-#include <cstdlib>
 #include "SimpleAudioEngine.h"
 #include "StatsUI.h"
 
@@ -103,7 +102,7 @@ void Cannon::shoot(Projectile::ProjectileType projType) {
     this->disableCannon(); // Prevents rapid fire, enabled after animation
 
     // Update stats
-    struct GameStats* stats=(struct GameStats*)malloc(sizeof(struct GameStats));
+    GameStats* stats = new GameStats();
     stats->fishCount = this->fishCount;
     stats->iceCreamCount = this->iceCreamCount;
     this->getEventDispatcher()->dispatchCustomEvent(UPDATE_STATS, stats);

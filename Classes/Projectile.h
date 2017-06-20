@@ -4,6 +4,8 @@
 #include "GameEntity.h"
 #include "IPhysics.h"
 
+#define DEFAULT_PROJ_VELOCITY 1000.0f
+
 class Projectile : public GameEntity, public IPhysics {
 public:
     enum class ProjectileType {FISH, FISHI, ICECREAM, ICECREAMF};
@@ -45,7 +47,7 @@ protected:
      * @param velocity : this projectile's velocity after launch
      */
     Projectile(std::string path, cocos2d::PhysicsBody* pBody,
-        ProjectileType type, float velocity = 1000);
+        ProjectileType type, float velocity = DEFAULT_PROJ_VELOCITY);
      
 private:
     /* Sprite for this projectile */
