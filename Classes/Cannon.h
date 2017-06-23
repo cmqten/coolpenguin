@@ -1,13 +1,14 @@
 #ifndef __CANNON_H__
 #define __CANNON_H__
 
-#include "GameEntity.h"
+#include "cocos2d.h"
+#include "IAnimated.h"
 #include "Projectile.h"
 
 /**
  * Cannon that shoots fish and ice cream
  */
-class Cannon : public GameEntity {
+class Cannon : public cocos2d::Node, public IAnimated {
 public:
     Cannon();
 
@@ -15,8 +16,6 @@ public:
 
     /* Called right after this object is created */
     virtual bool init() override;
-
-    virtual void updateEntity(float delta) {};
 
     /* Callback function for when a key is pressed */
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, 
@@ -34,7 +33,7 @@ protected:
     /* Number of times ice cream has been shot out of the cannon */
     int iceCreamCount;
 
-    /* Rotates the cannon based on the cursor's position in the x and y axes.*/
+    /* Rotates the cannon based on the cursor's position in the x and y axes. */
     void rotate(float x, float y);
 
     /** 

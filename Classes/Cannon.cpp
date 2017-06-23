@@ -6,8 +6,8 @@ using namespace cocos2d;
 using namespace CocosDenshion;
 using namespace std;
 
-Cannon::Cannon() : GameEntity("csb/cannon.csb"), fishCount(0), 
-    iceCreamCount(0), _enabled(true) {}
+Cannon::Cannon() : IAnimated("csb/cannon.csb"), fishCount(0), iceCreamCount(0), 
+    _enabled(true) {}
 
 bool Cannon::init() {
     if (!Node::init()) return false;
@@ -46,7 +46,7 @@ void Cannon::rotate(float x, float y) {
     (and stack overflow). */
     float cursorVecX = x - this->getPositionX();
     float cursorVecY = y - this->getPositionY();
-    this->setRotation(DEG(atan2f(cursorVecX, cursorVecY)));
+    this->setRotation(CC_RADIANS_TO_DEGREES(atan2f(cursorVecX, cursorVecY)));
 }
 
 void Cannon::shoot(Projectile::ProjectileType projType) {
@@ -58,30 +58,32 @@ void Cannon::shoot(Projectile::ProjectileType projType) {
      * - If more fish have been shot, cannon is "fish dirty", so all ice cream
      * become fish flavored ice cream
      * - If equal amounts of fish and ice cream have been shot, cannon is clean
+     * - Can only specify to shoot a regular fish or regular ice cream
      */
     if (!_enabled) return;
-    Projectile* proj;
 
+    Projectile* proj;
+    
     switch (projType) {
         case Projectile::ProjectileType::FISH:
-            proj = fishCount >= iceCreamCount ?
-                Projectile::createFish() : Projectile::createFishI();
+            proj = fishCount >= iceCreamCount ? Projectile::create(projType) :
+                Projectile::create(Projectile::ProjectileType::FISHI);
             this->fishCount++;
             break;
 
         case Projectile::ProjectileType::ICECREAM:
-            proj = iceCreamCount >= fishCount ?
-                Projectile::createIceCream() : Projectile::createIceCreamF();
+            proj = iceCreamCount >= fishCount ? Projectile::create(projType) :
+                Projectile::create(Projectile::ProjectileType::ICECREAMF);
             this->iceCreamCount++;
             break;
 
         case Projectile::ProjectileType::FISHI:
-            proj = Projectile::createFishI();
+            proj = Projectile::create(projType);
             this->fishCount++;
             break;
 
         case Projectile::ProjectileType::ICECREAMF:
-            proj = Projectile::createIceCreamF();
+            proj = Projectile::create(projType);
             this->iceCreamCount++;
             break;
     }
@@ -89,16 +91,14 @@ void Cannon::shoot(Projectile::ProjectileType projType) {
     if (!proj) return;
 
     // Shoots projectile
-    proj->setPosition(
-        60 * cosf(RAD(90 - this->getRotation())) + this->getPositionX(),
-        60 * sinf(RAD(90 - this->getRotation())) + this->getPositionY());
+    proj->setPosition(this->getPositionX(), this->getPositionY());
     proj->setRotation(this->getRotation());
     proj->launch(90 - this->getRotation());
     this->getParent()->addChild(proj, -1);
 
     // Cannon effects
     SimpleAudioEngine::getInstance()->playEffect("sfx/cannon_shoot.wav");
-    this->animate("shoot", false);
+    animate("shoot", false, true);
     this->disableCannon(); // Prevents rapid fire, enabled after animation
 
     // Update stats

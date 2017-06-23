@@ -36,22 +36,6 @@ void CoolPenguin::onEnter() {
     // cannon
     this->_cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));
 
-    // border
-    auto boundaryNode = Node::create();
-    boundaryNode->setPhysicsBody([]()->PhysicsBody* {
-        auto body = PhysicsBody::createEdgeBox(Size(700, 700),
-            PHYSICSBODY_MATERIAL_DEFAULT, 10);
-        body->getShapes().at(0)->setSensor(true);
-        body->setDynamic(false);
-        body->setCategoryBitmask(0x1);
-        body->setCollisionBitmask(0x0);
-        body->setContactTestBitmask(0x2);
-        return body;
-    }());
-
-    boundaryNode->setPosition(640, 320);
-    this->addChild(boundaryNode);
-
     // mouse listener
     auto mouseListener = EventListenerMouse::create();
     mouseListener->onMouseMove = CC_CALLBACK_1(CoolPenguin::onMouseMove, this);

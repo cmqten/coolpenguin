@@ -1,43 +1,40 @@
 #ifndef COOLPENGUIN_PENGUIN_H
 #define COOLPENGUIN_PENGUIN_H
 
-#include "GameEntity.h"
+#include "cocos2d.h"
 #include "IPhysics.h"
 #include "Projectile.h"
 
-class Penguin : public GameEntity, public IPhysics {
+class Penguin : public cocos2d::Node, public IPhysics {
 public:
+    enum class State {SPAWN, WADDLEIN, RECV, WADDLEOUT, DESPAWN};
+
     Penguin();
 
     CREATE_FUNC(Penguin);
 
+    /* Plays waddle in animation sequence and calls any callbacks */
+    void waddleIn();
+
+    /* Plays waddle out animation sequence and calls any callbacks */
+    void waddleOut();
+
+    /** 
+     * A dispatcher that dispatches actions depending on the current state. 
+     * Runs on a separate thread.
+     */
+    void actionDispatcher();
+
     virtual void onEnter() override;
 
-    /* Called when two objects begin contact */
-    virtual bool onContactBegin(cocos2d::PhysicsContact& contact);
-
-    /* Called after two objects begin contact and before processing collision */
-    virtual bool onContactPreSolve(cocos2d::PhysicsContact& contact,
-        cocos2d::PhysicsContactPreSolve& solve) { return false; };
-
-    /**
-     * Called after processing collision, and for as long as the two objects are
-     * colliding
-     */
-    virtual void onContactPostSolve(cocos2d::PhysicsContact& contact,
-        const cocos2d::PhysicsContactPostSolve& solve) {};
-
-    /* Called after two objects separate */
-    virtual void onContactSeparate(cocos2d::PhysicsContact& contact) {};
+    virtual bool onContactBegin(cocos2d::PhysicsContact& contact) override;
 
 private:
     cocos2d::Sprite* _sprite;
 
     Projectile::ProjectileType _request;
-
-    bool _receiving;
-
-    bool _returned;
+    
+    State _state;
 };
 
 #endif //COOLPENGUIN_PENGUIN_H

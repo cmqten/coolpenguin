@@ -10,12 +10,14 @@
  */
 class IPhysics {
 public:
+    virtual ~IPhysics() = 0;
+
     /**
      * Called when two objects begin contact
      * @param contact : contact data
      * @return true to process contact, false otherwise
      */
-    virtual bool onContactBegin(cocos2d::PhysicsContact& contact) = 0;
+    virtual bool onContactBegin(cocos2d::PhysicsContact& contact);
 
     /**
      * Called after two objects begin contact and before processing collision
@@ -23,8 +25,8 @@ public:
      * @param solve : collision data
      * @return true to process collision, false otherwise
      */
-    virtual bool onContactPreSolve(cocos2d::PhysicsContact& contact, 
-        cocos2d::PhysicsContactPreSolve& solve) = 0;
+    virtual bool onContactPreSolve(cocos2d::PhysicsContact& contact,
+        cocos2d::PhysicsContactPreSolve& solve);
 
     /**
      * Called after processing collision, and for as long as the two objects are
@@ -32,14 +34,14 @@ public:
      * @param contact : contact data
      * @param solve : collision data
      */
-    virtual void onContactPostSolve(cocos2d::PhysicsContact& contact, 
-        const cocos2d::PhysicsContactPostSolve& solve) = 0;
+    virtual void onContactPostSolve(cocos2d::PhysicsContact& contact,
+        const cocos2d::PhysicsContactPostSolve& solve) {};
 
     /**
      * Called after two objects separate
      * @param contact : contact data
      */
-    virtual void onContactSeparate(cocos2d::PhysicsContact& contact) = 0;
+    virtual void onContactSeparate(cocos2d::PhysicsContact& contact) {};
 };
 
-#endif 
+#endif
