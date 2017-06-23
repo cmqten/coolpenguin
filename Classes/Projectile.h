@@ -1,26 +1,20 @@
 #ifndef __PROJECTILE_H__
 #define __PROJECTILE_H__
 
-#include "GameEntity.h"
+#include "cocos2d.h"
 #include "IPhysics.h"
 
 #define DEFAULT_PROJ_VELOCITY 1000.0f
 
-class Projectile : public GameEntity, public IPhysics {
+class Projectile : public cocos2d::Node, public IPhysics {
 public:
     enum class ProjectileType {FISH, FISHI, ICECREAM, ICECREAMF};
 
-    /* Creates a fish projectile */
-    static Projectile* createFish();
-
-    /* Creates a fish covered with ice cream projectile */
-    static Projectile* createFishI();
-
-    /* Creates an ice cream projectile */
-    static Projectile* createIceCream();
-
-    /* Creates an fish flavored ice cream projectile */
-    static Projectile* createIceCreamF();
+    /**
+     * Creates a projectile of the specified type
+     * @param projType : projectile type, definied in the ProjectileType enum
+     */
+    static Projectile* create(ProjectileType projType);
 
     /**
      * Launches this projectile towards the specified angle
@@ -28,15 +22,11 @@ public:
      */
     void launch(float angle) const;
 
-    virtual bool onContactBegin(cocos2d::PhysicsContact& contact);
+    virtual void onEnter() override;
 
-    virtual bool onContactPreSolve(cocos2d::PhysicsContact& contact,
-        cocos2d::PhysicsContactPreSolve& solve) { return false; };
+    virtual void update(float delta) override;
 
-    virtual void onContactPostSolve(cocos2d::PhysicsContact& contact,
-        const cocos2d::PhysicsContactPostSolve& solve) {};
-
-    virtual void onContactSeparate(cocos2d::PhysicsContact& contact) {};
+    virtual bool onContactBegin(cocos2d::PhysicsContact& contact) override;
 
 protected:
     /**

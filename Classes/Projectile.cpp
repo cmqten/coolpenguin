@@ -3,97 +3,85 @@
 using namespace cocos2d;
 using namespace std;
 
-Projectile* Projectile::createFish() {
-    auto proj = new (nothrow) Projectile("img/fish_r.png",
-        []()->PhysicsBody* {
-            auto body = PhysicsBody::createBox(Size(12, 12));
-            body->getShapes().at(0)->setSensor(true);
-            body->setCategoryBitmask(0x2);
-            body->setCollisionBitmask(0x0);
-            body->setContactTestBitmask(0x7);
-            return body;
-        }(), ProjectileType::FISH);
+Projectile* Projectile::create(ProjectileType projType) {
+    auto pBody = []()->PhysicsBody* { // Physics body for collision dectection
+        auto body = PhysicsBody::createBox(Size(12, 12));
+        body->getShapes().at(0)->setSensor(true);
+        body->setCategoryBitmask(0x2);
+        body->setCollisionBitmask(0x0);
+        body->setContactTestBitmask(0x7);
+        return body;
+    }();
 
-    if (!proj || !proj->init()) {
-        CC_SAFE_DELETE(proj);
-        return nullptr;
+    Projectile* proj = nullptr;
+
+    switch (projType) {
+        case ProjectileType::FISH: // regular fish
+            proj = new (nothrow) Projectile("img/fish_r.png", pBody,
+                ProjectileType::FISH);
+            break;
+
+        case ProjectileType::FISHI: // ice-cream covered fish
+            proj = new (nothrow) Projectile("img/fish_i.png", pBody, 
+                ProjectileType::FISHI);
+            break;
+
+        case ProjectileType::ICECREAM: // regular ice cream
+            proj = new (nothrow) Projectile("img/ice_cream_r.png", pBody,
+                ProjectileType::ICECREAM);
+            break;
+
+        case ProjectileType::ICECREAMF: // fish-flavored ice cream
+            proj = new (nothrow) Projectile("img/ice_cream_f.png", pBody,
+                ProjectileType::ICECREAMF);
+            break;
     }
-    proj->autorelease();
-    return proj;
-}
 
-Projectile* Projectile::createFishI() {
-    auto proj = new (nothrow) Projectile("img/fish_i.png",
-        []()->PhysicsBody* {
-            auto body = PhysicsBody::createBox(Size(12, 12));
-            body->getShapes().at(0)->setSensor(true);
-            body->setCategoryBitmask(0x2);
-            body->setCollisionBitmask(0x0);
-            body->setContactTestBitmask(0x7);
-            return body;
-        }(), ProjectileType::FISHI);
-
-    if (!proj || !proj->init()) {
-        CC_SAFE_DELETE(proj);
-        return nullptr;
+    if (proj && proj->init()) {
+        proj->autorelease();
+        return proj;
     }
-    proj->autorelease();
-    return proj;
-}
-
-Projectile* Projectile::createIceCream() {
-    auto proj = new (nothrow) Projectile("img/ice_cream_r.png", 
-        []()->PhysicsBody* { 
-            auto body = PhysicsBody::createBox(Size(12, 12));
-            body->getShapes().at(0)->setSensor(true);
-            body->setCategoryBitmask(0x2);
-            body->setCollisionBitmask(0x0);
-            body->setContactTestBitmask(0x7);
-            return body;
-        }(), ProjectileType::ICECREAM);
-
-    if (!proj || !proj->init()) {
-        CC_SAFE_DELETE(proj);
-        return nullptr;
-    }
-    proj->autorelease();
-    return proj;
-}
-
-Projectile* Projectile::createIceCreamF() {
-    auto proj = new (nothrow) Projectile("img/ice_cream_f.png",
-        []()->PhysicsBody* {
-            auto body = PhysicsBody::createBox(Size(12, 12));
-            body->getShapes().at(0)->setSensor(true);
-            body->setCategoryBitmask(0x2);
-            body->setCollisionBitmask(0x0);
-            body->setContactTestBitmask(0x7);
-            return body;
-        }(), ProjectileType::ICECREAMF);
-
-    if (!proj || !proj->init()) {
-        CC_SAFE_DELETE(proj);
-        return nullptr;
-    }
-    proj->autorelease();
-    return proj;
+    CC_SAFE_DELETE(proj);
+    return nullptr;
 }
 
 Projectile::Projectile(string path, PhysicsBody* pBody, ProjectileType type,
-    float velocity) : GameEntity(pBody), _velocity(velocity), _type(type) {
+    float velocity) : _velocity(velocity), _type(type) {
     if (path != "") { // Creates projectile's sprite and adds it as a child
         this->_sprite = Sprite::create(path);
         this->addChild(this->_sprite);
     }
     else this->_sprite = nullptr;
+    this->setPhysicsBody(pBody);
 }
 
 void Projectile::launch(float angle) const {
     /* To launch the projectile at the specified velocity and angle, the 
     x and y components are calculated using math magic */
-    float xComp = _velocity * cosf(RAD(angle));
-    float yComp = _velocity * sinf(RAD(angle));
+    float xComp = _velocity * cosf(CC_DEGREES_TO_RADIANS(angle));
+    float yComp = _velocity * sinf(CC_DEGREES_TO_RADIANS(angle));
     this->getPhysicsBody()->setVelocity(Vec2(xComp, yComp));
+}
+
+void Projectile::onEnter() {
+    Node::onEnter();
+    this->unscheduleUpdate();
+    this->schedule(schedule_selector(Projectile::update), 1.0f);
+}
+
+void Projectile::update(float delta) {
+    // Does an out of bounds check and destroys this Node
+    Node::update(delta);
+    float x = this->getPositionX();
+    float y = this->getPositionY();
+    float sceneX = this->getScene()->getContentSize().width;
+    float sceneY = this->getScene()->getContentSize().height;
+    CCLOG("boi");
+    CCLOG("%f, %f", sceneX, sceneY);
+    
+    if (x > sceneX || x < 0 || y > sceneY || y < 0) {
+        this->removeFromParentAndCleanup(true);
+    }  
 }
 
 bool Projectile::onContactBegin(cocos2d::PhysicsContact& contact) {

@@ -149,8 +149,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Cannon.cpp" />
-    <ClCompile Include="..\Classes\GameEntity.cpp" />
+    <ClCompile Include="..\Classes\IAnimated.cpp" />
     <ClCompile Include="..\Classes\CoolPenguin.cpp" />
+    <ClCompile Include="..\Classes\IPhysics.cpp" />
+    <ClCompile Include="..\Classes\Penguin.cpp" />
     <ClCompile Include="..\Classes\Projectile.cpp" />
     <ClCompile Include="..\Classes\StatsUI.cpp" />
     <ClCompile Include="main.cpp" />
@@ -158,9 +160,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Cannon.h" />
-    <ClInclude Include="..\Classes\GameEntity.h" />
+    <ClInclude Include="..\Classes\IAnimated.h" />
     <ClInclude Include="..\Classes\IPhysics.h" />
     <ClInclude Include="..\Classes\CoolPenguin.h" />
+    <ClInclude Include="..\Classes\Penguin.h" />
     <ClInclude Include="..\Classes\Projectile.h" />
     <ClInclude Include="..\Classes\StatsUI.h" />
     <ClInclude Include="..\Classes\TNodeReader.h" />
