@@ -1,4 +1,5 @@
 #include "CoolPenguin.h"
+#include "Penguin.h"
 #include "StatsUI.h"
 #include "TNodeReader.h"
 
@@ -17,9 +18,9 @@ Scene* CoolPenguin::createScene() {
     auto scene = Scene::createWithPhysics();
     auto layer = CSLoader::createNode("csb/coolpenguin.csb");
     scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
-#ifdef _DEBUG
+//#ifdef _DEBUG
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-#endif
+//#endif
     scene->addChild(layer);
     return scene;
 }
@@ -70,6 +71,10 @@ void CoolPenguin::onEnter() {
 
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         contactListener, this);
+
+    auto penguin = Penguin::create();
+    penguin->setPosition(640, 400);
+    this->addChild(penguin, 0, "penguin");
 }
 
 void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {

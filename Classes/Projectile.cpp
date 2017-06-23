@@ -10,7 +10,7 @@ Projectile* Projectile::createFish() {
             body->getShapes().at(0)->setSensor(true);
             body->setCategoryBitmask(0x2);
             body->setCollisionBitmask(0x0);
-            body->setContactTestBitmask(0x3);
+            body->setContactTestBitmask(0x7);
             return body;
         }(), ProjectileType::FISH);
 
@@ -29,7 +29,7 @@ Projectile* Projectile::createFishI() {
             body->getShapes().at(0)->setSensor(true);
             body->setCategoryBitmask(0x2);
             body->setCollisionBitmask(0x0);
-            body->setContactTestBitmask(0x3);
+            body->setContactTestBitmask(0x7);
             return body;
         }(), ProjectileType::FISHI);
 
@@ -48,7 +48,7 @@ Projectile* Projectile::createIceCream() {
             body->getShapes().at(0)->setSensor(true);
             body->setCategoryBitmask(0x2);
             body->setCollisionBitmask(0x0);
-            body->setContactTestBitmask(0x3);
+            body->setContactTestBitmask(0x7);
             return body;
         }(), ProjectileType::ICECREAM);
 
@@ -67,7 +67,7 @@ Projectile* Projectile::createIceCreamF() {
             body->getShapes().at(0)->setSensor(true);
             body->setCategoryBitmask(0x2);
             body->setCollisionBitmask(0x0);
-            body->setContactTestBitmask(0x3);
+            body->setContactTestBitmask(0x7);
             return body;
         }(), ProjectileType::ICECREAMF);
 
