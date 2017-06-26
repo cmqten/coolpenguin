@@ -13,6 +13,7 @@ bool Cannon::init() {
     if (!Node::init()) return false;
     SimpleAudioEngine::getInstance()->preloadEffect("sfx/cannon_shoot.wav");
 
+    _timeline->setAnimationEndCallFunc("shoot", [this]() {
         // Enables cannon after shoot animation is done, prevents rapid fire
         _enabled = true;
     });
