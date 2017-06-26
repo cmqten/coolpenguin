@@ -32,21 +32,21 @@ void CoolPenguin::onEnter() {
     // white background
     auto bg = LayerColor::create(Color4B::WHITE, 640, 640);
     bg->setPosition(320, 0);
-    this->addChild(bg, -2);
+    addChild(bg, -2);
 
     // cannon
-    this->_cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));
+    _cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));
 
     // mouse listener
     auto mouseListener = EventListenerMouse::create();
     mouseListener->onMouseMove = CC_CALLBACK_1(CoolPenguin::onMouseMove, this);
-    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         mouseListener, this);
 
     // keyboard listener
     auto keyListener = EventListenerKeyboard::create();
     keyListener->onKeyPressed = CC_CALLBACK_2(CoolPenguin::onKeyPressed, this);
-    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         keyListener, this);
 
     // contact listener
@@ -54,7 +54,7 @@ void CoolPenguin::onEnter() {
     contactListener->onContactBegin = CC_CALLBACK_1(
         CoolPenguin::onContactBegin, this);
 
-    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         contactListener, this);
 
     /*
@@ -63,16 +63,16 @@ void CoolPenguin::onEnter() {
     this->addChild(penguin, 0, "penguin");
     */
     auto spawner = PenguinSpawner::create();
-    this->addChild(spawner);
+    addChild(spawner);
     spawner->setPosition(640, 688);
 }
 
 void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
-    this->_cannon->onKeyPressed(keyCode, event);
+    _cannon->onKeyPressed(keyCode, event);
 }
 
 void CoolPenguin::onMouseMove(EventMouse* event) {
-    this->_cannon->onMouseMove(event);
+    _cannon->onMouseMove(event);
 }
 
 bool CoolPenguin::onContactBegin(PhysicsContact& contact) {

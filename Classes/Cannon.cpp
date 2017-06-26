@@ -6,16 +6,15 @@ using namespace cocos2d;
 using namespace CocosDenshion;
 using namespace std;
 
-Cannon::Cannon() : IAnimated("csb/cannon.csb"), fishCount(0), iceCreamCount(0), 
-    _enabled(true) {}
+Cannon::Cannon() : IAnimated("csb/cannon.csb"), _enabled(true), _fishCount(0),
+    _iceCreamCount(0) {}
 
 bool Cannon::init() {
     if (!Node::init()) return false;
     SimpleAudioEngine::getInstance()->preloadEffect("sfx/cannon_shoot.wav");
 
-    this->timeline->setAnimationEndCallFunc("shoot", [this]() {
         // Enables cannon after shoot animation is done, prevents rapid fire
-        this->enableCannon();
+        _enabled = true;
     });
     return true;
 }
@@ -24,12 +23,12 @@ void Cannon::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     switch (keyCode) {
         case EventKeyboard::KeyCode::KEY_J:
         case EventKeyboard::KeyCode::KEY_A:
-            this->shoot(Projectile::ProjectileType::FISH);
+            shoot(Projectile::ProjectileType::FISH);
             break;
 
         case EventKeyboard::KeyCode::KEY_K:
         case EventKeyboard::KeyCode::KEY_S:
-            this->shoot(Projectile::ProjectileType::ICECREAM);
+            shoot(Projectile::ProjectileType::ICECREAM);
             break;
 
         default:
@@ -38,15 +37,15 @@ void Cannon::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 }
 
 void Cannon::onMouseMove(EventMouse* event) {
-    this->rotate(event->getCursorX(), event->getCursorY());
+    rotate(event->getCursorX(), event->getCursorY());
 }
 
 void Cannon::rotate(float x, float y) {
     /* Trigonometry magic to determine angle bless MAT223 
     (and stack overflow). */
-    float cursorVecX = x - this->getPositionX();
-    float cursorVecY = y - this->getPositionY();
-    this->setRotation(CC_RADIANS_TO_DEGREES(atan2f(cursorVecX, cursorVecY)));
+    float cursorVecX = x - getPositionX();
+    float cursorVecY = y - getPositionY();
+    setRotation(CC_RADIANS_TO_DEGREES(atan2f(cursorVecX, cursorVecY)));
 }
 
 void Cannon::shoot(Projectile::ProjectileType projType) {
@@ -66,44 +65,44 @@ void Cannon::shoot(Projectile::ProjectileType projType) {
     
     switch (projType) {
         case Projectile::ProjectileType::FISH:
-            proj = fishCount >= iceCreamCount ? Projectile::create(projType) :
+            proj = _fishCount >= _iceCreamCount ? Projectile::create(projType) :
                 Projectile::create(Projectile::ProjectileType::FISHI);
-            this->fishCount++;
+            _fishCount++;
             break;
 
         case Projectile::ProjectileType::ICECREAM:
-            proj = iceCreamCount >= fishCount ? Projectile::create(projType) :
+            proj = _iceCreamCount >= _fishCount ? Projectile::create(projType) :
                 Projectile::create(Projectile::ProjectileType::ICECREAMF);
-            this->iceCreamCount++;
+            _iceCreamCount++;
             break;
 
         case Projectile::ProjectileType::FISHI:
             proj = Projectile::create(projType);
-            this->fishCount++;
+            _fishCount++;
             break;
 
         case Projectile::ProjectileType::ICECREAMF:
             proj = Projectile::create(projType);
-            this->iceCreamCount++;
+            _iceCreamCount++;
             break;
     }
 
     if (!proj) return;
 
     // Shoots projectile
-    proj->setPosition(this->getPositionX(), this->getPositionY());
-    proj->setRotation(this->getRotation());
-    proj->launch(90 - this->getRotation());
+    proj->setPosition(getPositionX(), getPositionY());
+    proj->setRotation(getRotation());
+    proj->launch(90 - getRotation());
     this->getParent()->addChild(proj, -1);
 
     // Cannon effects
     SimpleAudioEngine::getInstance()->playEffect("sfx/cannon_shoot.wav");
     animate("shoot", false, true);
-    this->disableCannon(); // Prevents rapid fire, enabled after animation
+    _enabled = false; // Prevents rapid fire, enabled after animation
 
     // Update stats
     GameStats* stats = new GameStats();
-    stats->fishCount = this->fishCount;
-    stats->iceCreamCount = this->iceCreamCount;
-    this->getEventDispatcher()->dispatchCustomEvent(UPDATE_STATS, stats);
+    stats->fishCount = _fishCount;
+    stats->iceCreamCount = _iceCreamCount;
+    getEventDispatcher()->dispatchCustomEvent(UPDATE_STATS, stats);
 }

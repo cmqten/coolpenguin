@@ -38,8 +38,7 @@ protected:
      */
     Projectile(std::string path, cocos2d::PhysicsBody* pBody,
         ProjectileType type, float velocity = DEFAULT_PROJ_VELOCITY);
-     
-private:
+
     /* Sprite for this projectile */
     cocos2d::Sprite* _sprite;
 

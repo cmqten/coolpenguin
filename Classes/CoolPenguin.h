@@ -30,7 +30,7 @@ public:
      */
     virtual bool onContactBegin(cocos2d::PhysicsContact& contact) override;
 
-private:
+protected:
     Cannon* _cannon;
 };
 

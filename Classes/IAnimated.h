@@ -11,10 +11,10 @@
  * @param stopAll : true to stop all actions first, false otherwise
  */
 #define animate(name, loop, stopAll) \
-if (this->timeline) { \
-    if (stopAll) this->stopAllActions(); \
-    this->runAction(this->timeline); \
-    this->timeline->play(name, loop); \
+if (_timeline) { \
+    if (stopAll) stopAllActions(); \
+    runAction(_timeline); \
+    _timeline->play(name, loop); \
 }
 
 /**
@@ -26,7 +26,7 @@ public:
 
 protected:
     /* Animation data */
-    cocostudio::timeline::ActionTimeline* timeline;
+    cocostudio::timeline::ActionTimeline* _timeline;
 
     /**
      * @param path : path to csb file

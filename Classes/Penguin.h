@@ -25,7 +25,7 @@ public:
 
     friend class PenguinSpawner;
 
-private:
+protected:
     cocos2d::Sprite* _sprite;
 
     Projectile::ProjectileType _request;

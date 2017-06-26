@@ -28,10 +28,13 @@ public:
 
 protected:
     /* Number of times fish has been shot out of the cannon */
-    int fishCount;
+    int _fishCount;
 
     /* Number of times ice cream has been shot out of the cannon */
-    int iceCreamCount;
+    int _iceCreamCount;
+
+    /* Determines whether cannon can shoot or not */
+    bool _enabled;
 
     /* Rotates the cannon based on the cursor's position in the x and y axes. */
     void rotate(float x, float y);
@@ -42,16 +45,6 @@ protected:
      * projectile
      */
     void shoot(Projectile::ProjectileType projType);
-
-    /* Enables cannon for shooting */
-    void enableCannon() { _enabled = true; };
-
-    /* Disables cannon for shooting */
-    void disableCannon() { _enabled = false; };
-    
-private:
-    /* Determines whether cannon can shoot or not */
-    bool _enabled;
 };
 
 #endif // !__CANNON_H__

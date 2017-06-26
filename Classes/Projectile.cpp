@@ -48,11 +48,11 @@ Projectile* Projectile::create(ProjectileType projType) {
 Projectile::Projectile(string path, PhysicsBody* pBody, ProjectileType type,
     float velocity) : _velocity(velocity), _type(type) {
     if (path != "") { // Creates projectile's sprite and adds it as a child
-        this->_sprite = Sprite::create(path);
-        this->addChild(this->_sprite);
+        _sprite = Sprite::create(path);
+        addChild(_sprite);
     }
-    else this->_sprite = nullptr;
-    this->setPhysicsBody(pBody);
+    else _sprite = nullptr;
+    setPhysicsBody(pBody);
 }
 
 void Projectile::launch(float angle) const {
@@ -60,29 +60,29 @@ void Projectile::launch(float angle) const {
     x and y components are calculated using math magic */
     float xComp = _velocity * cosf(CC_DEGREES_TO_RADIANS(angle));
     float yComp = _velocity * sinf(CC_DEGREES_TO_RADIANS(angle));
-    this->getPhysicsBody()->setVelocity(Vec2(xComp, yComp));
+    getPhysicsBody()->setVelocity(Vec2(xComp, yComp));
 }
 
 void Projectile::onEnter() {
     Node::onEnter();
-    this->unscheduleUpdate();
-    this->schedule(schedule_selector(Projectile::update), 1.0f);
+    unscheduleUpdate();
+    schedule(schedule_selector(Projectile::update), 1.0f);
 }
 
 void Projectile::update(float delta) {
     // Does an out of bounds check and destroys this Node
     Node::update(delta);
-    float x = this->getPositionX();
-    float y = this->getPositionY();
-    float sceneX = this->getScene()->getContentSize().width;
-    float sceneY = this->getScene()->getContentSize().height;
+    float x = getPositionX();
+    float y = getPositionY();
+    float sceneX = getScene()->getContentSize().width;
+    float sceneY = getScene()->getContentSize().height;
     
     if (x > sceneX || x < 0 || y > sceneY || y < 0) {
-        this->removeFromParentAndCleanup(true);
+        removeFromParentAndCleanup(true);
     }  
 }
 
 bool Projectile::onContactBegin(cocos2d::PhysicsContact& contact) {
-    this->removeFromParentAndCleanup(true);
+    removeFromParentAndCleanup(true);
     return false;
 }

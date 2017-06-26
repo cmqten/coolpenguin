@@ -9,20 +9,21 @@ using namespace std;
 PenguinSpawner::PenguinSpawner() {
     // Initializes _spawnSlots as a hashmap of 4 buckets with a maximum load 
     // factor of 1
-    this->_spawnSlots = new unordered_set<int>();
-    this->_spawnSlots->max_load_factor(1.0f);
-    this->_spawnSlots->insert(0);
-    this->_spawnSlots->insert(1);
-    this->_spawnSlots->insert(2);
-    this->_spawnSlots->insert(3);
+    _spawnSlots = new unordered_set<int>();
+    _spawnSlots->max_load_factor(1.0f);
+    _spawnSlots->insert(0);
+    _spawnSlots->insert(1);
+    _spawnSlots->insert(2);
+    _spawnSlots->insert(3);
 }
 
 PenguinSpawner::~PenguinSpawner() {
-    delete this->_spawnSlots;
+    delete _spawnSlots;
 }
 
 void PenguinSpawner::spawnPenguin() {
-    if (this->_spawnSlots->empty()) return;
+    if (_spawnSlots->empty()) return;
+
     /**
      * Random number generation algorithm:
      * 1. Generate a random number between 0 and 3
@@ -32,37 +33,36 @@ void PenguinSpawner::spawnPenguin() {
      *    temporarily, spawn the penguin at the next element in the hash table,
      *    then delete the original number and the element after it
      */
-    this->_spawnLock.lock(); // Thread safety, generates a random slot
-    //CCLOG("%d", _spawnSlots->size());
+    _spawnLock.lock(); // Thread safety, generates a random slot
     if ((4 - _spawnSlots->size()) >= MAX_SPAWN) {
         // Max number of penguins have been spawned
-        this->_spawnLock.unlock();
+        _spawnLock.unlock();
         return;
     }
 
     int randomSlot = rand() & 3; // Generates a random number from 0 to 3
     auto penguin = Penguin::create();
 
-    if (this->_spawnSlots->find(randomSlot) != this->_spawnSlots->end()) {
+    if (_spawnSlots->find(randomSlot) != _spawnSlots->end()) {
         // If slot is not being used, spawn the penguin there
-        this->_spawnSlots->erase(randomSlot);
+        _spawnSlots->erase(randomSlot);
     }
     else { // If the slot is being used, generate a new number
         int oldRandomSlot = randomSlot;
-        this->_spawnSlots->insert(oldRandomSlot);
+        _spawnSlots->insert(oldRandomSlot);
 
         if (++(_spawnSlots->find(oldRandomSlot)) == _spawnSlots->end()) {
             // end of hash table
-            randomSlot = *(this->_spawnSlots->begin());
+            randomSlot = *(_spawnSlots->begin());
         }
         else randomSlot = *(++(_spawnSlots->find(randomSlot)));
 
-        this->_spawnSlots->erase(randomSlot);
-        this->_spawnSlots->erase(oldRandomSlot);
+        _spawnSlots->erase(randomSlot);
+        _spawnSlots->erase(oldRandomSlot);
     }
-    this->_spawnLock.unlock();
+    _spawnLock.unlock();
 
-    this->addChild(penguin);
+    addChild(penguin);
     switch (randomSlot) { // slot position
         case 0: penguin->setPositionX(-204); break;
         case 1: penguin->setPositionX(-68); break;
@@ -119,6 +119,6 @@ void PenguinSpawner::penguinDispatcher(Penguin* penguin, int slot) {
 
 void PenguinSpawner::onEnter() {
     Node::onEnter();
-    this->spawnPenguin();
-    this->spawnPenguin();
+    spawnPenguin();
+    spawnPenguin();
 }

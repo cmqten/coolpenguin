@@ -17,20 +17,22 @@ Penguin::Penguin() : _state(State::SPAWN) {
 void Penguin::waddleIn() {
     // Penguin waddles in the current state if SPAWN, then sets state to RECV
     // once the penguin finishes waddling in
-    if (this->_state != State::SPAWN) return;
-    this->_state = State::WADDLEIN;
+    if (_state != State::SPAWN) return;
+
+    _state = State::WADDLEIN;
     auto waddleInMove = MoveBy::create(2, Vec2(0, -100));
     auto waddleInFunc = CallFunc::create([this]() {
         this->_state = State::RECV;
     });
-    this->runAction(Sequence::create(waddleInMove, waddleInFunc, nullptr));
+    runAction(Sequence::create(waddleInMove, waddleInFunc, nullptr));
 }
 
 void Penguin::waddleOut() {
     // Penguin waddles out if if the penguin is currently receiving an item, 
     // then sets state to DESPAWN once the penguin finishes waddling out
-    if (this->_state != State::RECV) return;
-    this->_state = State::WADDLEOUT;
+    if (_state != State::RECV) return;
+
+    _state = State::WADDLEOUT;
     auto waddleOutMove = MoveBy::create(2, Vec2(0, 100));
     auto waddleOutFunc = CallFunc::create([this]() {
         this->_state = State::DESPAWN;
@@ -41,7 +43,7 @@ void Penguin::waddleOut() {
 void Penguin::onEnter() {
     Node::onEnter();
 
-    this->setPhysicsBody([]()->PhysicsBody* {
+    setPhysicsBody([]()->PhysicsBody* {
         auto body = PhysicsBody::createBox(Size(36, 96));
         body->getShapes().at(0)->setSensor(true);
         body->setCategoryBitmask(0x4);
@@ -50,13 +52,13 @@ void Penguin::onEnter() {
         return body;
     }());
 
-    this->_sprite = Sprite::create("img/penguin_glasses.png");
-    this->addChild(_sprite);
-    this->retain();
+    _sprite = Sprite::create("img/penguin_glasses.png");
+    addChild(_sprite);
+    retain();
 }
 
 bool Penguin::onContactBegin(cocos2d::PhysicsContact& contact) {
-    if (this->_state != State::RECV) return false;
-    this->waddleOut();
+    if (_state != State::RECV) return false;
+    waddleOut();
     return false;
 }
