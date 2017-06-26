@@ -14,7 +14,7 @@ cd coolpenguin
 git init 
 git remote add origin https://github.com/cmqten/coolpenguin.git
 git fetch --all
-git checkout -b master --track origin/master
+git checkout -b master --track origin/master -f
 git reset --hard origin/master
 ```
 4. Go to the proj.win32 folder inside the coolpenguin project directory and open coolpenguin.sln in Visual Studio.
