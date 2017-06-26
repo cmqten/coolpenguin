@@ -1,15 +1,11 @@
 #include "Penguin.h"
-#include <chrono>
 #include <random>
-#include <thread>
 
 using namespace cocos2d;
 using namespace std;
 
 Penguin::Penguin() : _state(State::SPAWN) {
-    int gen = rand() % 4;
-    //CCLOG("%d", gen);
-    switch (rand() % 4) {
+    switch (rand() & 3) {
         case 0: _request = Projectile::ProjectileType::FISH; break;
         case 1: _request = Projectile::ProjectileType::FISHI; break;
         case 2: _request = Projectile::ProjectileType::ICECREAM; break;

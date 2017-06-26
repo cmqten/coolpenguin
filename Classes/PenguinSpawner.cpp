@@ -68,6 +68,7 @@ void PenguinSpawner::spawnPenguin() {
         case 1: penguin->setPositionX(-68); break;
         case 2: penguin->setPositionX(68); break;
         case 3: penguin->setPositionX(204); break;
+        default: break;
     }
 
     thread threadPenguinDispatcher(&PenguinSpawner::penguinDispatcher, this,
