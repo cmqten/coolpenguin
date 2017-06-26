@@ -39,6 +39,9 @@
     <ClCompile Include="..\Classes\IPhysics.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\PenguinSpawner.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -69,6 +72,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\IAnimated.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PenguinSpawner.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

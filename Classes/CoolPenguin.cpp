@@ -1,5 +1,6 @@
 #include "CoolPenguin.h"
 #include "Penguin.h"
+#include "PenguinSpawner.h"
 #include "StatsUI.h"
 #include "TNodeReader.h"
 
@@ -56,9 +57,14 @@ void CoolPenguin::onEnter() {
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         contactListener, this);
 
+    /*
     auto penguin = Penguin::create();
     penguin->setPosition(640, 400);
     this->addChild(penguin, 0, "penguin");
+    */
+    auto spawner = PenguinSpawner::create();
+    this->addChild(spawner);
+    spawner->setPosition(640, 688);
 }
 
 void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
