@@ -7,7 +7,7 @@
 ### Build
 1. Install cocos2d-x. Go to this [link](http://www.cocos2d-x.org/wiki/Linux_Installation_and_Setup) for Linux installation and setup instructions.
 2. Setup the cocos command line tool. Go to this [link](http://cocos2d-x.org/docs/editors_and_tools/cocosCLTool/) for instructions.
-3. Open a terminal windows and change the working directory to whichever directory you want to create the project.
+3. Open a terminal window and change the working directory to whichever directory you want to create the project.
 4. Run the following commands to set up the project directory:
 ```
 cocos new coolpenguin -p coolpenguin -l cpp -d .
