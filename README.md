@@ -4,6 +4,6 @@ A game which involves penguins, cannons, fish, and ice cream. Name TBA.
 
 ## Build Instructions
 
-- Windows
+- [Windows](./proj.win32/README.md)
 
-- Linux
+- [Linux](./proj.linux/README.md)
