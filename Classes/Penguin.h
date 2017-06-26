@@ -19,15 +19,11 @@ public:
     /* Plays waddle out animation sequence and calls any callbacks */
     void waddleOut();
 
-    /** 
-     * A dispatcher that dispatches actions depending on the current state. 
-     * Runs on a separate thread.
-     */
-    void actionDispatcher();
-
     virtual void onEnter() override;
 
     virtual bool onContactBegin(cocos2d::PhysicsContact& contact) override;
+
+    friend class PenguinSpawner;
 
 private:
     cocos2d::Sprite* _sprite;

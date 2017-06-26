@@ -8,7 +8,7 @@ using namespace std;
 
 Penguin::Penguin() : _state(State::SPAWN) {
     int gen = rand() % 4;
-    CCLOG("%d", gen);
+    //CCLOG("%d", gen);
     switch (rand() % 4) {
         case 0: _request = Projectile::ProjectileType::FISH; break;
         case 1: _request = Projectile::ProjectileType::FISHI; break;
@@ -42,40 +42,6 @@ void Penguin::waddleOut() {
     this->runAction(Sequence::create(waddleOutMove, waddleOutFunc, nullptr));
 }
 
-void Penguin::actionDispatcher() {
-    int sec = 0;
-    auto scheduler = Director::getInstance()->getScheduler();
-
-    // Waddles the penguin in
-    scheduler->performFunctionInCocosThread([this]() {
-        this->waddleIn();
-    });
-
-    // Waits for the penguin to finish waddling in, then starts the timer
-    while (this->_state != State::RECV);
-    while (sec < 10) {
-        this_thread::sleep_for(chrono::seconds(1));
-        sec++;
-        if (this->_state != State::RECV) break;
-    }
-
-    // The main thread may not have called waddleOut() when the timer runs
-    // out because the penguin never received an item, so this thread
-    // dispatches a waddleOut()
-    if (this->_state == State::RECV) {
-        scheduler->performFunctionInCocosThread([this]() {
-            this->waddleOut();
-        });
-    }
-
-    // Waits for the penguin to finish waddling out, then deletes it
-    while (this->_state != State::DESPAWN);
-    scheduler->performFunctionInCocosThread([this]() {
-        this->removeFromParentAndCleanup(true);
-        this->release();
-    });
-}
-
 void Penguin::onEnter() {
     Node::onEnter();
 
@@ -91,11 +57,6 @@ void Penguin::onEnter() {
     this->_sprite = Sprite::create("img/penguin_glasses.png");
     this->addChild(_sprite);
     this->retain();
-
-    // This thread dispatches actions to the main thread. Separation required
-    // because this contains a timer.
-    thread threadActionDispatcher(&Penguin::actionDispatcher, this);
-    threadActionDispatcher.detach();
 }
 
 bool Penguin::onContactBegin(cocos2d::PhysicsContact& contact) {

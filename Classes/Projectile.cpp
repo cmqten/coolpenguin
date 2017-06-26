@@ -76,8 +76,6 @@ void Projectile::update(float delta) {
     float y = this->getPositionY();
     float sceneX = this->getScene()->getContentSize().width;
     float sceneY = this->getScene()->getContentSize().height;
-    CCLOG("boi");
-    CCLOG("%f, %f", sceneX, sceneY);
     
     if (x > sceneX || x < 0 || y > sceneY || y < 0) {
         this->removeFromParentAndCleanup(true);
