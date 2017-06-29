@@ -21,7 +21,7 @@ git reset --hard origin/master
 5. Run the following commands to build for Linux:
 ```
 cd proj.linux
-chmod u+x buildfiles.sh
+chmod u+x build.sh
 ./build.sh [debug/release]
 ```
 6. Go to the bin folder and run the coolpenguin executable.
