@@ -2,10 +2,11 @@
 #define COOLPENGUIN_PENGUIN_H
 
 #include "cocos2d.h"
+#include "IAnimated.h"
 #include "IPhysics.h"
 #include "Projectile.h"
 
-class Penguin : public cocos2d::Node, public IPhysics {
+class Penguin : public cocos2d::Node, public IPhysics, public IAnimated {
 public:
     enum class State {SPAWN, WADDLEIN, RECV, WADDLEOUT, DESPAWN};
 

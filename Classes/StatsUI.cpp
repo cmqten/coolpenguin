@@ -1,4 +1,5 @@
 #include "StatsUI.h"
+#include "ui/CocosGUI.h"
 
 using namespace cocos2d;
 
@@ -19,7 +20,7 @@ void StatsUI::onEnter() {
             // Random event for now, hides stats ui if fish is less than
             // ice cream
             GameStats* stats = (GameStats*)event->getUserData();
-            bgAndBorder->setVisible(stats->fishCount >= stats->iceCreamCount);
+            //bgAndBorder->setVisible(stats->fishCount >= stats->iceCreamCount);
             delete stats;
         });
 }

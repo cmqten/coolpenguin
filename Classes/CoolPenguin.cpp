@@ -15,6 +15,8 @@ Scene* CoolPenguin::createScene() {
         (ObjectFactory::Instance)TNodeReader<Cannon>::getInstance);
     CSLoader::getInstance()->registReaderObject("StatsUIReader",
         (ObjectFactory::Instance)TNodeReader<StatsUI>::getInstance);
+    CSLoader::getInstance()->registReaderObject("PenguinReader",
+        (ObjectFactory::Instance)TNodeReader<Penguin>::getInstance);
 
     auto scene = Scene::createWithPhysics();
     auto layer = CSLoader::createNode("csb/coolpenguin.csb");
@@ -56,15 +58,11 @@ void CoolPenguin::onEnter() {
 
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         contactListener, this);
-
-    /*
-    auto penguin = Penguin::create();
-    penguin->setPosition(640, 400);
-    this->addChild(penguin, 0, "penguin");
-    */
+    
+    // Spawner
     auto spawner = PenguinSpawner::create();
     addChild(spawner);
-    spawner->setPosition(640, 688);
+    spawner->setPosition(640, 704);
 }
 
 void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {

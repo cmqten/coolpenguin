@@ -10,7 +10,6 @@ PenguinSpawner::PenguinSpawner() {
     // Initializes _spawnSlots as a hashmap of 4 buckets with a maximum load 
     // factor of 1
     _spawnSlots = new unordered_set<int>();
-    _spawnSlots->max_load_factor(1.0f);
     _spawnSlots->insert(0);
     _spawnSlots->insert(1);
     _spawnSlots->insert(2);
@@ -41,7 +40,10 @@ void PenguinSpawner::spawnPenguin() {
     }
 
     int randomSlot = rand() & 3; // Generates a random number from 0 to 3
-    auto penguin = Penguin::create();
+    auto penguin = dynamic_cast<Penguin*>(CSLoader::createNode(
+        "csb/penguin.csb"));
+    if (!penguin) return;
+    penguin->retain();
 
     if (_spawnSlots->find(randomSlot) != _spawnSlots->end()) {
         // If slot is not being used, spawn the penguin there
@@ -119,6 +121,7 @@ void PenguinSpawner::penguinDispatcher(Penguin* penguin, int slot) {
 
 void PenguinSpawner::onEnter() {
     Node::onEnter();
+    spawnPenguin();
     spawnPenguin();
     spawnPenguin();
 }
