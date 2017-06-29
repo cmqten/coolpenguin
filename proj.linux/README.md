@@ -15,14 +15,32 @@ cd coolpenguin
 git init 
 git remote add origin https://github.com/cmqten/coolpenguin.git
 git fetch --all
-git checkout -b master --track origin/master
+git checkout -b master --track origin/master -f
 git reset --hard origin/master
 ```
 5. Run the following commands to build for Linux:
 ```
 cd proj.linux
 chmod u+x buildfiles.sh
-./buildfiles.sh
-make
+./build.sh [debug/release]
 ```
 6. Go to the bin folder and run the coolpenguin executable.
+
+## Generating your own build files
+To generate your own build files for a specific IDE, run one the following commands:
+
+Debug:
+```
+cmake -DCMAKE_BUILD_TYPE=Debug -DDEBUG_MODE=ON -G [generator] ..
+```
+
+Release:
+```
+cmake -DCMAKE_BUILD_TYPE=Release -DDEBUG_MODE=OFF -G [generator] ..
+```
+
+Refer to
+```
+cmake --help
+```
+for specific generators supported by your system.

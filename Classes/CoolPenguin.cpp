@@ -1,4 +1,6 @@
 #include "CoolPenguin.h"
+#include "Penguin.h"
+#include "PenguinSpawner.h"
 #include "StatsUI.h"
 #include "TNodeReader.h"
 
@@ -13,13 +15,15 @@ Scene* CoolPenguin::createScene() {
         (ObjectFactory::Instance)TNodeReader<Cannon>::getInstance);
     CSLoader::getInstance()->registReaderObject("StatsUIReader",
         (ObjectFactory::Instance)TNodeReader<StatsUI>::getInstance);
+    CSLoader::getInstance()->registReaderObject("PenguinReader",
+        (ObjectFactory::Instance)TNodeReader<Penguin>::getInstance);
 
     auto scene = Scene::createWithPhysics();
     auto layer = CSLoader::createNode("csb/coolpenguin.csb");
     scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
-#ifdef _DEBUG
+//#ifdef _DEBUG
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-#endif
+//#endif
     scene->addChild(layer);
     return scene;
 }
@@ -30,37 +34,21 @@ void CoolPenguin::onEnter() {
     // white background
     auto bg = LayerColor::create(Color4B::WHITE, 640, 640);
     bg->setPosition(320, 0);
-    this->addChild(bg, -2);
+    addChild(bg, -2);
 
     // cannon
-    this->_cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));
-
-    // border
-    auto boundaryNode = Node::create();
-    boundaryNode->setPhysicsBody([]()->PhysicsBody* {
-        auto body = PhysicsBody::createEdgeBox(Size(700, 700),
-            PHYSICSBODY_MATERIAL_DEFAULT, 10);
-        body->getShapes().at(0)->setSensor(true);
-        body->setDynamic(false);
-        body->setCategoryBitmask(0x1);
-        body->setCollisionBitmask(0x0);
-        body->setContactTestBitmask(0x2);
-        return body;
-    }());
-
-    boundaryNode->setPosition(640, 320);
-    this->addChild(boundaryNode);
+    _cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));
 
     // mouse listener
     auto mouseListener = EventListenerMouse::create();
     mouseListener->onMouseMove = CC_CALLBACK_1(CoolPenguin::onMouseMove, this);
-    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         mouseListener, this);
 
     // keyboard listener
     auto keyListener = EventListenerKeyboard::create();
     keyListener->onKeyPressed = CC_CALLBACK_2(CoolPenguin::onKeyPressed, this);
-    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         keyListener, this);
 
     // contact listener
@@ -68,16 +56,21 @@ void CoolPenguin::onEnter() {
     contactListener->onContactBegin = CC_CALLBACK_1(
         CoolPenguin::onContactBegin, this);
 
-    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         contactListener, this);
+    
+    // Spawner
+    auto spawner = PenguinSpawner::create();
+    addChild(spawner);
+    spawner->setPosition(640, 704);
 }
 
 void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
-    this->_cannon->onKeyPressed(keyCode, event);
+    _cannon->onKeyPressed(keyCode, event);
 }
 
 void CoolPenguin::onMouseMove(EventMouse* event) {
-    this->_cannon->onMouseMove(event);
+    _cannon->onMouseMove(event);
 }
 
 bool CoolPenguin::onContactBegin(PhysicsContact& contact) {

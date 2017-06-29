@@ -28,23 +28,9 @@ public:
      * Called when two objects begin contact. Return true to process collision,
      * false otherwise.
      */
-    virtual bool onContactBegin(cocos2d::PhysicsContact& contact);
+    virtual bool onContactBegin(cocos2d::PhysicsContact& contact) override;
 
-    /**
-     * Called after two objects begin contact and before processing collision.
-     * Returns false because this game doesn't require collisions.
-     */
-    virtual bool onContactPreSolve(cocos2d::PhysicsContact& contact,
-        cocos2d::PhysicsContactPreSolve& solve) { return false; };
-
-    /* Called after processing collision */
-    virtual void onContactPostSolve(cocos2d::PhysicsContact& contact,
-        const cocos2d::PhysicsContactPostSolve& solve) {};
-
-    /* Called after two objects separate */
-    virtual void onContactSeparate(cocos2d::PhysicsContact& contact) {};
-
-private:
+protected:
     Cannon* _cannon;
 };
 

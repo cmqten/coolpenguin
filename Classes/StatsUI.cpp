@@ -1,4 +1,5 @@
 #include "StatsUI.h"
+#include "ui/CocosGUI.h"
 
 using namespace cocos2d;
 
@@ -11,15 +12,15 @@ void StatsUI::onEnter() {
     auto bgAndBorder = DrawNode::create();
     bgAndBorder->drawSolidRect(Vec2(0, 0), Vec2(320, 640), Color4F(oceanBlue));
     bgAndBorder->drawSolidRect(Vec2(20, 20), Vec2(300, 620), Color4F(iceBlue));
-    this->addChild(bgAndBorder, -2, "bgAndBorder");
+    addChild(bgAndBorder, -2, "bgAndBorder");
 
     // Listener for stat updates
-    this->getEventDispatcher()->addCustomEventListener(UPDATE_STATS,
+    getEventDispatcher()->addCustomEventListener(UPDATE_STATS,
         [this, bgAndBorder](EventCustom* event) {
             // Random event for now, hides stats ui if fish is less than
             // ice cream
             GameStats* stats = (GameStats*)event->getUserData();
-            bgAndBorder->setVisible(stats->fishCount >= stats->iceCreamCount);
+            //bgAndBorder->setVisible(stats->fishCount >= stats->iceCreamCount);
             delete stats;
         });
 }
