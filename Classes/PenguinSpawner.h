@@ -1,7 +1,6 @@
 #ifndef __PENGUIN_SPAWNER_H__
 #define __PENGUIN_SPAWNER_H__
 
-#include <mutex>
 #include <queue>
 #include <unordered_set>
 #include "cocos2d.h"
@@ -25,7 +24,7 @@ public:
      * @param penguin : penguin to be dispatched
      * @param slot : spawn slot where the penguin was spawned
      */
-    void penguinDispatcher(Penguin* penguin, int slot);
+    //void penguinDispatcher(Penguin* penguin, int slot);
 
     virtual void onEnter() override;
 
@@ -35,9 +34,6 @@ private:
 
     /* Stores penguins that are not dispatched */
     std::queue<Penguin*>* _penguins;
-
-    /* Mutex for shared resource across threads */
-    std::mutex _spawnLock;
 };
 
 #endif

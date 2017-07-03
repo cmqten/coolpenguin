@@ -6,6 +6,9 @@
 #include "IPhysics.h"
 #include "Projectile.h"
 
+// Event to notify dispatcher that this penguin is done
+#define PENGUIN_DONE "penguin_done" 
+
 class Penguin : public cocos2d::Node, public IPhysics, public IAnimated {
 public:
     friend class PenguinSpawner;
@@ -28,16 +31,25 @@ public:
     /* Closes request */
     void closeRequest();
 
+    /** 
+     * Decrements the wait time every second, and if the wait time expires, 
+     * penguin waddles back. 
+     */
+    void waitForRequest(float delta);
+
+    /* Resets the penguin to prepare to be dispatched again */
+    void resetPenguin();
+
     virtual void onEnter() override;
 
     virtual bool onContactBegin(cocos2d::PhysicsContact& contact) override;
 
 protected:
-    cocos2d::Sprite* _sprite;
-
     Projectile::ProjectileType _request;
     
     State _state;
+
+    int _waitTime;
 };
 
 #endif //COOLPENGUIN_PENGUIN_H
