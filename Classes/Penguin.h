@@ -8,6 +8,8 @@
 
 class Penguin : public cocos2d::Node, public IPhysics, public IAnimated {
 public:
+    friend class PenguinSpawner;
+
     enum class State {SPAWN, WADDLEIN, RECV, WADDLEOUT, DESPAWN};
 
     Penguin();
@@ -20,11 +22,15 @@ public:
     /* Plays waddle out animation sequence and calls any callbacks */
     void waddleOut();
 
+    /* Generates a random request */
+    void generateRequest();
+
+    /* Closes request */
+    void closeRequest();
+
     virtual void onEnter() override;
 
     virtual bool onContactBegin(cocos2d::PhysicsContact& contact) override;
-
-    friend class PenguinSpawner;
 
 protected:
     cocos2d::Sprite* _sprite;

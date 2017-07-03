@@ -2,6 +2,7 @@
 #define __PENGUIN_SPAWNER_H__
 
 #include <mutex>
+#include <queue>
 #include <unordered_set>
 #include "cocos2d.h"
 #include "Penguin.h"
@@ -31,6 +32,9 @@ public:
 private:
     /* Stores the slots that are not being used */
     std::unordered_set<int>* _spawnSlots;
+
+    /* Stores penguins that are not dispatched */
+    std::queue<Penguin*>* _penguins;
 
     /* Mutex for shared resource across threads */
     std::mutex _spawnLock;

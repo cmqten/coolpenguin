@@ -27,9 +27,6 @@
     <ClCompile Include="..\Classes\Projectile.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\StatsUI.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Penguin.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -40,6 +37,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\PenguinSpawner.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameUI.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,9 +62,6 @@
     <ClInclude Include="..\Classes\Projectile.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\StatsUI.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\IPhysics.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -75,6 +72,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\PenguinSpawner.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameUI.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

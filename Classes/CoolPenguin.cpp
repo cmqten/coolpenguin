@@ -1,7 +1,7 @@
 #include "CoolPenguin.h"
 #include "Penguin.h"
 #include "PenguinSpawner.h"
-#include "StatsUI.h"
+#include "GameUI.h"
 #include "TNodeReader.h"
 
 using namespace cocos2d;
@@ -13,8 +13,6 @@ Scene* CoolPenguin::createScene() {
         (ObjectFactory::Instance)TNodeReader<CoolPenguin>::getInstance);
     CSLoader::getInstance()->registReaderObject("CannonReader",
         (ObjectFactory::Instance)TNodeReader<Cannon>::getInstance);
-    CSLoader::getInstance()->registReaderObject("StatsUIReader",
-        (ObjectFactory::Instance)TNodeReader<StatsUI>::getInstance);
     CSLoader::getInstance()->registReaderObject("PenguinReader",
         (ObjectFactory::Instance)TNodeReader<Penguin>::getInstance);
 
@@ -35,6 +33,12 @@ void CoolPenguin::onEnter() {
     auto bg = LayerColor::create(Color4B::WHITE, 640, 640);
     bg->setPosition(320, 0);
     addChild(bg, -2);
+
+    // ui
+    auto ui = GameUI::create();
+    ui->setAnchorPoint(Vec2(0, 0));
+    ui->setPosition(0, 0);
+    addChild(ui);
 
     // cannon
     _cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));
@@ -59,7 +63,7 @@ void CoolPenguin::onEnter() {
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         contactListener, this);
     
-    // Spawner
+    // spawner
     auto spawner = PenguinSpawner::create();
     addChild(spawner);
     spawner->setPosition(640, 704);

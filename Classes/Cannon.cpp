@@ -1,6 +1,6 @@
 #include "Cannon.h"
 #include "SimpleAudioEngine.h"
-#include "StatsUI.h"
+#include "GameUI.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -102,8 +102,6 @@ void Cannon::shoot(Projectile::ProjectileType projType) {
     _enabled = false; // Prevents rapid fire, enabled after animation
 
     // Update stats
-    GameStats* stats = new GameStats();
-    stats->fishCount = _fishCount;
-    stats->iceCreamCount = _iceCreamCount;
-    getEventDispatcher()->dispatchCustomEvent(UPDATE_STATS, stats);
+    GameStats stats = {_fishCount, _iceCreamCount};
+    getEventDispatcher()->dispatchCustomEvent(UPDATE_STATS, (void*)&stats);
 }
