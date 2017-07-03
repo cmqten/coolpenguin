@@ -186,6 +186,29 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\res\img\cannon.png" />
+    <Image Include="..\Resources\res\img\fish_i.png" />
+    <Image Include="..\Resources\res\img\fish_r.png" />
+    <Image Include="..\Resources\res\img\ice_cream_f.png" />
+    <Image Include="..\Resources\res\img\ice_cream_r.png" />
+    <Image Include="..\Resources\res\img\penguin_glasses.png" />
+    <Image Include="..\Resources\res\img\peng_idle_1.png" />
+    <Image Include="..\Resources\res\img\peng_idle_2.png" />
+    <Image Include="..\Resources\res\img\peng_stand.png" />
+    <Image Include="..\Resources\res\img\peng_stand_b.png" />
+    <Image Include="..\Resources\res\img\peng_stand_s.png" />
+    <Image Include="..\Resources\res\img\peng_walk_1.png" />
+    <Image Include="..\Resources\res\img\peng_walk_2.png" />
+    <Image Include="..\Resources\res\img\peng_walk_b_1.png" />
+    <Image Include="..\Resources\res\img\peng_walk_b_2.png" />
+    <Image Include="..\Resources\res\img\peng_walk_s_1.png" />
+    <Image Include="..\Resources\res\img\peng_walk_s_2.png" />
+    <Image Include="..\Resources\res\img\sp_fi.png" />
+    <Image Include="..\Resources\res\img\sp_fr.png" />
+    <Image Include="..\Resources\res\img\sp_icf.png" />
+    <Image Include="..\Resources\res\img\sp_icr.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
