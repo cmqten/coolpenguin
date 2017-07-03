@@ -23,7 +23,7 @@ void GameUI::onEnter() {
     addChild(bgAndBorder, -2, "bgAndBorder");
 
     /* Lambda for creating labels to remove reptitive code */
-    auto createLabel = [this](string text, float size, Vec2& position,
+    auto createLabel = [this](string text, float size, Vec2 position,
         string name) {
         auto label = Label::createWithTTF(TTFConfig(
             "fonts/BPdotsUnicaseSquareBold.ttf", size), text);
