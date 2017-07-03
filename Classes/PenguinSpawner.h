@@ -8,6 +8,9 @@
 
 #define MAX_SPAWN 2
 
+/**
+ * Handles spawning penguins at the top of the screen
+ */
 class PenguinSpawner : public cocos2d::Node {
 public:
     PenguinSpawner();

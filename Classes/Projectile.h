@@ -6,6 +6,9 @@
 
 #define DEFAULT_PROJ_VELOCITY 1000.0f
 
+/**
+ * Cannon projectile
+ */
 class Projectile : public cocos2d::Node, public IPhysics {
 public:
     enum class ProjectileType {FISH, FISHI, ICECREAM, ICECREAMF};

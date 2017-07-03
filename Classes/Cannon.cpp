@@ -14,8 +14,10 @@ bool Cannon::init() {
     SimpleAudioEngine::getInstance()->preloadEffect("sfx/cannon_shoot.wav");
 
     _timeline->setAnimationEndCallFunc("shoot", [this]() {
-        // Enables cannon after shoot animation is done, prevents rapid fire
-        _enabled = true;
+        /* Enables cannon after shoot animation is done, prevents rapid fire. 
+        If more than 10 of the sme projectile has been shot, cannon gets 
+        clogged. */
+        _enabled = abs(_fishCount - _iceCreamCount) < 10;
     });
     return true;
 }

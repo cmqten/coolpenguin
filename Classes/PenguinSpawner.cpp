@@ -26,11 +26,6 @@ PenguinSpawner::PenguinSpawner() {
 
 PenguinSpawner::~PenguinSpawner() {
     delete _spawnSlots;
-    for (int i = 0; i < 4; i++) {
-        auto penguin = _penguins->front();
-        _penguins->pop();
-        delete penguin;
-    }
     delete _penguins;
 }
 

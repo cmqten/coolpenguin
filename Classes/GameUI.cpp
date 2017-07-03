@@ -43,8 +43,6 @@ void GameUI::onEnter() {
     // Timer increment
     schedule(SEL_SCHEDULE(&GameUI::incrementTime), 1.0f);
 
-    // Status display
-
     // Listener for time updates
     getEventDispatcher()->addCustomEventListener(TIMER_TICK, 
         [this](EventCustom* event) {
@@ -58,5 +56,61 @@ void GameUI::onEnter() {
             // Random event for now, hides stats ui if fish is less than
             // ice cream
             GameStats* stats = (GameStats*)event->getUserData();
+
+            // Updates the status display
+            auto statusDisplay = (Label*)getChildByName("status_display");
+            switch (stats->fishCount - stats->iceCreamCount) {
+                case 0:
+                    statusDisplay->setColor(Color3B::BLACK);
+                    statusDisplay->setString("CLEAN");
+                    break;
+
+                case 1: 
+                case 2:
+                case 3:
+                    statusDisplay->setColor(Color3B(0x2b, 0x86, 0xa4));
+                    statusDisplay->setString("DIRTY");
+                    break;
+
+                case 4:
+                case 5:
+                case 6:
+                    statusDisplay->setColor(Color3B(0x2b, 0x86, 0xa4));
+                    statusDisplay->setString("VERY DIRTY");
+                    break;
+
+                case 7:
+                case 8:
+                case 9:
+                    statusDisplay->setColor(Color3B(0x2b, 0x86, 0xa4));
+                    statusDisplay->setString("SUPER DIRTY");
+                    break;
+
+                case -1:
+                case -2:
+                case -3:
+                    statusDisplay->setColor(Color3B(0xf3, 0x7e, 0xf4));
+                    statusDisplay->setString("DIRTY");
+                    break;
+
+                case -4:
+                case -5:
+                case -6:
+                    statusDisplay->setColor(Color3B(0xf3, 0x7e, 0xf4));
+                    statusDisplay->setString("VERY DIRTY");
+                    break;
+
+                case -7:
+                case -8:
+                case -9:
+                    statusDisplay->setColor(Color3B(0xf3, 0x7e, 0xf4));
+                    statusDisplay->setString("SUPER DIRTY");
+                    break;
+
+                default:
+                    statusDisplay->setColor(Color3B::RED);
+                    statusDisplay->setString("CLOGGED");
+                    break;
+            }
         });
 }

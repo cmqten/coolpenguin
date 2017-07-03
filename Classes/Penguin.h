@@ -9,6 +9,9 @@
 // Event to notify dispatcher that this penguin is done
 #define PENGUIN_DONE "penguin_done" 
 
+/**
+ * A penguin 
+ */
 class Penguin : public cocos2d::Node, public IPhysics, public IAnimated {
 public:
     friend class PenguinSpawner;
