@@ -40,17 +40,17 @@ void Penguin::waddleIn() {
 void Penguin::waddleOut() {
     if (_state != State::RECV) return; // Can only waddle out after receiving
 
-    /* Closes request by unscheduling request timer and setting the speech
-    bubble invisible */
-    this->unschedule(SEL_SCHEDULE(&Penguin::waitForRequest));
-    closeRequest();
-
     auto waddleOutMove = MoveBy::create(2, Vec2(0, 208));
     auto waddleOutFunc = CallFunc::create([this]() {
         // Dispatches an event to tell listeners that penguin has returned
         this->_state = State::DESPAWN;
         this->_eventDispatcher->dispatchCustomEvent(PENGUIN_DONE, (void*)this);
     });
+
+    /* Closes request by unscheduling request timer and setting the speech
+    bubble invisible */
+    unschedule(SEL_SCHEDULE(&Penguin::waitForRequest));
+    closeRequest();
 
     // Sets state to waddle out and runs animations
     _state = State::WADDLEOUT;

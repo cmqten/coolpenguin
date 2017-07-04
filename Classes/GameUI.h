@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 
-#define UPDATE_STATS "update_stats"
+#define UPDATE_CANNON "update_stats"
 #define TIMER_TICK "timer_tick"
 
 /**
@@ -16,7 +16,13 @@ public:
     /* Increments the time every second */
     void incrementTime(float delta);
 
-    virtual void onEnter() override;
+    /**
+     * Listener for cannon update events
+     * @param event : event object, contains information about event
+     */
+    void updateCannonStats(cocos2d::EventCustom* event);
+
+    virtual bool init() override;
 
 private:
     /* Amount of time that has passed */
@@ -25,11 +31,13 @@ private:
 
 /**
  * To be used by the cannon, cannon fills out the fields, then dispatches an
- * UPDATE_STATS event containing a pointer to this struct.
+ * UPDATE_CANNON event containing a pointer to this struct.
  */
-struct GameStats {
-    int fishCount;
-    int iceCreamCount;
+struct CannonStats {
+    int fishShotCount;
+    int iceCreamShotCount;
+    int fishReserve;
+    int iceCreamReserve;
 };
 
 #endif

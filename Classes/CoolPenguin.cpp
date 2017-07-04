@@ -42,6 +42,7 @@ void CoolPenguin::onEnter() {
 
     // cannon
     _cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));
+    _cannon->updateUI();
 
     // mouse listener
     auto mouseListener = EventListenerMouse::create();

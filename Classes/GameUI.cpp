@@ -1,4 +1,5 @@
 #include "GameUI.h"
+#include <cstdlib>
 #include <string>
 #include "ui/CocosGUI.h"
 
@@ -11,8 +12,54 @@ void GameUI::incrementTime(float delta) {
     getEventDispatcher()->dispatchCustomEvent(TIMER_TICK, (void*)&_time);
 }
 
-void GameUI::onEnter() {
-    Node::onEnter();
+void GameUI::updateCannonStats(EventCustom * event) {
+    CannonStats* stats = (CannonStats*)event->getUserData();
+    auto statusDisplay = (Label*)getChildByName("status_display");
+
+    // Sets the color, blue if more fish, pink if more ice cream, black if equal
+    if (stats->fishShotCount > stats->iceCreamShotCount) {
+        statusDisplay->setColor(Color3B(0x2b, 0x86, 0xa4));
+    }
+    else if (stats->fishShotCount < stats->iceCreamShotCount) {
+        statusDisplay->setColor(Color3B(0xf3, 0x7e, 0xf4));
+    }
+    else statusDisplay->setColor(Color3B::BLACK);
+
+    // Updates the status
+    switch (abs(stats->fishShotCount - stats->iceCreamShotCount)) {
+        case 0:
+            if (!stats->fishShotCount && !stats->iceCreamShotCount)
+                statusDisplay->setString("SQUEAKY CLEAN");
+            else statusDisplay->setString("CLEAN");
+            break;
+
+        case 1: case 2: case 3:
+            statusDisplay->setString("DIRTY");
+            break;
+
+        case 4: case 5: case 6:
+            statusDisplay->setString("VERY DIRTY");
+            break;
+
+        case 7: case 8: case 9:
+            statusDisplay->setString("SUPER DIRTY");
+            break;
+
+        default:
+            statusDisplay->setColor(Color3B::RED);
+            statusDisplay->setString("CLOGGED");
+            break;
+    }
+
+    // Updates reserve
+    auto fishDisplay = (Label*)getChildByName("fish_display");
+    fishDisplay->setString(to_string(stats->fishReserve));
+    auto iceCreamDisplay = (Label*)getChildByName("ice_cream_display");
+    iceCreamDisplay->setString(to_string(stats->iceCreamReserve));
+}
+
+bool GameUI::init() {
+    if (!Layer::init()) return false;
 
     // Background and border
     Color4B iceBlue(0xd4, 0xf0, 0xff, 0xff);
@@ -22,7 +69,7 @@ void GameUI::onEnter() {
     bgAndBorder->drawSolidRect(Vec2(16, 16), Vec2(304, 624), Color4F(iceBlue));
     addChild(bgAndBorder, -2, "bgAndBorder");
 
-    /* Lambda for creating labels to remove reptitive code */
+    // Lambda for creating labels to remove reptitive code 
     auto createLabel = [this](string text, float size, Vec2 position,
         string name) {
         auto label = Label::createWithTTF(TTFConfig(
@@ -38,79 +85,39 @@ void GameUI::onEnter() {
     createLabel("SCORE", 40.0f, Vec2(24, 504), "score_label");
     createLabel("0", 40.0f, Vec2(24, 476), "score_display");
     createLabel("STATUS", 40.0f, Vec2(24, 420), "status_label");
-    createLabel("SQUEAKY CLEAN", 30.0f, Vec2(24, 392), "status_display");
+    createLabel("", 30.0f, Vec2(24, 392), "status_display");
+    createLabel("RESERVE", 40.0f, Vec2(24, 336), "reserve_label");
+
+    // Fish reserve display and count
+    addChild([]()->Sprite* {
+        auto fishReserve = Sprite::create("img/fish_reserve.png");
+        fishReserve->setAnchorPoint(Vec2(0, 0));
+        fishReserve->setPosition(24, 272);
+        return fishReserve;
+    }());
+    createLabel("0", 40.0f, Vec2(88, 284), "fish_display");
+
+    addChild([]()->Sprite* {
+        auto iceCreamReserve = Sprite::create("img/ice_cream_reserve.png");
+        iceCreamReserve->setAnchorPoint(Vec2(0, 0));
+        iceCreamReserve->setPosition(24, 208);
+        return iceCreamReserve;
+    }());
+    createLabel("0", 40.0f, Vec2(88, 220), "ice_cream_display");
 
     // Timer increment
     schedule(SEL_SCHEDULE(&GameUI::incrementTime), 1.0f);
 
     // Listener for time updates
-    getEventDispatcher()->addCustomEventListener(TIMER_TICK, 
+    getEventDispatcher()->addCustomEventListener(TIMER_TICK,
         [this](EventCustom* event) {
-            auto timerDisplay = (Label*)this->getChildByName("timer_display");
-            timerDisplay->setString(to_string(*(int*)event->getUserData()));
-        });
+        auto timerDisplay = (Label*)this->getChildByName("timer_display");
+        timerDisplay->setString(to_string(*(int*)event->getUserData()));
+    });
 
-    // Listener for stat updates
-    getEventDispatcher()->addCustomEventListener(UPDATE_STATS,
-        [this, bgAndBorder](EventCustom* event) {
-            // Random event for now, hides stats ui if fish is less than
-            // ice cream
-            GameStats* stats = (GameStats*)event->getUserData();
-
-            // Updates the status display
-            auto statusDisplay = (Label*)getChildByName("status_display");
-            switch (stats->fishCount - stats->iceCreamCount) {
-                case 0:
-                    statusDisplay->setColor(Color3B::BLACK);
-                    statusDisplay->setString("CLEAN");
-                    break;
-
-                case 1: 
-                case 2:
-                case 3:
-                    statusDisplay->setColor(Color3B(0x2b, 0x86, 0xa4));
-                    statusDisplay->setString("DIRTY");
-                    break;
-
-                case 4:
-                case 5:
-                case 6:
-                    statusDisplay->setColor(Color3B(0x2b, 0x86, 0xa4));
-                    statusDisplay->setString("VERY DIRTY");
-                    break;
-
-                case 7:
-                case 8:
-                case 9:
-                    statusDisplay->setColor(Color3B(0x2b, 0x86, 0xa4));
-                    statusDisplay->setString("SUPER DIRTY");
-                    break;
-
-                case -1:
-                case -2:
-                case -3:
-                    statusDisplay->setColor(Color3B(0xf3, 0x7e, 0xf4));
-                    statusDisplay->setString("DIRTY");
-                    break;
-
-                case -4:
-                case -5:
-                case -6:
-                    statusDisplay->setColor(Color3B(0xf3, 0x7e, 0xf4));
-                    statusDisplay->setString("VERY DIRTY");
-                    break;
-
-                case -7:
-                case -8:
-                case -9:
-                    statusDisplay->setColor(Color3B(0xf3, 0x7e, 0xf4));
-                    statusDisplay->setString("SUPER DIRTY");
-                    break;
-
-                default:
-                    statusDisplay->setColor(Color3B::RED);
-                    statusDisplay->setString("CLOGGED");
-                    break;
-            }
-        });
+    // Listener for cannon stat updates
+    getEventDispatcher()->addCustomEventListener(UPDATE_CANNON,
+        CC_CALLBACK_1(GameUI::updateCannonStats, this));
+    
+    return true;
 }
