@@ -25,6 +25,8 @@ public:
      */
     void launch(float angle) const;
 
+    ProjectileType getType() { return _type; };
+
     virtual void onEnter() override;
 
     virtual void update(float delta) override;

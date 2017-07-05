@@ -68,7 +68,12 @@ void Cannon::rotate(float x, float y) {
     (and stack overflow). */
     float cursorVecX = x - getPositionX();
     float cursorVecY = y - getPositionY();
-    setRotation(CC_RADIANS_TO_DEGREES(atan2f(cursorVecX, cursorVecY)));
+
+    // Limits rotation to -90 degrees and 90 degrees
+    float rotation = CC_RADIANS_TO_DEGREES(atan2f(cursorVecX, cursorVecY));
+    if (rotation < -90.0f) rotation = -90.0f;
+    else if (rotation > 90.0f) rotation = 90.0f;
+    setRotation(rotation);
 }
 
 void Cannon::shoot(Projectile::ProjectileType projType) {

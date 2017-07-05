@@ -22,26 +22,29 @@ public:
 
     CREATE_FUNC(Penguin);
 
+    /* Closes request */
+    void closeRequest();
+
+    /* Generates a random request */
+    void generateRequest();
+
+    /**
+     * Prepares this penguin for spawn
+     * @param wait : request wait time
+     */
+    void prepareForSpawn(int wait = 10);
+
     /* Plays waddle in animation sequence and calls any callbacks */
     void waddleIn();
 
     /* Plays waddle out animation sequence and calls any callbacks */
     void waddleOut();
 
-    /* Generates a random request */
-    void generateRequest();
-
-    /* Closes request */
-    void closeRequest();
-
     /** 
      * Decrements the wait time every second, and if the wait time expires, 
      * penguin waddles back. 
      */
     void waitForRequest(float delta);
-
-    /* Resets the penguin to prepare to be dispatched again */
-    void resetPenguin();
 
     virtual void onEnter() override;
 

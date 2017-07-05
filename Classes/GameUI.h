@@ -3,15 +3,18 @@
 
 #include "cocos2d.h"
 
-#define UPDATE_CANNON "update_stats"
 #define TIMER_TICK "timer_tick"
+#define UPDATE_CANNON "update_stats"
+#define UPDATE_SCORE "update_score"
 
 /**
  * Sidebar that displays current game stats such as time, score, etc...
  */
 class GameUI : public cocos2d::Layer {
 public:
-    CREATE_FUNC(GameUI);
+    static GameUI* getInstance();
+
+    long getGameTime() { return _time; };
 
     /* Increments the time every second */
     void incrementTime(float delta);
@@ -24,7 +27,16 @@ public:
 
     virtual bool init() override;
 
-private:
+protected:
+    static GameUI* _instance;
+
+    GameUI() {};
+
+    CREATE_FUNC(GameUI);
+
+    /* Player score */
+    int _score;
+
     /* Amount of time that has passed */
     long _time;
 };

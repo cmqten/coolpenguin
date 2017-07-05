@@ -35,7 +35,7 @@ void CoolPenguin::onEnter() {
     addChild(bg, -2);
 
     // ui
-    auto ui = GameUI::create();
+    auto ui = GameUI::getInstance();
     ui->setAnchorPoint(Vec2(0, 0));
     ui->setPosition(0, 0);
     addChild(ui);

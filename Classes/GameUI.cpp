@@ -6,6 +6,13 @@
 using namespace cocos2d;
 using namespace std;
 
+GameUI* GameUI::_instance = nullptr;
+
+GameUI* GameUI::getInstance() {
+    if (!_instance) _instance = GameUI::create();
+    return _instance;
+}
+
 void GameUI::incrementTime(float delta) {
     auto timerDisplay = (Label*)getChildByName("timer_display");
     timerDisplay->setString(to_string(++_time));
@@ -80,10 +87,14 @@ bool GameUI::init() {
         this->addChild(label, 0, name);
     };
 
+    _time = 0;
     createLabel("TIME", 40.0f, Vec2(24, 588), "timer_label");
     createLabel("0", 40.0f, Vec2(24, 560), "timer_display");
+
+    _score = 0;
     createLabel("SCORE", 40.0f, Vec2(24, 504), "score_label");
-    createLabel("0", 40.0f, Vec2(24, 476), "score_display");
+    createLabel(to_string(_score), 40.0f, Vec2(24, 476), "score_display");
+
     createLabel("STATUS", 40.0f, Vec2(24, 420), "status_label");
     createLabel("", 30.0f, Vec2(24, 392), "status_display");
     createLabel("RESERVE", 40.0f, Vec2(24, 336), "reserve_label");
@@ -108,16 +119,17 @@ bool GameUI::init() {
     // Timer increment
     schedule(SEL_SCHEDULE(&GameUI::incrementTime), 1.0f);
 
-    // Listener for time updates
-    getEventDispatcher()->addCustomEventListener(TIMER_TICK,
-        [this](EventCustom* event) {
-        auto timerDisplay = (Label*)this->getChildByName("timer_display");
-        timerDisplay->setString(to_string(*(int*)event->getUserData()));
-    });
-
     // Listener for cannon stat updates
     getEventDispatcher()->addCustomEventListener(UPDATE_CANNON,
         CC_CALLBACK_1(GameUI::updateCannonStats, this));
+
+    // Listener for score updates
+    getEventDispatcher()->addCustomEventListener(UPDATE_SCORE, 
+        [this](EventCustom* event) {
+            this->_score += *(int*)event->getUserData();
+            ((Label*)this->getChildByName("score_display"))->setString(
+                to_string(this->_score));
+        });
     
     return true;
 }

@@ -1,11 +1,12 @@
 #include "PenguinSpawner.h"
 #include <cstdlib>
 #include <ctime>
+#include "GameUI.h"
 
 using namespace cocos2d;
 using namespace std;
 
-PenguinSpawner::PenguinSpawner() {
+PenguinSpawner::PenguinSpawner() : _maxSpawn(1) {
     // Initializes _spawnSlots as a hashmap with 4 integers from 0 to 3 
     _spawnSlots = new unordered_set<int>();
     _spawnSlots->insert(0);
@@ -33,7 +34,7 @@ void PenguinSpawner::spawnPenguin() {
     if (_spawnSlots->empty()) return;
 
     // Max number spawned
-    if ((4 - _spawnSlots->size()) >= MAX_SPAWN) return;
+    if ((4 - _spawnSlots->size()) >= _maxSpawn) return;
 
     /* Chooses a penguin to dispatch. No need to check if penguin queue is 
     empty or not because there always has to be penguins in the queue, and if
@@ -84,7 +85,7 @@ void PenguinSpawner::spawnPenguin() {
 
     // Prepares the penguin for dispatch, binds slot to penguin for access 
     // after the penguin has returned
-    penguin->resetPenguin();
+    penguin->prepareForSpawn(GameUI::getInstance()->getGameTime() >= 30 ? 5:7);
     penguin->setUserData(new int(randomSlot));
     penguin->waddleIn();
 }
@@ -106,6 +107,35 @@ void PenguinSpawner::onEnter() {
             this->_penguins->push((Penguin*)event->getUserData());
             this->spawnPenguin();
         });
+
+    /* Listener for time */
+    getEventDispatcher()->addCustomEventListener(TIMER_TICK,
+        [this](EventCustom* event) {
+            switch (*(int*)event->getUserData()) {
+                case 10:
+                    this->_maxSpawn = 2;
+                    this->spawnPenguin();
+                    this->spawnPenguin();
+                    break;
+
+                case 20:
+                    this->_maxSpawn = 3;
+                    this->spawnPenguin();
+                    this->spawnPenguin();
+                    this->spawnPenguin();
+                    break;
+
+                case 40:
+                    this->_maxSpawn = 4;
+                    this->spawnPenguin();
+                    this->spawnPenguin();
+                    this->spawnPenguin();
+                    this->spawnPenguin();
+                    break;
+
+                default: break;
+            }
+    });
 
     spawnPenguin();
     spawnPenguin();

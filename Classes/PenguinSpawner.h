@@ -6,8 +6,6 @@
 #include "cocos2d.h"
 #include "Penguin.h"
 
-#define MAX_SPAWN 2
-
 /**
  * Handles spawning penguins at the top of the screen
  */
@@ -32,11 +30,14 @@ public:
     virtual void onEnter() override;
 
 private:
-    /* Stores the slots that are not being used */
-    std::unordered_set<int>* _spawnSlots;
+    /* Maximum number of spawned penguins */
+    int _maxSpawn;
 
     /* Stores penguins that are not dispatched */
     std::queue<Penguin*>* _penguins;
+
+    /* Stores the slots that are not being used */
+    std::unordered_set<int>* _spawnSlots;
 };
 
 #endif
