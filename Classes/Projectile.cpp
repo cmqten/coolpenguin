@@ -9,7 +9,7 @@ Projectile* Projectile::create(ProjectileType projType) {
         body->getShapes().at(0)->setSensor(true);
         body->setCategoryBitmask(0x2);
         body->setCollisionBitmask(0x0);
-        body->setContactTestBitmask(0x7);
+        body->setContactTestBitmask(0x4);
         return body;
     }();
 
@@ -65,6 +65,7 @@ void Projectile::launch(float angle) const {
 
 void Projectile::onEnter() {
     Node::onEnter();
+    retain();
     unscheduleUpdate();
     schedule(schedule_selector(Projectile::update), 1.0f);
 }
@@ -78,11 +79,12 @@ void Projectile::update(float delta) {
     float sceneY = getScene()->getContentSize().height;
     
     if (x > sceneX || x < 0 || y > sceneY || y < 0) {
+        release();
         removeFromParentAndCleanup(true);
     }  
 }
 
 bool Projectile::onContactBegin(cocos2d::PhysicsContact& contact) {
-    removeFromParentAndCleanup(true);
+    release();
     return false;
 }

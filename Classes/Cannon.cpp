@@ -1,22 +1,33 @@
 #include "Cannon.h"
+#include <cstdlib>
+#include "GameUI.h"
 #include "SimpleAudioEngine.h"
-#include "StatsUI.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
 using namespace std;
 
-Cannon::Cannon() : IAnimated("csb/cannon.csb"), _enabled(true), _fishCount(0),
-    _iceCreamCount(0) {}
+Cannon::Cannon() : IAnimated("csb/cannon.csb"), _enabled(true), 
+    _fishReserve(10), _fishShotCount(0), _iceCreamReserve(10), 
+    _iceCreamShotCount(0) {}
+
+void Cannon::updateUI() {
+    CannonStats cannonStats = { _fishShotCount, _iceCreamShotCount,
+        _fishReserve, _iceCreamReserve };
+    _eventDispatcher->dispatchCustomEvent(UPDATE_CANNON, (void*)&cannonStats);
+}
 
 bool Cannon::init() {
     if (!Node::init()) return false;
     SimpleAudioEngine::getInstance()->preloadEffect("sfx/cannon_shoot.wav");
 
     _timeline->setAnimationEndCallFunc("shoot", [this]() {
-        // Enables cannon after shoot animation is done, prevents rapid fire
-        _enabled = true;
+        /* Enables cannon after shoot animation is done, prevents rapid fire. 
+        If more than 10 of the some projectile has been shot, cannon gets 
+        clogged. */
+        _enabled = abs(_fishShotCount - _iceCreamShotCount) < 10;
     });
+
     return true;
 }
 
@@ -32,8 +43,12 @@ void Cannon::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
             shoot(Projectile::ProjectileType::ICECREAM);
             break;
 
-        default:
+        case EventKeyboard::KeyCode::KEY_D:
+        case EventKeyboard::KeyCode::KEY_L:
+            clean();
             break;
+
+        default: break;
     }
 }
 
@@ -41,12 +56,24 @@ void Cannon::onMouseMove(EventMouse* event) {
     rotate(event->getCursorX(), event->getCursorY());
 }
 
+void Cannon::clean() {
+    _fishShotCount = 0;
+    _iceCreamShotCount = 0;
+    _enabled = true;
+    updateUI();
+}
+
 void Cannon::rotate(float x, float y) {
     /* Trigonometry magic to determine angle bless MAT223 
     (and stack overflow). */
     float cursorVecX = x - getPositionX();
     float cursorVecY = y - getPositionY();
-    setRotation(CC_RADIANS_TO_DEGREES(atan2f(cursorVecX, cursorVecY)));
+
+    // Limits rotation to -90 degrees and 90 degrees
+    float rotation = CC_RADIANS_TO_DEGREES(atan2f(cursorVecX, cursorVecY));
+    if (rotation < -90.0f) rotation = -90.0f;
+    else if (rotation > 90.0f) rotation = 90.0f;
+    setRotation(rotation);
 }
 
 void Cannon::shoot(Projectile::ProjectileType projType) {
@@ -62,29 +89,45 @@ void Cannon::shoot(Projectile::ProjectileType projType) {
      */
     if (!_enabled) return;
 
-    Projectile* proj;
+    Projectile* proj = nullptr;
     
     switch (projType) {
+        /**
+         * - Check if the reserve for the specified projectile is not empty
+         * - Check which kind of projectile have been shot more, then determine
+         *   what kind of projectile comes out of the cannon 
+         * - Decrement the reserve after shooting
+         */
         case Projectile::ProjectileType::FISH:
-            proj = _fishCount >= _iceCreamCount ? Projectile::create(projType) :
+            if (!_fishReserve) return;
+            proj = _fishShotCount >= _iceCreamShotCount ? 
+                Projectile::create(projType) :
                 Projectile::create(Projectile::ProjectileType::FISHI);
-            _fishCount++;
+            _fishShotCount++;
+            _fishReserve--;
             break;
 
         case Projectile::ProjectileType::ICECREAM:
-            proj = _iceCreamCount >= _fishCount ? Projectile::create(projType) :
+            if (!_iceCreamReserve) return;
+            proj = _iceCreamShotCount >= _fishShotCount ? 
+                Projectile::create(projType) :
                 Projectile::create(Projectile::ProjectileType::ICECREAMF);
-            _iceCreamCount++;
+            _iceCreamShotCount++;
+            _iceCreamReserve--;
             break;
 
         case Projectile::ProjectileType::FISHI:
+            if (!_fishReserve) return;
             proj = Projectile::create(projType);
-            _fishCount++;
+            _fishShotCount++;
+            _fishReserve--;
             break;
 
         case Projectile::ProjectileType::ICECREAMF:
+            if (!_iceCreamReserve) return;
             proj = Projectile::create(projType);
-            _iceCreamCount++;
+            _iceCreamShotCount++;
+            _fishReserve--;
             break;
     }
 
@@ -101,9 +144,6 @@ void Cannon::shoot(Projectile::ProjectileType projType) {
     animate("shoot", false, true);
     _enabled = false; // Prevents rapid fire, enabled after animation
 
-    // Update stats
-    GameStats* stats = new GameStats();
-    stats->fishCount = _fishCount;
-    stats->iceCreamCount = _iceCreamCount;
-    getEventDispatcher()->dispatchCustomEvent(UPDATE_STATS, stats);
+    // Update UI with current cannon stats
+    updateUI();
 }

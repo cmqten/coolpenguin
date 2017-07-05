@@ -14,6 +14,12 @@ public:
 
     CREATE_FUNC(Cannon);
 
+    /**
+    * Dispatches an event that updates the UI of the status of the cannon and
+    * the amount of projectiles.
+    */
+    void updateUI();
+
     /* Called right after this object is created */
     virtual bool init() override;
 
@@ -27,14 +33,23 @@ public:
     bool isEnabled() { return _enabled; };
 
 protected:
-    /* Number of times fish has been shot out of the cannon */
-    int _fishCount;
-
-    /* Number of times ice cream has been shot out of the cannon */
-    int _iceCreamCount;
-
     /* Determines whether cannon can shoot or not */
     bool _enabled;
+
+    /* Amount of fish in the reserve */
+    int _fishReserve;
+
+    /* Number of times fish has been shot out of the cannon */
+    int _fishShotCount;
+
+    /* Amount of ice cream in the reserve */
+    int _iceCreamReserve;
+
+    /* Number of times ice cream has been shot out of the cannon */
+    int _iceCreamShotCount;
+
+    /* Cleans the cannon */
+    void clean();
 
     /* Rotates the cannon based on the cursor's position in the x and y axes. */
     void rotate(float x, float y);

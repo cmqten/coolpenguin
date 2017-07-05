@@ -27,9 +27,6 @@
     <ClCompile Include="..\Classes\Projectile.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\StatsUI.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Penguin.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -40,6 +37,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\PenguinSpawner.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameUI.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,9 +62,6 @@
     <ClInclude Include="..\Classes\Projectile.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\StatsUI.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\IPhysics.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -77,10 +74,78 @@
     <ClInclude Include="..\Classes\PenguinSpawner.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\GameUI.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
       <Filter>resource</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\res\img\cannon.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\fish_i.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\fish_r.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\ice_cream_f.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\ice_cream_r.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\peng_idle_1.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\peng_idle_2.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\peng_stand.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\peng_stand_b.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\peng_stand_s.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\peng_walk_1.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\peng_walk_2.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\peng_walk_b_1.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\peng_walk_b_2.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\peng_walk_s_1.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\peng_walk_s_2.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\penguin_glasses.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\sp_fi.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\sp_fr.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\sp_icf.png">
+      <Filter>resource</Filter>
+    </Image>
+    <Image Include="..\Resources\res\img\sp_icr.png">
+      <Filter>resource</Filter>
+    </Image>
   </ItemGroup>
 </Project>
