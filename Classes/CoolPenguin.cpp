@@ -17,7 +17,7 @@ Scene* CoolPenguin::createScene() {
         (ObjectFactory::Instance)TNodeReader<Penguin>::getInstance);
 
     auto scene = Scene::createWithPhysics();
-    auto layer = CSLoader::createNode("csb/coolpenguin.csb");
+    auto layer = CoolPenguin::create();
     scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
 //#ifdef _DEBUG
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
@@ -27,7 +27,7 @@ Scene* CoolPenguin::createScene() {
 }
 
 void CoolPenguin::onEnter() {
-    Node::onEnter();
+    Layer::onEnter();
 
     // white background
     auto bg = LayerColor::create(Color4B::WHITE, 640, 640);
@@ -41,8 +41,10 @@ void CoolPenguin::onEnter() {
     addChild(ui);
 
     // cannon
-    _cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));
-    _cannon->updateUI();
+    auto cannon = Cannon::getInstance();
+    cannon->setPosition(640, 64);
+    cannon->updateUI();
+    addChild(cannon);
 
     // mouse listener
     auto mouseListener = EventListenerMouse::create();
@@ -71,18 +73,18 @@ void CoolPenguin::onEnter() {
 }
 
 void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
-    _cannon->onKeyPressed(keyCode, event);
+    Cannon::getInstance()->onKeyPressed(keyCode, event);
 }
 
 void CoolPenguin::onMouseMove(EventMouse* event) {
-    _cannon->onMouseMove(event);
+    Cannon::getInstance()->onMouseMove(event);
 }
 
 bool CoolPenguin::onContactBegin(PhysicsContact& contact) {
-    IPhysics* entityA = dynamic_cast<IPhysics*>(contact.getShapeA()->getBody()
+    IContact* entityA = dynamic_cast<IContact*>(contact.getShapeA()->getBody()
         ->getOwner());
 
-    IPhysics* entityB = dynamic_cast<IPhysics*>(contact.getShapeB()->getBody()
+    IContact* entityB = dynamic_cast<IContact*>(contact.getShapeB()->getBody()
         ->getOwner());
 
     if (entityA) entityA->onContactBegin(contact);

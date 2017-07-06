@@ -2,19 +2,25 @@
 #include <cstdlib>
 #include "GameUI.h"
 #include "SimpleAudioEngine.h"
+#include "TNodeReader.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
 using namespace std;
 
-Cannon::Cannon() : IAnimated("csb/cannon.csb"), _enabled(true), 
-    _fishReserve(10), _fishShotCount(0), _iceCreamReserve(10), 
-    _iceCreamShotCount(0) {}
+Cannon* Cannon::_instance = nullptr;
+
+Cannon* Cannon::getInstance() {
+    if (!_instance) _instance = (Cannon*)CSLoader::createNode("csb/cannon.csb");
+    return _instance;
+}
+
+Cannon::Cannon() : IAnimated("csb/cannon.csb"), _enabled(true), _fishShot(0),
+    _fishReserve(10), _iceCreamReserve(10), _iceCreamShot(0) {}
 
 void Cannon::updateUI() {
-    CannonStats cannonStats = { _fishShotCount, _iceCreamShotCount,
-        _fishReserve, _iceCreamReserve };
-    _eventDispatcher->dispatchCustomEvent(UPDATE_CANNON, (void*)&cannonStats);
+    GameUI::getInstance()->updateCannonStats(_fishShot, _iceCreamShot,
+        _fishReserve, _iceCreamReserve);
 }
 
 bool Cannon::init() {
@@ -25,7 +31,7 @@ bool Cannon::init() {
         /* Enables cannon after shoot animation is done, prevents rapid fire. 
         If more than 10 of the some projectile has been shot, cannon gets 
         clogged. */
-        _enabled = abs(_fishShotCount - _iceCreamShotCount) < 10;
+        _enabled = abs(_fishShot - _iceCreamShot) < 10;
     });
 
     return true;
@@ -57,8 +63,8 @@ void Cannon::onMouseMove(EventMouse* event) {
 }
 
 void Cannon::clean() {
-    _fishShotCount = 0;
-    _iceCreamShotCount = 0;
+    _fishShot = 0;
+    _iceCreamShot = 0;
     _enabled = true;
     updateUI();
 }
@@ -100,33 +106,33 @@ void Cannon::shoot(Projectile::ProjectileType projType) {
          */
         case Projectile::ProjectileType::FISH:
             if (!_fishReserve) return;
-            proj = _fishShotCount >= _iceCreamShotCount ? 
+            proj = _fishShot >= _iceCreamShot ? 
                 Projectile::create(projType) :
                 Projectile::create(Projectile::ProjectileType::FISHI);
-            _fishShotCount++;
+            _fishShot++;
             _fishReserve--;
             break;
 
         case Projectile::ProjectileType::ICECREAM:
             if (!_iceCreamReserve) return;
-            proj = _iceCreamShotCount >= _fishShotCount ? 
+            proj = _iceCreamShot >= _fishShot ? 
                 Projectile::create(projType) :
                 Projectile::create(Projectile::ProjectileType::ICECREAMF);
-            _iceCreamShotCount++;
+            _iceCreamShot++;
             _iceCreamReserve--;
             break;
 
         case Projectile::ProjectileType::FISHI:
             if (!_fishReserve) return;
             proj = Projectile::create(projType);
-            _fishShotCount++;
+            _fishShot++;
             _fishReserve--;
             break;
 
         case Projectile::ProjectileType::ICECREAMF:
             if (!_iceCreamReserve) return;
             proj = Projectile::create(projType);
-            _iceCreamShotCount++;
+            _iceCreamShot++;
             _fishReserve--;
             break;
     }

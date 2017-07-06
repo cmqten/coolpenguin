@@ -2,14 +2,14 @@
 #define __PROJECTILE_H__
 
 #include "cocos2d.h"
-#include "IPhysics.h"
+#include "IContact.h"
 
 #define DEFAULT_PROJ_VELOCITY 1000.0f
 
 /**
  * Cannon projectile
  */
-class Projectile : public cocos2d::Node, public IPhysics {
+class Projectile : public cocos2d::Node, public IContact {
 public:
     enum class ProjectileType {FISH, FISHI, ICECREAM, ICECREAMF};
 

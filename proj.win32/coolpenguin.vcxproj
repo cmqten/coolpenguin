@@ -151,7 +151,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Cannon.cpp" />
     <ClCompile Include="..\Classes\IAnimated.cpp" />
     <ClCompile Include="..\Classes\CoolPenguin.cpp" />
-    <ClCompile Include="..\Classes\IPhysics.cpp" />
+    <ClCompile Include="..\Classes\IContact.cpp" />
     <ClCompile Include="..\Classes\Penguin.cpp" />
     <ClCompile Include="..\Classes\PenguinSpawner.cpp" />
     <ClCompile Include="..\Classes\Projectile.cpp" />
@@ -162,7 +162,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Cannon.h" />
     <ClInclude Include="..\Classes\IAnimated.h" />
-    <ClInclude Include="..\Classes\IPhysics.h" />
+    <ClInclude Include="..\Classes\IContact.h" />
     <ClInclude Include="..\Classes\CoolPenguin.h" />
     <ClInclude Include="..\Classes\Penguin.h" />
     <ClInclude Include="..\Classes\PenguinSpawner.h" />

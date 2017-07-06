@@ -10,9 +10,11 @@
  */
 class Cannon : public cocos2d::Node, public IAnimated {
 public:
-    Cannon();
-
     CREATE_FUNC(Cannon);
+
+    static Cannon* getInstance();
+
+    bool isEnabled() { return _enabled; };
 
     /**
     * Dispatches an event that updates the UI of the status of the cannon and
@@ -30,9 +32,11 @@ public:
     /* Callback function for when the mouse is moved */
     void onMouseMove(cocos2d::EventMouse* event);
 
-    bool isEnabled() { return _enabled; };
-
 protected:
+    Cannon();
+
+    static Cannon* _instance;
+
     /* Determines whether cannon can shoot or not */
     bool _enabled;
 
@@ -40,13 +44,13 @@ protected:
     int _fishReserve;
 
     /* Number of times fish has been shot out of the cannon */
-    int _fishShotCount;
+    int _fishShot;
 
     /* Amount of ice cream in the reserve */
     int _iceCreamReserve;
 
     /* Number of times ice cream has been shot out of the cannon */
-    int _iceCreamShotCount;
+    int _iceCreamShot;
 
     /* Cleans the cannon */
     void clean();

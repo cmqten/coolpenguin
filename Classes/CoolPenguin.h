@@ -3,12 +3,12 @@
 
 #include "cocos2d.h"
 #include "Cannon.h"
-#include "IPhysics.h"
+#include "IContact.h"
 
 /**
  * Main game
  */
-class CoolPenguin : public cocos2d::Layer, public IPhysics {
+class CoolPenguin : public cocos2d::Layer, public IContact {
 public:
     static cocos2d::Scene* createScene();
 
@@ -29,9 +29,6 @@ public:
      * false otherwise.
      */
     virtual bool onContactBegin(cocos2d::PhysicsContact& contact) override;
-
-protected:
-    Cannon* _cannon;
 };
 
 #endif
