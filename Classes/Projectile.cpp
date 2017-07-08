@@ -55,11 +55,13 @@ Projectile::Projectile(string path, PhysicsBody* pBody, ProjectileType type,
     setPhysicsBody(pBody);
 }
 
-void Projectile::launch(float angle) const {
+void Projectile::launch(float rotation, Vec2 pos) {
     /* To launch the projectile at the specified velocity and angle, the 
     x and y components are calculated using math magic */
-    float xComp = _velocity * cosf(CC_DEGREES_TO_RADIANS(angle));
-    float yComp = _velocity * sinf(CC_DEGREES_TO_RADIANS(angle));
+    setRotation(rotation);
+    setPosition(pos);
+    float xComp = _velocity * cosf(CC_DEGREES_TO_RADIANS(90 - rotation));
+    float yComp = _velocity * sinf(CC_DEGREES_TO_RADIANS(90 - rotation));
     getPhysicsBody()->setVelocity(Vec2(xComp, yComp));
 }
 

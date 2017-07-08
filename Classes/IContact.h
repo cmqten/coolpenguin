@@ -4,13 +4,13 @@
 #include "cocos2d.h"
 
 /**
- * An interface for physics callbacks. In this interface, contact refers to
+ * An interface for contact callbacks. In this interface, contact refers to
  * two objects touching, and collision refers to the physics response to two
  * objects touching. A collision cannot happen without a contact.
  */
-class IPhysics {
+class IContact {
 public:
-    virtual ~IPhysics() = 0;
+    virtual ~IContact() = 0;
 
     /**
      * Called when two objects begin contact

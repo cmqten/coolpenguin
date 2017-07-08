@@ -19,23 +19,23 @@ void GameUI::incrementTime(float delta) {
     getEventDispatcher()->dispatchCustomEvent(TIMER_TICK, (void*)&_time);
 }
 
-void GameUI::updateCannonStats(EventCustom * event) {
-    CannonStats* stats = (CannonStats*)event->getUserData();
+void GameUI::updateCannonStats(int fishShot, int iceCreamShot, int fishReserve,
+    int iceCreamReserve) {
     auto statusDisplay = (Label*)getChildByName("status_display");
 
     // Sets the color, blue if more fish, pink if more ice cream, black if equal
-    if (stats->fishShotCount > stats->iceCreamShotCount) {
+    if (fishShot > iceCreamShot) 
         statusDisplay->setColor(Color3B(0x2b, 0x86, 0xa4));
-    }
-    else if (stats->fishShotCount < stats->iceCreamShotCount) {
+
+    else if (fishShot < iceCreamShot) 
         statusDisplay->setColor(Color3B(0xf3, 0x7e, 0xf4));
-    }
+
     else statusDisplay->setColor(Color3B::BLACK);
 
     // Updates the status
-    switch (abs(stats->fishShotCount - stats->iceCreamShotCount)) {
+    switch (abs(fishShot - iceCreamShot)) {
         case 0:
-            if (!stats->fishShotCount && !stats->iceCreamShotCount)
+            if (!fishShot && !iceCreamShot)
                 statusDisplay->setString("SQUEAKY CLEAN");
             else statusDisplay->setString("CLEAN");
             break;
@@ -60,9 +60,14 @@ void GameUI::updateCannonStats(EventCustom * event) {
 
     // Updates reserve
     auto fishDisplay = (Label*)getChildByName("fish_display");
-    fishDisplay->setString(to_string(stats->fishReserve));
+    fishDisplay->setString(to_string(fishReserve));
     auto iceCreamDisplay = (Label*)getChildByName("ice_cream_display");
-    iceCreamDisplay->setString(to_string(stats->iceCreamReserve));
+    iceCreamDisplay->setString(to_string(iceCreamReserve));
+}
+
+void GameUI::updateScore(int points) {
+    _score += points;
+    ((Label*)getChildByName("score_display"))->setString(to_string(_score));
 }
 
 bool GameUI::init() {
@@ -118,18 +123,6 @@ bool GameUI::init() {
 
     // Timer increment
     schedule(SEL_SCHEDULE(&GameUI::incrementTime), 1.0f);
-
-    // Listener for cannon stat updates
-    getEventDispatcher()->addCustomEventListener(UPDATE_CANNON,
-        CC_CALLBACK_1(GameUI::updateCannonStats, this));
-
-    // Listener for score updates
-    getEventDispatcher()->addCustomEventListener(UPDATE_SCORE, 
-        [this](EventCustom* event) {
-            this->_score += *(int*)event->getUserData();
-            ((Label*)this->getChildByName("score_display"))->setString(
-                to_string(this->_score));
-        });
     
     return true;
 }

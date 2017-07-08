@@ -9,14 +9,12 @@ using namespace std;
 PenguinSpawner::PenguinSpawner() : _maxSpawn(1) {
     // Initializes _spawnSlots as a hashmap with 4 integers from 0 to 3 
     _spawnSlots = new unordered_set<int>();
-    _spawnSlots->insert(0);
-    _spawnSlots->insert(1);
-    _spawnSlots->insert(2);
-    _spawnSlots->insert(3);
 
     // Creates as many penguins as there are slots
     _penguins = new queue<Penguin*>();
+
     for (int i = 0; i < 4; i++) {
+        _spawnSlots->insert(i);
         auto penguin = dynamic_cast<Penguin*>(CSLoader::createNode(
             "csb/penguin.csb"));
         penguin->retain();
@@ -85,7 +83,7 @@ void PenguinSpawner::spawnPenguin() {
 
     // Prepares the penguin for dispatch, binds slot to penguin for access 
     // after the penguin has returned
-    penguin->prepareForSpawn(GameUI::getInstance()->getGameTime() >= 30 ? 5:7);
+    penguin->prepareForSpawn(7);
     penguin->setUserData(new int(randomSlot));
     penguin->waddleIn();
 }
@@ -112,20 +110,20 @@ void PenguinSpawner::onEnter() {
     getEventDispatcher()->addCustomEventListener(TIMER_TICK,
         [this](EventCustom* event) {
             switch (*(int*)event->getUserData()) {
-                case 10:
+                case 15:
                     this->_maxSpawn = 2;
                     this->spawnPenguin();
                     this->spawnPenguin();
                     break;
 
-                case 20:
+                case 30:
                     this->_maxSpawn = 3;
                     this->spawnPenguin();
                     this->spawnPenguin();
                     this->spawnPenguin();
                     break;
 
-                case 40:
+                case 45:
                     this->_maxSpawn = 4;
                     this->spawnPenguin();
                     this->spawnPenguin();

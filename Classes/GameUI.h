@@ -4,8 +4,6 @@
 #include "cocos2d.h"
 
 #define TIMER_TICK "timer_tick"
-#define UPDATE_CANNON "update_stats"
-#define UPDATE_SCORE "update_score"
 
 /**
  * Sidebar that displays current game stats such as time, score, etc...
@@ -20,10 +18,18 @@ public:
     void incrementTime(float delta);
 
     /**
-     * Listener for cannon update events
+     * Updates cannon stats such as number of projectiles shot and amount of
+     * projectiles in the reserve.
      * @param event : event object, contains information about event
      */
-    void updateCannonStats(cocos2d::EventCustom* event);
+    void updateCannonStats(int fishShot, int iceCreamShot, int fishReserve,
+        int iceCreamReserve);
+
+    /**
+     * Updates score
+     * @param points : points to add to the score
+     */
+    void updateScore(int points);
 
     virtual bool init() override;
 
@@ -39,17 +45,6 @@ protected:
 
     /* Amount of time that has passed */
     long _time;
-};
-
-/**
- * To be used by the cannon, cannon fills out the fields, then dispatches an
- * UPDATE_CANNON event containing a pointer to this struct.
- */
-struct CannonStats {
-    int fishShotCount;
-    int iceCreamShotCount;
-    int fishReserve;
-    int iceCreamReserve;
 };
 
 #endif

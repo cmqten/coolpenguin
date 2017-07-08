@@ -9,65 +9,51 @@ using namespace std;
 Penguin::Penguin() : IAnimated("csb/penguin.csb") {
     /* Creates the speech bubbles to be set visible when a random request is
     generated */
-    auto createSpeechBubble = [this](string path, string name) {
+    _speechBubbles = new unordered_map<Projectile::ProjectileType,
+        cocos2d::Sprite*>();
+
+    auto createSpeechBubble = [this](string path)->Sprite* {
         auto speechBubble = Sprite::create(path);
-        speechBubble->setVisible(false);
         speechBubble->setPosition(48, 64);
-        this->addChild(speechBubble, 0, name);
+        speechBubble->retain();
+        return speechBubble;
     };
-    createSpeechBubble("img/sp_fr.png", "sp_fr"); // regular fish
-    createSpeechBubble("img/sp_fi.png", "sp_fi"); // ice cream covered fish
-    createSpeechBubble("img/sp_icr.png", "sp_icr"); // regular ice cream
-    createSpeechBubble("img/sp_icf.png", "sp_icf"); // fish flavored ice cream
+
+    _speechBubbles->insert({ { Projectile::ProjectileType::FISH, 
+        createSpeechBubble("img/sp_fr.png") } }); // regular fish
+
+    _speechBubbles->insert({ { Projectile::ProjectileType::FISHI,
+        createSpeechBubble("img/sp_fi.png") } }); // ice cream covered fish
+
+    _speechBubbles->insert({ { Projectile::ProjectileType::ICECREAM,
+        createSpeechBubble("img/sp_icr.png") } }); // regular ice cream
+
+    _speechBubbles->insert({ { Projectile::ProjectileType::ICECREAMF,
+        createSpeechBubble("img/sp_icf.png") } }); // fish flavored ice cream
+}
+
+Penguin::~Penguin() {
+    for (auto it : *_speechBubbles) it.second->release();
+    delete _speechBubbles;
 }
 
 void Penguin::closeRequest() {
-    switch (_request) {
-        case Projectile::ProjectileType::FISH:
-            getChildByName("sp_fr")->setVisible(false);
-            break;
-
-        case Projectile::ProjectileType::FISHI:
-            getChildByName("sp_fi")->setVisible(false);
-            break;
-
-        case Projectile::ProjectileType::ICECREAM:
-            getChildByName("sp_icr")->setVisible(false);
-            break;
-
-        case Projectile::ProjectileType::ICECREAMF:
-            getChildByName("sp_icf")->setVisible(false);
-            break;
-    }
+    getChildByName("spBubble")->removeFromParentAndCleanup(true);
 }
 
 void Penguin::generateRequest() {
-    /* First 20 seconds of the game, only regular fish and regular ice cream 
+    Projectile::ProjectileType projTypes[] = {
+        Projectile::ProjectileType::FISH, 
+        Projectile::ProjectileType::ICECREAM,
+        Projectile::ProjectileType::FISHI,
+        Projectile::ProjectileType::ICECREAMF
+    };
+
+    /* First 20 seconds of the game, only regular fish and regular ice cream
     are generated */
-    int choice = GameUI::getInstance()->getGameTime() >= 20 ? 3 : 1;
-    switch (rand() & choice) {
-        case 0:
-            _request = Projectile::ProjectileType::FISH;
-            getChildByName("sp_fr")->setVisible(true);
-            break;
-
-        case 1:
-            _request = Projectile::ProjectileType::ICECREAM;
-            getChildByName("sp_icr")->setVisible(true);
-            break;
-
-        case 2:
-            _request = Projectile::ProjectileType::FISHI;
-            getChildByName("sp_fi")->setVisible(true);
-            break;
-
-        case 3:
-            _request = Projectile::ProjectileType::ICECREAMF;
-            getChildByName("sp_icf")->setVisible(true);
-            break;
-
-        default: break;
-    }
+    int choice = rand() & (GameUI::getInstance()->getGameTime() >= 20 ? 3 : 1);
+    _request = projTypes[choice];
+    addChild(_speechBubbles->at(_request), 0, "spBubble");
 }
 
 void Penguin::prepareForSpawn(int wait) {
@@ -107,7 +93,7 @@ void Penguin::waddleOut() {
 
     /* Closes request by stopping contact detection, unscheduling request timer, 
     and setting the speech bubble invisible */
-    this->getPhysicsBody()->setContactTestBitmask(0x0);
+    getPhysicsBody()->setContactTestBitmask(0x0);
     unschedule(SEL_SCHEDULE(&Penguin::waitForRequest));
     closeRequest();
 
@@ -138,19 +124,21 @@ void Penguin::onEnter() {
 
 bool Penguin::onContactBegin(cocos2d::PhysicsContact& contact) {
     if (_state != State::RECV) return false;
+
     // Detects projectile type and updates points accordingly
     Node* penguin = contact.getShapeA()->getBody()->getOwner();
     Node* proj = contact.getShapeB()->getBody()->getOwner();
 
-    if (penguin != this) { // Swapping pointers
+    if (penguin != this) { // Swap pointers if required
         penguin = (Node*)((uintptr_t)penguin ^ (uintptr_t)proj);
         proj = (Node*)((uintptr_t)penguin ^ (uintptr_t)proj);
         penguin = (Node*)((uintptr_t)penguin ^ (uintptr_t)proj);
     }
 
-    // Calculates points and removes projectile from game
+    /* Calculates points and removes projectile from game. 2 for a correct shot,
+    -1 for a wrong shot */ 
     auto points = ((Projectile*)proj)->getType() == _request ? 2 : -1;
-    getEventDispatcher()->dispatchCustomEvent(UPDATE_SCORE, (void*)&points);
+    GameUI::getInstance()->updateScore(points);
     proj->removeFromParentAndCleanup(true);
     waddleOut();
     return false;

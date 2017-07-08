@@ -1,4 +1,5 @@
 #include "CoolPenguin.h"
+#include "HelperPenguin.h"
 #include "Penguin.h"
 #include "PenguinSpawner.h"
 #include "GameUI.h"
@@ -15,9 +16,11 @@ Scene* CoolPenguin::createScene() {
         (ObjectFactory::Instance)TNodeReader<Cannon>::getInstance);
     CSLoader::getInstance()->registReaderObject("PenguinReader",
         (ObjectFactory::Instance)TNodeReader<Penguin>::getInstance);
+    CSLoader::getInstance()->registReaderObject("HelperPenguinReader",
+        (ObjectFactory::Instance)TNodeReader<HelperPenguin>::getInstance);
 
     auto scene = Scene::createWithPhysics();
-    auto layer = CSLoader::createNode("csb/coolpenguin.csb");
+    auto layer = CoolPenguin::create();
     scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
 //#ifdef _DEBUG
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
@@ -26,8 +29,10 @@ Scene* CoolPenguin::createScene() {
     return scene;
 }
 
+CoolPenguin::CoolPenguin() : _paused(false) {}
+
 void CoolPenguin::onEnter() {
-    Node::onEnter();
+    Layer::onEnter();
 
     // white background
     auto bg = LayerColor::create(Color4B::WHITE, 640, 640);
@@ -40,9 +45,20 @@ void CoolPenguin::onEnter() {
     ui->setPosition(0, 0);
     addChild(ui);
 
+    // spawner
+    auto spawner = PenguinSpawner::create();
+    addChild(spawner, -2);
+    spawner->setPosition(640, 704);
+
     // cannon
-    _cannon = dynamic_cast<Cannon*>(this->getChildByName("cannon"));
-    _cannon->updateUI();
+    auto cannon = Cannon::getInstance();
+    cannon->setPosition(640, 64);
+    addChild(cannon);
+
+    // helper penguin
+    auto helperPenguin = HelperPenguin::getInstance();
+    helperPenguin->setPosition(896, 64);
+    addChild(helperPenguin);
 
     // mouse listener
     auto mouseListener = EventListenerMouse::create();
@@ -63,26 +79,28 @@ void CoolPenguin::onEnter() {
 
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         contactListener, this);
-    
-    // spawner
-    auto spawner = PenguinSpawner::create();
-    addChild(spawner);
-    spawner->setPosition(640, 704);
 }
 
 void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
-    _cannon->onKeyPressed(keyCode, event);
+    Cannon::getInstance()->onKeyPressed(keyCode, event);
+
+    // Pauses the game
+    if (keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
+        if (!_paused) Director::getInstance()->stopAnimation();
+        else Director::getInstance()->startAnimation();
+        _paused = !_paused;
+    }
 }
 
 void CoolPenguin::onMouseMove(EventMouse* event) {
-    _cannon->onMouseMove(event);
+    Cannon::getInstance()->onMouseMove(event);
 }
 
 bool CoolPenguin::onContactBegin(PhysicsContact& contact) {
-    IPhysics* entityA = dynamic_cast<IPhysics*>(contact.getShapeA()->getBody()
+    IContact* entityA = dynamic_cast<IContact*>(contact.getShapeA()->getBody()
         ->getOwner());
 
-    IPhysics* entityB = dynamic_cast<IPhysics*>(contact.getShapeB()->getBody()
+    IContact* entityB = dynamic_cast<IContact*>(contact.getShapeB()->getBody()
         ->getOwner());
 
     if (entityA) entityA->onContactBegin(contact);

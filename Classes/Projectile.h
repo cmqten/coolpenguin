@@ -2,14 +2,14 @@
 #define __PROJECTILE_H__
 
 #include "cocos2d.h"
-#include "IPhysics.h"
+#include "IContact.h"
 
 #define DEFAULT_PROJ_VELOCITY 1000.0f
 
 /**
  * Cannon projectile
  */
-class Projectile : public cocos2d::Node, public IPhysics {
+class Projectile : public cocos2d::Node, public IContact {
 public:
     enum class ProjectileType {FISH, FISHI, ICECREAM, ICECREAMF};
 
@@ -21,9 +21,10 @@ public:
 
     /**
      * Launches this projectile towards the specified angle
-     * @param angle : angle in degrees
+     * @param rotation : rotation angle
+     * @param pos : start position
      */
-    void launch(float angle) const;
+    void launch(float rotation, cocos2d::Vec2 pos);
 
     ProjectileType getType() { return _type; };
 
