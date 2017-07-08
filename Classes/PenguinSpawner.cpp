@@ -32,7 +32,7 @@ void PenguinSpawner::spawnPenguin() {
     if (_spawnSlots->empty()) return;
 
     // Max number spawned
-    if ((4 - _spawnSlots->size()) >= _maxSpawn) return;
+    if ((int)(4 - _spawnSlots->size()) >= _maxSpawn) return;
 
     /* Chooses a penguin to dispatch. No need to check if penguin queue is 
     empty or not because there always has to be penguins in the queue, and if
@@ -50,7 +50,7 @@ void PenguinSpawner::spawnPenguin() {
      *    temporarily, spawn the penguin at the next element in the hash table,
      *    then delete the original number and the element after it
      */
-    srand(time(nullptr));
+    srand((unsigned int)time(nullptr));
     int randomSlot = rand() & 3; // Generates a random number from 0 to 3
 
     if (_spawnSlots->find(randomSlot) != _spawnSlots->end()) {

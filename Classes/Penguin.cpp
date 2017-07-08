@@ -9,8 +9,7 @@ using namespace std;
 Penguin::Penguin() : IAnimated("csb/penguin.csb") {
     /* Creates the speech bubbles to be set visible when a random request is
     generated */
-    _speechBubbles = new unordered_map<Projectile::ProjectileType,
-        cocos2d::Sprite*>();
+    _speechBubbles = new Sprite*[4];
 
     auto createSpeechBubble = [this](string path)->Sprite* {
         auto speechBubble = Sprite::create(path);
@@ -19,21 +18,20 @@ Penguin::Penguin() : IAnimated("csb/penguin.csb") {
         return speechBubble;
     };
 
-    _speechBubbles->insert({ { Projectile::ProjectileType::FISH, 
-        createSpeechBubble("img/sp_fr.png") } }); // regular fish
+    _speechBubbles[0] = createSpeechBubble("img/sp_fr.png"); // regular fish
 
-    _speechBubbles->insert({ { Projectile::ProjectileType::FISHI,
-        createSpeechBubble("img/sp_fi.png") } }); // ice cream covered fish
+    // regular ice cream
+    _speechBubbles[1] = createSpeechBubble("img/sp_icr.png");
 
-    _speechBubbles->insert({ { Projectile::ProjectileType::ICECREAM,
-        createSpeechBubble("img/sp_icr.png") } }); // regular ice cream
+    // ice cream covered fish
+    _speechBubbles[2] = createSpeechBubble("img/sp_fi.png");
 
-    _speechBubbles->insert({ { Projectile::ProjectileType::ICECREAMF,
-        createSpeechBubble("img/sp_icf.png") } }); // fish flavored ice cream
+    // fish flavored ice cream
+    _speechBubbles[3] = createSpeechBubble("img/sp_icf.png");
 }
 
 Penguin::~Penguin() {
-    for (auto it : *_speechBubbles) it.second->release();
+    for (int i = 0; i < 4; i++) _speechBubbles[i]->release();
     delete _speechBubbles;
 }
 
@@ -53,7 +51,7 @@ void Penguin::generateRequest() {
     are generated */
     int choice = rand() & (GameUI::getInstance()->getGameTime() >= 20 ? 3 : 1);
     _request = projTypes[choice];
-    addChild(_speechBubbles->at(_request), 0, "spBubble");
+    addChild(_speechBubbles[choice], 0, "spBubble");
 }
 
 void Penguin::prepareForSpawn(int wait) {

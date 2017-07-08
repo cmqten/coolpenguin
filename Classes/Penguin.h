@@ -61,8 +61,7 @@ protected:
     Projectile::ProjectileType _request;
 
     /* Speech bubbles that will be displayed according to penguin's request */
-    std::unordered_map<Projectile::ProjectileType, cocos2d::Sprite*>*
-        _speechBubbles;
+    cocos2d::Sprite** _speechBubbles;
     
     /* Penguin's state. Defined in the State enum. */
     State _state;
