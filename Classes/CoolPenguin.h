@@ -12,6 +12,8 @@ class CoolPenguin : public cocos2d::Layer, public IContact {
 public:
     static cocos2d::Scene* createScene();
 
+    CoolPenguin();
+
     CREATE_FUNC(CoolPenguin);
 
     /* Called once when this object enters the running game */
@@ -29,6 +31,9 @@ public:
      * false otherwise.
      */
     virtual bool onContactBegin(cocos2d::PhysicsContact& contact) override;
+
+protected:
+    bool _paused;
 };
 
 #endif

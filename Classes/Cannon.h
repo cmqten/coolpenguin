@@ -2,6 +2,7 @@
 #define __CANNON_H__
 
 #include "cocos2d.h"
+#include "HelperPenguin.h"
 #include "IAnimated.h"
 #include "Projectile.h"
 
@@ -14,7 +15,7 @@ public:
 
     static Cannon* getInstance();
 
-    bool isEnabled() { return _enabled; };
+    inline bool isEnabled() { return _enabled; };
 
     /**
     * Dispatches an event that updates the UI of the status of the cannon and
@@ -22,8 +23,11 @@ public:
     */
     void updateUI();
 
-    /* Called right after this object is created */
+    /* Called right after node is created */
     virtual bool init() override;
+
+    /* Called when node enters running scene */
+    virtual void onEnter() override;
 
     /* Callback function for when a key is pressed */
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, 
@@ -55,13 +59,16 @@ protected:
     /* Cleans the cannon */
     void clean();
 
+    /* Callback function when a helper penguin event is received. */
+    void helperEventCallback(cocos2d::EventCustom* event);
+
     /* Rotates the cannon based on the cursor's position in the x and y axes. */
     void rotate(float x, float y);
 
     /** 
      * Shoots a projectile.
      * @param projType : an enumerator defined in the Projectile class, type of
-     * projectile
+     *      projectile
      */
     void shoot(Projectile::ProjectileType projType);
 };

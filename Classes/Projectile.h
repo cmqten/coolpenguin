@@ -21,9 +21,10 @@ public:
 
     /**
      * Launches this projectile towards the specified angle
-     * @param angle : angle in degrees
+     * @param rotation : rotation angle
+     * @param pos : start position
      */
-    void launch(float angle) const;
+    void launch(float rotation, cocos2d::Vec2 pos);
 
     ProjectileType getType() { return _type; };
 

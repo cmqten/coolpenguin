@@ -1,4 +1,5 @@
 #include "CoolPenguin.h"
+#include "HelperPenguin.h"
 #include "Penguin.h"
 #include "PenguinSpawner.h"
 #include "GameUI.h"
@@ -15,6 +16,8 @@ Scene* CoolPenguin::createScene() {
         (ObjectFactory::Instance)TNodeReader<Cannon>::getInstance);
     CSLoader::getInstance()->registReaderObject("PenguinReader",
         (ObjectFactory::Instance)TNodeReader<Penguin>::getInstance);
+    CSLoader::getInstance()->registReaderObject("HelperPenguinReader",
+        (ObjectFactory::Instance)TNodeReader<HelperPenguin>::getInstance);
 
     auto scene = Scene::createWithPhysics();
     auto layer = CoolPenguin::create();
@@ -25,6 +28,8 @@ Scene* CoolPenguin::createScene() {
     scene->addChild(layer);
     return scene;
 }
+
+CoolPenguin::CoolPenguin() : _paused(false) {}
 
 void CoolPenguin::onEnter() {
     Layer::onEnter();
@@ -40,11 +45,20 @@ void CoolPenguin::onEnter() {
     ui->setPosition(0, 0);
     addChild(ui);
 
+    // spawner
+    auto spawner = PenguinSpawner::create();
+    addChild(spawner, -2);
+    spawner->setPosition(640, 704);
+
     // cannon
     auto cannon = Cannon::getInstance();
     cannon->setPosition(640, 64);
-    cannon->updateUI();
     addChild(cannon);
+
+    // helper penguin
+    auto helperPenguin = HelperPenguin::getInstance();
+    helperPenguin->setPosition(896, 64);
+    addChild(helperPenguin);
 
     // mouse listener
     auto mouseListener = EventListenerMouse::create();
@@ -65,15 +79,17 @@ void CoolPenguin::onEnter() {
 
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         contactListener, this);
-    
-    // spawner
-    auto spawner = PenguinSpawner::create();
-    addChild(spawner);
-    spawner->setPosition(640, 704);
 }
 
 void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     Cannon::getInstance()->onKeyPressed(keyCode, event);
+
+    // Pauses the game
+    if (keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
+        if (!_paused) Director::getInstance()->stopAnimation();
+        else Director::getInstance()->startAnimation();
+        _paused = !_paused;
+    }
 }
 
 void CoolPenguin::onMouseMove(EventMouse* event) {

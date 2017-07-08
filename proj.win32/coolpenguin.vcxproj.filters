@@ -42,6 +42,9 @@
     <ClCompile Include="..\Classes\IContact.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\HelperPenguin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -75,6 +78,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\IContact.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\HelperPenguin.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
