@@ -99,7 +99,7 @@ void PenguinSpawner::reset() {
     for (int i = 0; i < 4; i++) {
         if (_penguins[i]->getUserData() != nullptr) {
             _spawnSlots->insert(*(int*)_penguins[i]->getUserData());
-            delete _penguins[i]->getUserData();
+            delete (int*)_penguins[i]->getUserData();
             _penguins[i]->setUserData(nullptr);
         }
         _penguins[i]->reset();
