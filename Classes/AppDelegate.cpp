@@ -1,5 +1,12 @@
 #include "AppDelegate.h"
 #include "CoolPenguin.h"
+#include "Cannon.h"
+#include "HelperPenguin.h"
+#include "Penguin.h"
+#include "PenguinSpawner.h"
+#include "GameUI.h"
+#include "TitleScreen.h"
+#include "TNodeReader.h"
 
 USING_NS_CC;
 
@@ -37,8 +44,20 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     FileUtils::getInstance()->addSearchPath("res");
 
+    // Register custom loaders
+    CSLoader::getInstance()->registReaderObject("CoolPenguinReader",
+        (ObjectFactory::Instance)TNodeReader<CoolPenguin>::getInstance);
+    CSLoader::getInstance()->registReaderObject("CannonReader",
+        (ObjectFactory::Instance)TNodeReader<Cannon>::getInstance);
+    CSLoader::getInstance()->registReaderObject("PenguinReader",
+        (ObjectFactory::Instance)TNodeReader<Penguin>::getInstance);
+    CSLoader::getInstance()->registReaderObject("HelperPenguinReader",
+        (ObjectFactory::Instance)TNodeReader<HelperPenguin>::getInstance);
+    CSLoader::getInstance()->registReaderObject("TitleScreenReader",
+        (ObjectFactory::Instance)TNodeReader<TitleScreen>::getInstance);
+
     // create a scene. it's an autorelease object
-    auto scene = CoolPenguin::createScene();
+    auto scene = TitleScreen::createScene();
 
     // run
     director->runWithScene(scene);

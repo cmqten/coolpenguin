@@ -5,6 +5,7 @@
 #include "cocos2d.h"
 #include "IAnimated.h"
 #include "IContact.h"
+#include "IReset.h"
 #include "Projectile.h"
 
 // Event to notify dispatcher that this penguin is done
@@ -13,7 +14,8 @@
 /**
  * A penguin 
  */
-class Penguin : public cocos2d::Node, public IContact, public IAnimated {
+class Penguin : public cocos2d::Node, public IContact, public IAnimated, 
+    public IReset {
 public:
     friend class PenguinSpawner;
 
@@ -48,6 +50,8 @@ public:
      * penguin waddles back. 
      */
     void waitForRequest(float delta);
+
+    virtual void reset();
 
     virtual void onEnter() override;
 

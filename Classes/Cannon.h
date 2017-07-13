@@ -4,12 +4,13 @@
 #include "cocos2d.h"
 #include "HelperPenguin.h"
 #include "IAnimated.h"
+#include "IReset.h"
 #include "Projectile.h"
 
 /**
  * Cannon that shoots fish and ice cream
  */
-class Cannon : public cocos2d::Node, public IAnimated {
+class Cannon : public cocos2d::Node, public IAnimated, public IReset {
 public:
     CREATE_FUNC(Cannon);
 
@@ -22,6 +23,9 @@ public:
     * the amount of projectiles.
     */
     void updateUI();
+
+    /* Resets cannon to original state */
+    virtual void reset();
 
     /* Called right after node is created */
     virtual bool init() override;

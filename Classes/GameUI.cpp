@@ -70,16 +70,24 @@ void GameUI::updateScore(int points) {
     ((Label*)getChildByName("score_display"))->setString(to_string(_score));
 }
 
+void GameUI::reset() {
+    _score = 0;
+    getChildByName<Label*>("score_display")->setString("0");
+
+    _time = 0;
+    unschedule(SEL_SCHEDULE(&GameUI::incrementTime));
+    getChildByName<Label*>("timer_display")->setString("0");
+    schedule(SEL_SCHEDULE(&GameUI::incrementTime), 1.0f);
+}
+
 bool GameUI::init() {
     if (!Layer::init()) return false;
 
     // Background and border
-    Color4B iceBlue(0xd4, 0xf0, 0xff, 0xff);
-    Color4B oceanBlue(0, 0x77, 0xbe, 0xff);
-    auto bgAndBorder = DrawNode::create();
-    bgAndBorder->drawSolidRect(Vec2(0, 0), Vec2(320, 640), Color4F(oceanBlue));
-    bgAndBorder->drawSolidRect(Vec2(16, 16), Vec2(304, 624), Color4F(iceBlue));
-    addChild(bgAndBorder, -2, "bgAndBorder");
+    Color4B grassGreen(0xff, 0xff, 0xff, 0xcc);
+    auto bg = DrawNode::create();
+    bg->drawSolidRect(Vec2(0, 0), Vec2(320, 640), Color4F(grassGreen));
+    addChild(bg, -2, "bgAndBorder");
 
     // Lambda for creating labels to remove reptitive code 
     auto createLabel = [this](string text, float size, Vec2 position,

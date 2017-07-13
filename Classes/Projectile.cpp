@@ -65,6 +65,11 @@ void Projectile::launch(float rotation, Vec2 pos) {
     getPhysicsBody()->setVelocity(Vec2(xComp, yComp));
 }
 
+void Projectile::reset() {
+    release();
+    removeFromParentAndCleanup(true);
+}
+
 void Projectile::onEnter() {
     Node::onEnter();
     retain();
@@ -81,8 +86,7 @@ void Projectile::update(float delta) {
     float sceneY = getScene()->getContentSize().height;
     
     if (x > sceneX || x < 0 || y > sceneY || y < 0) {
-        release();
-        removeFromParentAndCleanup(true);
+        
     }  
 }
 

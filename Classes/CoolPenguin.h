@@ -2,19 +2,21 @@
 #define __COOL_PENGUIN_H__
 
 #include "cocos2d.h"
-#include "Cannon.h"
 #include "IContact.h"
+#include "IReset.h"
 
 /**
  * Main game
  */
-class CoolPenguin : public cocos2d::Layer, public IContact {
+class CoolPenguin : public cocos2d::Layer, public IContact, public IReset {
 public:
     static cocos2d::Scene* createScene();
 
     CoolPenguin();
 
     CREATE_FUNC(CoolPenguin);
+
+    virtual void reset();
 
     /* Called once when this object enters the running game */
     virtual void onEnter() override;

@@ -1,4 +1,5 @@
 #include "CoolPenguin.h"
+#include "Cannon.h"
 #include "HelperPenguin.h"
 #include "Penguin.h"
 #include "PenguinSpawner.h"
@@ -10,26 +11,21 @@ using namespace std;
 
 Scene* CoolPenguin::createScene() {
     // Registers custom loaders
-    CSLoader::getInstance()->registReaderObject("CoolPenguinReader",
-        (ObjectFactory::Instance)TNodeReader<CoolPenguin>::getInstance);
-    CSLoader::getInstance()->registReaderObject("CannonReader",
-        (ObjectFactory::Instance)TNodeReader<Cannon>::getInstance);
-    CSLoader::getInstance()->registReaderObject("PenguinReader",
-        (ObjectFactory::Instance)TNodeReader<Penguin>::getInstance);
-    CSLoader::getInstance()->registReaderObject("HelperPenguinReader",
-        (ObjectFactory::Instance)TNodeReader<HelperPenguin>::getInstance);
-
     auto scene = Scene::createWithPhysics();
     auto layer = CoolPenguin::create();
     scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
-//#ifdef _DEBUG
-    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-//#endif
     scene->addChild(layer);
     return scene;
 }
 
 CoolPenguin::CoolPenguin() : _paused(false) {}
+
+void CoolPenguin::reset() {
+    GameUI::getInstance()->reset();
+    Cannon::getInstance()->reset();
+    HelperPenguin::getInstance()->reset();
+    getChildByName<PenguinSpawner*>("spawner")->reset();
+}
 
 void CoolPenguin::onEnter() {
     Layer::onEnter();
@@ -39,6 +35,12 @@ void CoolPenguin::onEnter() {
     bg->setPosition(320, 0);
     addChild(bg, -2);
 
+    // backdrop
+    auto backdrop = Sprite::create("img/backdrop.png");
+    backdrop->setAnchorPoint(Vec2(0, 0));
+    backdrop->setPosition(0, 0);
+    addChild(backdrop, -2);
+
     // ui
     auto ui = GameUI::getInstance();
     ui->setAnchorPoint(Vec2(0, 0));
@@ -47,18 +49,18 @@ void CoolPenguin::onEnter() {
 
     // spawner
     auto spawner = PenguinSpawner::create();
-    addChild(spawner, -2);
+    addChild(spawner, 0, "spawner");
     spawner->setPosition(640, 704);
 
     // cannon
     auto cannon = Cannon::getInstance();
     cannon->setPosition(640, 64);
-    addChild(cannon);
+    addChild(cannon, 3);
 
     // helper penguin
     auto helperPenguin = HelperPenguin::getInstance();
-    helperPenguin->setPosition(896, 64);
-    addChild(helperPenguin);
+    helperPenguin->setStartPosition(Vec2(896, 64));
+    addChild(helperPenguin, 4);
 
     // mouse listener
     auto mouseListener = EventListenerMouse::create();
@@ -90,6 +92,8 @@ void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
         else Director::getInstance()->startAnimation();
         _paused = !_paused;
     }
+
+    else if (keyCode == EventKeyboard::KeyCode::KEY_6) reset();
 }
 
 void CoolPenguin::onMouseMove(EventMouse* event) {

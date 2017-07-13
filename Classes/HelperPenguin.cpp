@@ -98,6 +98,18 @@ void HelperPenguin::returnFromClean(cocos2d::Vec2 pos) {
     runAction(Sequence::create(helperWalkBack, helperReturned, nullptr));
 }
 
+void HelperPenguin::setStartPosition(cocos2d::Vec2 startPos) {
+    setUserData((void*)(new Vec2(startPos)));
+    setPosition(*(Vec2*)getUserData());
+}
+
+void HelperPenguin::reset() {
+    animate("idle", true, true);
+    _state = State::IDLE;
+    setPosition(*(Vec2*)getUserData());
+    setVisible(true);
+}
+
 void HelperPenguin::onEnter() {
     Node::onEnter();
     animate("idle", true, true);

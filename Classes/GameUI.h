@@ -2,13 +2,14 @@
 #define __GAME_UI_H__
 
 #include "cocos2d.h"
+#include "IReset.h"
 
 #define TIMER_TICK "timer_tick"
 
 /**
  * Sidebar that displays current game stats such as time, score, etc...
  */
-class GameUI : public cocos2d::Layer {
+class GameUI : public cocos2d::Layer, public IReset {
 public:
     static GameUI* getInstance();
 
@@ -30,6 +31,8 @@ public:
      * @param points : points to add to the score
      */
     void updateScore(int points);
+
+    virtual void reset();
 
     virtual bool init() override;
 

@@ -17,11 +17,22 @@ Cannon* Cannon::getInstance() {
 }
 
 Cannon::Cannon() : IAnimated("csb/cannon.csb"), _enabled(true), _fishShot(0), 
-    _fishReserve(10), _iceCreamReserve(10), _iceCreamShot(0) {}
+    _fishReserve(0), _iceCreamReserve(0), _iceCreamShot(0) {}
 
 void Cannon::updateUI() {
     GameUI::getInstance()->updateCannonStats(_fishShot, _iceCreamShot,
         _fishReserve, _iceCreamReserve);
+}
+
+void Cannon::reset() {
+    stopAllActions();
+    getChildByName("peng_clean")->setVisible(false);
+    _enabled = true;
+    _fishShot = 0;
+    _fishReserve = 10;
+    _iceCreamShot = 0;
+    _iceCreamReserve = 10;
+    updateUI();
 }
 
 bool Cannon::init() {
@@ -46,8 +57,7 @@ bool Cannon::init() {
 
 void Cannon::onEnter() {
     Node::onEnter();
-    getChildByName("peng_clean")->setVisible(false);
-    updateUI();
+    reset();
 }
 
 void Cannon::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {

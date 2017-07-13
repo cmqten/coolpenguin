@@ -157,6 +157,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\PenguinSpawner.cpp" />
     <ClCompile Include="..\Classes\Projectile.cpp" />
     <ClCompile Include="..\Classes\GameUI.cpp" />
+    <ClCompile Include="..\Classes\TitleScreen.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -166,10 +167,12 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\IAnimated.h" />
     <ClInclude Include="..\Classes\IContact.h" />
     <ClInclude Include="..\Classes\CoolPenguin.h" />
+    <ClInclude Include="..\Classes\IReset.h" />
     <ClInclude Include="..\Classes\Penguin.h" />
     <ClInclude Include="..\Classes\PenguinSpawner.h" />
     <ClInclude Include="..\Classes\Projectile.h" />
     <ClInclude Include="..\Classes\GameUI.h" />
+    <ClInclude Include="..\Classes\TitleScreen.h" />
     <ClInclude Include="..\Classes\TNodeReader.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

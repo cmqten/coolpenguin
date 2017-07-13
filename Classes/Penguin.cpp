@@ -106,6 +106,14 @@ void Penguin::waitForRequest(float delta) {
     if (!_waitTime) waddleOut();
 }
 
+void Penguin::reset() {
+    stopAllActions();
+    auto spBubble = getChildByName("spBubble");
+    if (spBubble != nullptr) spBubble->removeFromParent();
+    _state = State::SPAWN;
+    unscheduleAllCallbacks();
+}
+
 void Penguin::onEnter() {
     Node::onEnter();
 
