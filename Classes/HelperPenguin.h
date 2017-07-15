@@ -16,7 +16,7 @@ class HelperPenguin : public cocos2d::Node, public IAnimated, public IReset {
 public:
     enum class State {CLEAN, GATHER, IDLE};
 
-    static HelperPenguin* getInstance();
+    HelperPenguin();
 
     CREATE_FUNC(HelperPenguin);
 
@@ -49,12 +49,7 @@ public:
     virtual void onEnter() override;
 
 protected:
-    HelperPenguin();
-
-    static HelperPenguin* _instance;
-
     HelperPenguin::State _state;
-
 };
 
 #endif // !__HELPER_PENGUIN_H__

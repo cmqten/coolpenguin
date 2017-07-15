@@ -2,6 +2,7 @@
 #include "CoolPenguin.h"
 #include "Cannon.h"
 #include "HelperPenguin.h"
+#include "HelpScreen.h"
 #include "Penguin.h"
 #include "PenguinSpawner.h"
 #include "GameUI.h"
@@ -37,12 +38,20 @@ bool AppDelegate::applicationDidFinishLaunching() {
         ResolutionPolicy::SHOW_ALL);
 
     // turn on display FPS
-    director->setDisplayStats(true);
+    director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60.0f);
 
     FileUtils::getInstance()->addSearchPath("res");
+
+    // Spritesheets
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
+        "img/cannonproj.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
+        "img/penguin.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
+        "img/titleuisprites.plist");
 
     // Register custom loaders
     CSLoader::getInstance()->registReaderObject("CoolPenguinReader",
@@ -55,6 +64,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
         (ObjectFactory::Instance)TNodeReader<HelperPenguin>::getInstance);
     CSLoader::getInstance()->registReaderObject("TitleScreenReader",
         (ObjectFactory::Instance)TNodeReader<TitleScreen>::getInstance);
+    CSLoader::getInstance()->registReaderObject("HelpScreenReader",
+        (ObjectFactory::Instance)TNodeReader<HelpScreen>::getInstance);
 
     // create a scene. it's an autorelease object
     auto scene = TitleScreen::createScene();

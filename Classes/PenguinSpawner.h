@@ -22,9 +22,11 @@ public:
 
     virtual void reset();
 
-    virtual void onEnter() override;
+    virtual bool init() override;
 
 private:
+    bool _gameOver;
+
     /* Maximum number of spawned penguins */
     int _maxSpawn;
 

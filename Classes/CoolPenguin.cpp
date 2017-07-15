@@ -1,6 +1,7 @@
 #include "CoolPenguin.h"
 #include "Cannon.h"
 #include "HelperPenguin.h"
+#include "HelpScreen.h"
 #include "Penguin.h"
 #include "PenguinSpawner.h"
 #include "GameUI.h"
@@ -10,7 +11,6 @@ using namespace cocos2d;
 using namespace std;
 
 Scene* CoolPenguin::createScene() {
-    // Registers custom loaders
     auto scene = Scene::createWithPhysics();
     auto layer = CoolPenguin::create();
     scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
@@ -21,14 +21,15 @@ Scene* CoolPenguin::createScene() {
 CoolPenguin::CoolPenguin() : _paused(false) {}
 
 void CoolPenguin::reset() {
-    GameUI::getInstance()->reset();
-    Cannon::getInstance()->reset();
-    HelperPenguin::getInstance()->reset();
-    getChildByName<PenguinSpawner*>("spawner")->reset();
+    for (Node* child : getChildren()) {
+        auto resettable = dynamic_cast<IReset*>(child);
+        if (resettable) resettable->reset();
+    }
 }
 
-void CoolPenguin::onEnter() {
-    Layer::onEnter();
+bool CoolPenguin::init() {
+    if (!Layer::init()) return false;
+    CCLOG("game init");
 
     // white background
     auto bg = LayerColor::create(Color4B::WHITE, 640, 640);
@@ -42,29 +43,33 @@ void CoolPenguin::onEnter() {
     addChild(backdrop, -2);
 
     // ui
-    auto ui = GameUI::getInstance();
+    auto ui = GameUI::create();
     ui->setAnchorPoint(Vec2(0, 0));
     ui->setPosition(0, 0);
-    addChild(ui);
+    addChild(ui, 0, "ui");
 
     // spawner
     auto spawner = PenguinSpawner::create();
-    addChild(spawner, 0, "spawner");
     spawner->setPosition(640, 704);
+    addChild(spawner, 0, "spawner");
 
     // cannon
-    auto cannon = Cannon::getInstance();
+    auto cannon = (Cannon*)CSLoader::createNode("csb/cannon.csb");
     cannon->setPosition(640, 64);
-    addChild(cannon, 3);
+    addChild(cannon, 3, "cannon");
 
     // helper penguin
-    auto helperPenguin = HelperPenguin::getInstance();
+    auto helperPenguin = (HelperPenguin*)CSLoader::createNode(
+        "csb/helperpenguin.csb");
     helperPenguin->setStartPosition(Vec2(896, 64));
-    addChild(helperPenguin, 4);
+    addChild(helperPenguin, 4, "helper");
 
     // mouse listener
     auto mouseListener = EventListenerMouse::create();
-    mouseListener->onMouseMove = CC_CALLBACK_1(CoolPenguin::onMouseMove, this);
+    mouseListener->onMouseMove = [cannon](EventMouse* event) {
+        cannon->onMouseMove(event);
+    };
+
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         mouseListener, this);
 
@@ -81,10 +86,12 @@ void CoolPenguin::onEnter() {
 
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         contactListener, this);
+
+    return true;
 }
 
 void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
-    Cannon::getInstance()->onKeyPressed(keyCode, event);
+    getChildByName<Cannon*>("cannon")->onKeyPressed(keyCode, event);
 
     // Pauses the game
     if (keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
@@ -94,10 +101,6 @@ void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     }
 
     else if (keyCode == EventKeyboard::KeyCode::KEY_6) reset();
-}
-
-void CoolPenguin::onMouseMove(EventMouse* event) {
-    Cannon::getInstance()->onMouseMove(event);
 }
 
 bool CoolPenguin::onContactBegin(PhysicsContact& contact) {

@@ -4,10 +4,87 @@
 	<dict>
 		<key>frames</key>
 		<dict>
-			<key>img/peng_idle_1.png</key>
+			<key>img/title.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,0},{128,128}}</string>
+				<string>{{0,0},{768,240}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{768,240}</string>
+			</dict>
+			<key>img/play_up.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,240},{320,128}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{320,128}</string>
+			</dict>
+			<key>img/play_down.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{320,240},{320,128}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{320,128}</string>
+			</dict>
+			<key>img/play_disable.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{640,240},{320,128}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{320,128}</string>
+			</dict>
+			<key>img/help_up.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,368},{320,128}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{320,128}</string>
+			</dict>
+			<key>img/help_down.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{320,368},{320,128}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{320,128}</string>
+			</dict>
+			<key>img/help_disable.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{640,368},{320,128}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{320,128}</string>
+			</dict>
+			<key>img/pile.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{768,0},{128,128}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -15,214 +92,104 @@
 				<key>sourceSize</key>
 				<string>{128,128}</string>
 			</dict>
-			<key>img/peng_idle_2.png</key>
+			<key>img/back_disable.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,128},{128,128}}</string>
+				<string>{{0,496},{320,128}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{128,128}</string>
+				<string>{320,128}</string>
 			</dict>
-			<key>img/peng_stand.png</key>
+			<key>img/back_down.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,256},{128,128}}</string>
+				<string>{{320,496},{320,128}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{128,128}</string>
+				<string>{320,128}</string>
 			</dict>
-			<key>img/peng_stand_b.png</key>
+			<key>img/back_up.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,384},{128,128}}</string>
+				<string>{{640,496},{320,128}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{128,128}</string>
+				<string>{320,128}</string>
 			</dict>
-			<key>img/peng_stand_s.png</key>
+			<key>img/menu_disable.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{128,0},{128,128}}</string>
+				<string>{{0,624},{320,128}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{128,128}</string>
+				<string>{320,128}</string>
 			</dict>
-			<key>img/peng_stand_sc.png</key>
+			<key>img/menu_down.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{128,128},{128,128}}</string>
+				<string>{{0,752},{320,128}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{128,128}</string>
+				<string>{320,128}</string>
 			</dict>
-			<key>img/peng_walk_1.png</key>
+			<key>img/menu_up.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{128,256},{128,128}}</string>
+				<string>{{320,624},{320,128}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{128,128}</string>
+				<string>{320,128}</string>
 			</dict>
-			<key>img/peng_walk_2.png</key>
+			<key>img/reset_disable.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{128,384},{128,128}}</string>
+				<string>{{640,624},{320,128}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{128,128}</string>
+				<string>{320,128}</string>
 			</dict>
-			<key>img/peng_walk_b_1.png</key>
+			<key>img/reset_down.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{256,0},{128,128}}</string>
+				<string>{{320,752},{320,128}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{128,128}</string>
+				<string>{320,128}</string>
 			</dict>
-			<key>img/peng_walk_b_2.png</key>
+			<key>img/reset_up.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{256,128},{128,128}}</string>
+				<string>{{640,752},{320,128}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{128,128}</string>
-			</dict>
-			<key>img/peng_walk_s_1.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{256,256},{128,128}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{128,128}</string>
-			</dict>
-			<key>img/peng_walk_s_2.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{256,384},{128,128}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{128,128}</string>
-			</dict>
-			<key>img/peng_walk_sc_1.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{384,0},{128,128}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{128,128}</string>
-			</dict>
-			<key>img/peng_walk_sc_2.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{384,128},{128,128}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{128,128}</string>
-			</dict>
-			<key>img/sp_fi.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{384,256},{64,64}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{64,64}</string>
-			</dict>
-			<key>img/sp_fr.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{384,320},{64,64}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{64,64}</string>
-			</dict>
-			<key>img/sp_happy.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{384,384},{64,64}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{64,64}</string>
-			</dict>
-			<key>img/sp_icf.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{384,448},{64,64}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{64,64}</string>
-			</dict>
-			<key>img/sp_icr.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{448,256},{64,64}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{64,64}</string>
-			</dict>
-			<key>img/sp_sad.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{448,320},{64,64}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{64,64}</string>
+				<string>{320,128}</string>
 			</dict>
 		</dict>
 		<key>metadata</key>
@@ -230,18 +197,18 @@
 			<key>format</key>
 			<integer>2</integer>
 			<key>textureFileName</key>
-			<string>penguin.png</string>
+			<string>titleuisprites.png</string>
 			<key>realTextureFileName</key>
-			<string>penguin.png</string>
+			<string>titleuisprites.png</string>
 			<key>size</key>
-			<string>{512,512}</string>
+			<string>{960,880}</string>
 		</dict>
 		<key>texture</key>
 		<dict>
 			<key>width</key>
-			<integer>512</integer>
+			<integer>960</integer>
 			<key>height</key>
-			<integer>512</integer>
+			<integer>880</integer>
 		</dict>
 	</dict>
 </plist>

@@ -4,87 +4,10 @@
 	<dict>
 		<key>frames</key>
 		<dict>
-			<key>img/title.png</key>
+			<key>img/cannon.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,0},{768,240}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{768,240}</string>
-			</dict>
-			<key>img/play_up.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{0,240},{320,128}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{320,128}</string>
-			</dict>
-			<key>img/play_down.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{0,368},{320,128}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{320,128}</string>
-			</dict>
-			<key>img/play_disable.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{320,240},{320,128}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{320,128}</string>
-			</dict>
-			<key>img/help_up.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{320,368},{320,128}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{320,128}</string>
-			</dict>
-			<key>img/help_down.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{640,240},{320,128}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{320,128}</string>
-			</dict>
-			<key>img/help_disable.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{640,368},{320,128}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{320,128}</string>
-			</dict>
-			<key>img/pile.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{768,0},{128,128}}</string>
+				<string>{{0,0},{128,128}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -92,24 +15,90 @@
 				<key>sourceSize</key>
 				<string>{128,128}</string>
 			</dict>
+			<key>img/cannon_clean_1.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,128},{128,128}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{128,128}</string>
+			</dict>
+			<key>img/cannon_clean_2.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{128,0},{128,128}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{128,128}</string>
+			</dict>
+			<key>img/fish_i.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{128,128},{64,64}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+			<key>img/fish_r.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{128,192},{64,64}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+			<key>img/ice_cream_f.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,128},{64,64}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+			<key>img/ice_cream_r.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,192},{64,64}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
 		</dict>
 		<key>metadata</key>
 		<dict>
 			<key>format</key>
 			<integer>2</integer>
 			<key>textureFileName</key>
-			<string>titlesprites.png</string>
+			<string>cannonproj.png</string>
 			<key>realTextureFileName</key>
-			<string>titlesprites.png</string>
+			<string>cannonproj.png</string>
 			<key>size</key>
-			<string>{1024,512}</string>
+			<string>{256,256}</string>
 		</dict>
 		<key>texture</key>
 		<dict>
 			<key>width</key>
-			<integer>1024</integer>
+			<integer>256</integer>
 			<key>height</key>
-			<integer>512</integer>
+			<integer>256</integer>
 		</dict>
 	</dict>
 </plist>

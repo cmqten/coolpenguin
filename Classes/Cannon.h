@@ -12,9 +12,9 @@
  */
 class Cannon : public cocos2d::Node, public IAnimated, public IReset {
 public:
-    CREATE_FUNC(Cannon);
+    Cannon();
 
-    static Cannon* getInstance();
+    CREATE_FUNC(Cannon);
 
     inline bool isEnabled() { return _enabled; };
 
@@ -41,10 +41,6 @@ public:
     void onMouseMove(cocos2d::EventMouse* event);
 
 protected:
-    Cannon();
-
-    static Cannon* _instance;
-
     /* Determines whether cannon can shoot or not */
     bool _enabled;
 

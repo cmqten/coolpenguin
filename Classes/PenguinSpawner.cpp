@@ -6,7 +6,7 @@
 using namespace cocos2d;
 using namespace std;
 
-PenguinSpawner::PenguinSpawner() : _maxSpawn(1) {
+PenguinSpawner::PenguinSpawner() : _maxSpawn(1), _gameOver(false) {
     // Initializes _spawnSlots as a hashmap with 4 integers from 0 to 3 
     _spawnSlots = new unordered_set<int>();
 
@@ -16,8 +16,7 @@ PenguinSpawner::PenguinSpawner() : _maxSpawn(1) {
 
     for (int i = 0; i < 4; i++) {
         _spawnSlots->insert(i);
-        auto penguin = dynamic_cast<Penguin*>(CSLoader::createNode(
-            "csb/penguin.csb"));
+        auto penguin = (Penguin*)(CSLoader::createNode("csb/penguin.csb"));
         penguin->retain();
         _penguins[i] = penguin;
         _penguinQueue->push(penguin);
@@ -108,12 +107,13 @@ void PenguinSpawner::reset() {
     }
 
     getEventDispatcher()->resumeEventListenersForTarget(this, false);
+    _gameOver = false;
     _maxSpawn = 1;
     spawnPenguin();
 }
 
-void PenguinSpawner::onEnter() {
-    Node::onEnter();
+bool PenguinSpawner::init() {
+    if (!Node::init()) return false;
 
     /* Listener for any penguins that have returned, so they can be added to 
     the queue again and their slots added back to the hash table. */
@@ -134,15 +134,18 @@ void PenguinSpawner::onEnter() {
     getEventDispatcher()->addCustomEventListener(TIMER_TICK,
         [this](EventCustom* event) {
             switch (*(int*)event->getUserData()) {
-                case 20: this->_maxSpawn = 2; break;
-                case 40: this->_maxSpawn = 3; break;
+                case 100: this->_maxSpawn = 2; break;
+                case 80: this->_maxSpawn = 3; break;
                 case 60: this->_maxSpawn = 4; break;
-                case 118: this->_maxSpawn = 0; break;
-                case 120: // Game end
+                case 2: this->_maxSpawn = 0; break;
+                case 0: // Game end
+                    if (this->_gameOver) return;
                     for (int i = 0; i < 4; i++) {
                         this->_penguins[i]->waddleOut();
                     }
+                    this->_gameOver = true;
                     break;
+
                 default: return;
             }
 
@@ -150,4 +153,6 @@ void PenguinSpawner::onEnter() {
     });
 
     spawnPenguin();
+
+    return true;
 }

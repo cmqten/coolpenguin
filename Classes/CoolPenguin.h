@@ -6,7 +6,7 @@
 #include "IReset.h"
 
 /**
- * Main game
+ * Main game.
  */
 class CoolPenguin : public cocos2d::Layer, public IContact, public IReset {
 public:
@@ -19,14 +19,11 @@ public:
     virtual void reset();
 
     /* Called once when this object enters the running game */
-    virtual void onEnter() override;
+    virtual bool init() override;
 
     /* Called when a key is pressed */
     virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, 
         cocos2d::Event* event) override;
-
-    /* Called when the mouse is moved */
-    void onMouseMove(cocos2d::EventMouse* event);
 
     /**
      * Called when two objects begin contact. Return true to process collision,

@@ -5,14 +5,6 @@
 using namespace cocos2d;
 using namespace std;
 
-HelperPenguin* HelperPenguin::_instance = nullptr;
-
-HelperPenguin* HelperPenguin::getInstance() {
-    if (!_instance) _instance = (HelperPenguin*)CSLoader::createNode(
-        "csb/helperpenguin.csb");
-    return _instance;
-}
-
 HelperPenguin::HelperPenguin() : IAnimated("csb/helperpenguin.csb"),
     _state(State::IDLE) {}
 

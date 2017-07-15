@@ -11,7 +11,9 @@
  */
 class GameUI : public cocos2d::Layer, public IReset {
 public:
-    static GameUI* getInstance();
+    GameUI() {};
+
+    CREATE_FUNC(GameUI);
 
     long getGameTime() { return _time; };
 
@@ -37,12 +39,6 @@ public:
     virtual bool init() override;
 
 protected:
-    static GameUI* _instance;
-
-    GameUI() {};
-
-    CREATE_FUNC(GameUI);
-
     /* Player score */
     int _score;
 

@@ -31,7 +31,7 @@ public:
 
     virtual void reset();
 
-    virtual void onEnter() override;
+    virtual bool init() override;
 
     virtual void update(float delta) override;
 

@@ -1,5 +1,6 @@
 #include "TitleScreen.h"
 #include "CoolPenguin.h"
+#include "HelpScreen.h"
 #include "editor-support/cocostudio/CocoStudio.h"
 #include "ui/CocosGUI.h"
 
@@ -30,6 +31,6 @@ void TitleScreen::onEnter() {
 
     // Displays instructions
     getChildByName<ui::Button*>("help")->addClickEventListener([](Ref* ref) {
-        Director::getInstance()->popScene();
+        Director::getInstance()->pushScene(HelpScreen::createScene());
     });
 }
