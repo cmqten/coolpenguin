@@ -22,7 +22,7 @@ git reset --hard origin/master
 ```
 cd proj.linux
 chmod u+x build.sh
-./build.sh [debug/release]
+./build.sh [debug/release/minrel/clean]
 ```
 6. Go to the bin folder and run the coolpenguin executable.
 
