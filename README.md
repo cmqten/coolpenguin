@@ -2,6 +2,8 @@
 
 These penguins are stuck in a lifeless plain and they want fish and ice cream. Try to satisfy as many penguins as you can before time runs out.
 
+## [Demo Video](https://vid.me/IBwMZ)
+
 ## Build Instructions
 
 - [Windows](./proj.win32/README.md)
