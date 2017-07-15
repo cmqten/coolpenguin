@@ -9,7 +9,8 @@ using namespace std;
 Penguin::Penguin() : IAnimated("csb/penguin.csb") {
     /* Creates the speech bubbles to be set visible when a random request is
     generated */
-    _speechBubbles = new Sprite*[4];
+    _requestBubbles = new Sprite*[4];
+    _reactionBubbles = new Sprite*[2];
 
     auto createSpeechBubble = [this](string path)->Sprite* {
         auto speechBubble = Sprite::createWithSpriteFrameName(path);
@@ -18,25 +19,27 @@ Penguin::Penguin() : IAnimated("csb/penguin.csb") {
         return speechBubble;
     };
 
-    _speechBubbles[0] = createSpeechBubble("img/sp_fr.png"); // regular fish
+    /* regular fish, regular ice cream, ice cream fish, and fish flavored ice
+    cream in that specific order */
+    _requestBubbles[0] = createSpeechBubble("img/sp_fr.png"); 
+    _requestBubbles[1] = createSpeechBubble("img/sp_icr.png");
+    _requestBubbles[2] = createSpeechBubble("img/sp_fi.png");
+    _requestBubbles[3] = createSpeechBubble("img/sp_icf.png");
 
-    // regular ice cream
-    _speechBubbles[1] = createSpeechBubble("img/sp_icr.png");
-
-    // ice cream covered fish
-    _speechBubbles[2] = createSpeechBubble("img/sp_fi.png");
-
-    // fish flavored ice cream
-    _speechBubbles[3] = createSpeechBubble("img/sp_icf.png");
+    // happy and sad reactions
+    _reactionBubbles[0] = createSpeechBubble("img/sp_happy.png");
+    _reactionBubbles[1] = createSpeechBubble("img/sp_sad.png");
 }
 
 Penguin::~Penguin() {
-    for (int i = 0; i < 4; i++) _speechBubbles[i]->release();
-    delete _speechBubbles;
+    for (int i = 0; i < 4; i++) _requestBubbles[i]->release();
+    for (int i = 0; i < 2; i++) _reactionBubbles[i]->release();
+    delete[] _requestBubbles;
+    delete[] _reactionBubbles;
 }
 
 void Penguin::closeRequest() {
-    getChildByName("spBubble")->removeFromParentAndCleanup(true);
+    getChildByName("requestBubble")->removeFromParentAndCleanup(true);
 }
 
 void Penguin::generateRequest() {
@@ -52,7 +55,7 @@ void Penguin::generateRequest() {
     int choice = rand() & (getParent()->getParent()->getChildByName<GameUI*>(
         "ui")->getGameTime() <= 100 ? 3 : 1);
     _request = projTypes[choice];
-    addChild(_speechBubbles[choice], 0, "spBubble");
+    addChild(_requestBubbles[choice], 0, "requestBubble");
 }
 
 void Penguin::prepareForSpawn(int wait) {
@@ -80,13 +83,14 @@ void Penguin::waddleIn() {
     runAction(Sequence::create(waddleInMove, waddleInFunc, nullptr));
 }
 
-void Penguin::waddleOut() {
+void Penguin::waddleOut(bool received) {
     if (_state != State::RECV) return; // Can only waddle out after receiving
 
     auto waddleOutMove = MoveBy::create(1.5f, Vec2(0, 160));
     auto waddleOutFunc = CallFunc::create([this]() {
         // Dispatches an event to tell listeners that penguin has returned
         this->_state = State::DESPAWN;
+        this->removeChildByName("reactionBubble");
         this->_eventDispatcher->dispatchCustomEvent(PENGUIN_DONE, (void*)this);
     });
 
@@ -96,6 +100,10 @@ void Penguin::waddleOut() {
     unschedule(SEL_SCHEDULE(&Penguin::waitForRequest));
     closeRequest();
 
+    // Displays happy reaction if received, sad reaction otherwise
+    if (received) addChild(_reactionBubbles[0], 0, "reactionBubble");
+    else addChild(_reactionBubbles[1], 0, "reactionBubble");
+
     // Sets state to waddle out and runs animations
     _state = State::WADDLEOUT;
     animate("waddle_back", true, true);
@@ -104,13 +112,18 @@ void Penguin::waddleOut() {
 
 void Penguin::waitForRequest(float delta) {
     _waitTime--;
-    if (!_waitTime) waddleOut();
+    if (!_waitTime) waddleOut(false);
 }
 
 void Penguin::reset() {
     stopAllActions();
-    auto spBubble = getChildByName("spBubble");
-    if (spBubble != nullptr) spBubble->removeFromParent();
+
+    auto requestBubble = getChildByName("requestBubble");
+    if (requestBubble) requestBubble->removeFromParent();
+
+    auto reactionBubble = getChildByName("reactionBubble");
+    if (reactionBubble) reactionBubble->removeFromParent();
+
     _state = State::SPAWN;
     unscheduleAllCallbacks();
 }
@@ -149,6 +162,6 @@ bool Penguin::onContactBegin(cocos2d::PhysicsContact& contact) {
     auto pts = ((Projectile*)proj)->getType() == _request ? 2 : -1;
     getParent()->getParent()->getChildByName<GameUI*>("ui")->updateScore(pts);
     proj->removeFromParentAndCleanup(true);
-    waddleOut();
+    waddleOut(pts == 2);
     return false;
 }

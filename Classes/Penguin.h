@@ -42,8 +42,11 @@ public:
     /* Plays waddle in animation sequence and calls any callbacks */
     void waddleIn();
 
-    /* Plays waddle out animation sequence and calls any callbacks */
-    void waddleOut();
+    /**
+     * Plays waddle out animation sequence and calls any callbacks.
+     * @param received : true if the request was received, false otherwise
+     */
+    void waddleOut(bool received);
 
     /** 
      * Decrements the wait time every second, and if the wait time expires, 
@@ -64,8 +67,14 @@ protected:
      */
     Projectile::ProjectileType _request;
 
+    /**
+     * Speech bubbles that will be displayed whether penguin received its
+     * request or not.
+     */
+    cocos2d::Sprite** _reactionBubbles;
+
     /* Speech bubbles that will be displayed according to penguin's request */
-    cocos2d::Sprite** _speechBubbles;
+    cocos2d::Sprite** _requestBubbles;
     
     /* Penguin's state. Defined in the State enum. */
     State _state;
