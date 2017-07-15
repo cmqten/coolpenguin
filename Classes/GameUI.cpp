@@ -154,8 +154,8 @@ bool GameUI::init() {
     menuButton->addClickEventListener([](Ref* ref) {
         Director::getInstance()->popScene();
     });
-    menuButton->setBright(false);
-    menuButton->setTouchEnabled(false);
+    //menuButton->setBright(false);
+    //menuButton->setTouchEnabled(false);
     addChild(menuButton);
 
     // Timer increment

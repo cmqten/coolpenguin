@@ -21,6 +21,8 @@ public:
     /* Called once when this object enters the running game */
     virtual bool init() override;
 
+    virtual void onEnter() override;
+
     /* Called when a key is pressed */
     virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, 
         cocos2d::Event* event) override;

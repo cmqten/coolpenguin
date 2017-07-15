@@ -30,7 +30,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview=GLViewImpl::createWithRect("coolpenguin", Rect(0, 0, 960, 640));
+        glview = GLViewImpl::createWithRect("Penguin Plains", 
+            Rect(0, 0, 960, 640));
         director->setOpenGLView(glview);
     }
 

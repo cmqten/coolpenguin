@@ -89,6 +89,11 @@ bool CoolPenguin::init() {
     return true;
 }
 
+void CoolPenguin::onEnter() {
+    Node::onEnter();
+    reset();
+}
+
 void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     getChildByName<Cannon*>("cannon")->onKeyPressed(keyCode, event);
 

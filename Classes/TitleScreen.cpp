@@ -21,13 +21,21 @@ Scene* TitleScreen::createScene() {
     return scene;
 }
 
+TitleScreen::TitleScreen() : IAnimated("csb/titlescreen.csb") {
+    _gameScene = CoolPenguin::createScene();
+    _gameScene->retain();
+}
+
 void TitleScreen::onEnter() {
     Node::onEnter();
 
+    animate("default", true, true);
+
     // Starts game
-    getChildByName<ui::Button*>("play")->addClickEventListener([](Ref* ref) {
-        Director::getInstance()->pushScene(CoolPenguin::createScene());
-    });
+    getChildByName<ui::Button*>("play")->addClickEventListener(
+        [this](Ref* ref) {
+            Director::getInstance()->pushScene(this->_gameScene);
+        });
 
     // Displays instructions
     getChildByName<ui::Button*>("help")->addClickEventListener([](Ref* ref) {
