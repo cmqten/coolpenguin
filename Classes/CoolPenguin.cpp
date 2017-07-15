@@ -1,5 +1,7 @@
 #include "CoolPenguin.h"
+#include "Cannon.h"
 #include "HelperPenguin.h"
+#include "HelpScreen.h"
 #include "Penguin.h"
 #include "PenguinSpawner.h"
 #include "GameUI.h"
@@ -9,60 +11,64 @@ using namespace cocos2d;
 using namespace std;
 
 Scene* CoolPenguin::createScene() {
-    // Registers custom loaders
-    CSLoader::getInstance()->registReaderObject("CoolPenguinReader",
-        (ObjectFactory::Instance)TNodeReader<CoolPenguin>::getInstance);
-    CSLoader::getInstance()->registReaderObject("CannonReader",
-        (ObjectFactory::Instance)TNodeReader<Cannon>::getInstance);
-    CSLoader::getInstance()->registReaderObject("PenguinReader",
-        (ObjectFactory::Instance)TNodeReader<Penguin>::getInstance);
-    CSLoader::getInstance()->registReaderObject("HelperPenguinReader",
-        (ObjectFactory::Instance)TNodeReader<HelperPenguin>::getInstance);
-
     auto scene = Scene::createWithPhysics();
     auto layer = CoolPenguin::create();
     scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
-//#ifdef _DEBUG
-    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-//#endif
     scene->addChild(layer);
     return scene;
 }
 
 CoolPenguin::CoolPenguin() : _paused(false) {}
 
-void CoolPenguin::onEnter() {
-    Layer::onEnter();
+void CoolPenguin::reset() {
+    for (Node* child : getChildren()) {
+        auto resettable = dynamic_cast<IReset*>(child);
+        if (resettable) resettable->reset();
+    }
+}
+
+bool CoolPenguin::init() {
+    if (!Layer::init()) return false;
 
     // white background
     auto bg = LayerColor::create(Color4B::WHITE, 640, 640);
     bg->setPosition(320, 0);
     addChild(bg, -2);
 
+    // backdrop
+    auto backdrop = Sprite::create("img/backdrop.png");
+    backdrop->setAnchorPoint(Vec2(0, 0));
+    backdrop->setPosition(0, 0);
+    addChild(backdrop, -2);
+
     // ui
-    auto ui = GameUI::getInstance();
+    auto ui = GameUI::create();
     ui->setAnchorPoint(Vec2(0, 0));
     ui->setPosition(0, 0);
-    addChild(ui);
+    addChild(ui, 1, "ui");
 
     // spawner
     auto spawner = PenguinSpawner::create();
-    addChild(spawner, -2);
     spawner->setPosition(640, 704);
+    addChild(spawner, 0, "spawner");
 
     // cannon
-    auto cannon = Cannon::getInstance();
+    auto cannon = (Cannon*)CSLoader::createNode("csb/cannon.csb");
     cannon->setPosition(640, 64);
-    addChild(cannon);
+    addChild(cannon, 3, "cannon");
 
     // helper penguin
-    auto helperPenguin = HelperPenguin::getInstance();
-    helperPenguin->setPosition(896, 64);
-    addChild(helperPenguin);
+    auto helperPenguin = (HelperPenguin*)CSLoader::createNode(
+        "csb/helperpenguin.csb");
+    helperPenguin->setStartPosition(Vec2(896, 64));
+    addChild(helperPenguin, 4, "helper");
 
     // mouse listener
     auto mouseListener = EventListenerMouse::create();
-    mouseListener->onMouseMove = CC_CALLBACK_1(CoolPenguin::onMouseMove, this);
+    mouseListener->onMouseMove = [cannon](EventMouse* event) {
+        cannon->onMouseMove(event);
+    };
+
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         mouseListener, this);
 
@@ -79,10 +85,17 @@ void CoolPenguin::onEnter() {
 
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(
         contactListener, this);
+
+    return true;
+}
+
+void CoolPenguin::onEnter() {
+    Node::onEnter();
+    reset();
 }
 
 void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
-    Cannon::getInstance()->onKeyPressed(keyCode, event);
+    getChildByName<Cannon*>("cannon")->onKeyPressed(keyCode, event);
 
     // Pauses the game
     if (keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
@@ -90,10 +103,8 @@ void CoolPenguin::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
         else Director::getInstance()->startAnimation();
         _paused = !_paused;
     }
-}
 
-void CoolPenguin::onMouseMove(EventMouse* event) {
-    Cannon::getInstance()->onMouseMove(event);
+    else if (keyCode == EventKeyboard::KeyCode::KEY_6) reset();
 }
 
 bool CoolPenguin::onContactBegin(PhysicsContact& contact) {

@@ -3,13 +3,14 @@
 
 #include "cocos2d.h"
 #include "IContact.h"
+#include "IReset.h"
 
 #define DEFAULT_PROJ_VELOCITY 1000.0f
 
 /**
  * Cannon projectile
  */
-class Projectile : public cocos2d::Node, public IContact {
+class Projectile : public cocos2d::Node, public IContact, public IReset {
 public:
     enum class ProjectileType {FISH, FISHI, ICECREAM, ICECREAMF};
 
@@ -19,6 +20,8 @@ public:
      */
     static Projectile* create(ProjectileType projType);
 
+    inline ProjectileType getType() { return _type; };
+
     /**
      * Launches this projectile towards the specified angle
      * @param rotation : rotation angle
@@ -26,9 +29,9 @@ public:
      */
     void launch(float rotation, cocos2d::Vec2 pos);
 
-    ProjectileType getType() { return _type; };
+    virtual void reset();
 
-    virtual void onEnter() override;
+    virtual bool init() override;
 
     virtual void update(float delta) override;
 

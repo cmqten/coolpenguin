@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 #include "IAnimated.h"
-#include "IContact.h"
+#include "IReset.h"
 
 #define HELPER_EVENT "helper_penguin"
 #define WALK_SPEED 384.0f
@@ -12,11 +12,11 @@
  * Helper penguin. This penguin cleans the cannon and fetches projectiles for 
  * you. Doesn't really do much than provide visuals.
  */
-class HelperPenguin : public cocos2d::Node, public IAnimated, public IContact {
+class HelperPenguin : public cocos2d::Node, public IAnimated, public IReset {
 public:
     enum class State {CLEAN, GATHER, IDLE};
 
-    static HelperPenguin* getInstance();
+    HelperPenguin();
 
     CREATE_FUNC(HelperPenguin);
 
@@ -41,13 +41,14 @@ public:
      */
     void returnFromClean(cocos2d::Vec2 pos);
 
+    /* Sets the helper penguin's start position */
+    void setStartPosition(cocos2d::Vec2 startPos);
+
+    virtual void reset();
+
     virtual void onEnter() override;
 
 protected:
-    HelperPenguin();
-
-    static HelperPenguin* _instance;
-
     HelperPenguin::State _state;
 };
 

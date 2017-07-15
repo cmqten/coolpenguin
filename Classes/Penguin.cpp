@@ -12,7 +12,7 @@ Penguin::Penguin() : IAnimated("csb/penguin.csb") {
     _speechBubbles = new Sprite*[4];
 
     auto createSpeechBubble = [this](string path)->Sprite* {
-        auto speechBubble = Sprite::create(path);
+        auto speechBubble = Sprite::createWithSpriteFrameName(path);
         speechBubble->setPosition(48, 64);
         speechBubble->retain();
         return speechBubble;
@@ -49,7 +49,8 @@ void Penguin::generateRequest() {
 
     /* First 20 seconds of the game, only regular fish and regular ice cream
     are generated */
-    int choice = rand() & (GameUI::getInstance()->getGameTime() >= 20 ? 3 : 1);
+    int choice = rand() & (getParent()->getParent()->getChildByName<GameUI*>(
+        "ui")->getGameTime() <= 100 ? 3 : 1);
     _request = projTypes[choice];
     addChild(_speechBubbles[choice], 0, "spBubble");
 }
@@ -106,8 +107,16 @@ void Penguin::waitForRequest(float delta) {
     if (!_waitTime) waddleOut();
 }
 
-void Penguin::onEnter() {
-    Node::onEnter();
+void Penguin::reset() {
+    stopAllActions();
+    auto spBubble = getChildByName("spBubble");
+    if (spBubble != nullptr) spBubble->removeFromParent();
+    _state = State::SPAWN;
+    unscheduleAllCallbacks();
+}
+
+bool Penguin::init() {
+    if (!Node::init()) return false;
 
     // Contact test is set later when penguin actually needs to detect contact
     setPhysicsBody([]()->PhysicsBody* {
@@ -118,6 +127,8 @@ void Penguin::onEnter() {
         body->setContactTestBitmask(0x0);
         return body;
     }());
+
+    return true;
 }
 
 bool Penguin::onContactBegin(cocos2d::PhysicsContact& contact) {
@@ -135,8 +146,8 @@ bool Penguin::onContactBegin(cocos2d::PhysicsContact& contact) {
 
     /* Calculates points and removes projectile from game. 2 for a correct shot,
     -1 for a wrong shot */ 
-    auto points = ((Projectile*)proj)->getType() == _request ? 2 : -1;
-    GameUI::getInstance()->updateScore(points);
+    auto pts = ((Projectile*)proj)->getType() == _request ? 2 : -1;
+    getParent()->getParent()->getChildByName<GameUI*>("ui")->updateScore(pts);
     proj->removeFromParentAndCleanup(true);
     waddleOut();
     return false;

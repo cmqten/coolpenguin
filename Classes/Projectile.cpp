@@ -48,7 +48,7 @@ Projectile* Projectile::create(ProjectileType projType) {
 Projectile::Projectile(string path, PhysicsBody* pBody, ProjectileType type,
     float velocity) : _velocity(velocity), _type(type) {
     if (path != "") { // Creates projectile's sprite and adds it as a child
-        _sprite = Sprite::create(path);
+        _sprite = Sprite::createWithSpriteFrameName(path);
         addChild(_sprite);
     }
     else _sprite = nullptr;
@@ -65,11 +65,20 @@ void Projectile::launch(float rotation, Vec2 pos) {
     getPhysicsBody()->setVelocity(Vec2(xComp, yComp));
 }
 
-void Projectile::onEnter() {
-    Node::onEnter();
+void Projectile::reset() {
+    getPhysicsBody()->setContactTestBitmask(0x0);
+    setVisible(false);
+}
+
+bool Projectile::init() {
+    if (!Node::init()) return false;
     retain();
+
+    // Periodically checks if the projectile is out of bounds and deletes it
     unscheduleUpdate();
     schedule(schedule_selector(Projectile::update), 1.0f);
+
+    return true;
 }
 
 void Projectile::update(float delta) {

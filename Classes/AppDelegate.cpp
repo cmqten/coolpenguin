@@ -1,5 +1,13 @@
 #include "AppDelegate.h"
 #include "CoolPenguin.h"
+#include "Cannon.h"
+#include "HelperPenguin.h"
+#include "HelpScreen.h"
+#include "Penguin.h"
+#include "PenguinSpawner.h"
+#include "GameUI.h"
+#include "TitleScreen.h"
+#include "TNodeReader.h"
 
 USING_NS_CC;
 
@@ -22,7 +30,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview=GLViewImpl::createWithRect("coolpenguin", Rect(0, 0, 960, 640));
+        glview = GLViewImpl::createWithRect("Penguin Plains", 
+            Rect(0, 0, 960, 640));
         director->setOpenGLView(glview);
     }
 
@@ -30,15 +39,37 @@ bool AppDelegate::applicationDidFinishLaunching() {
         ResolutionPolicy::SHOW_ALL);
 
     // turn on display FPS
-    director->setDisplayStats(true);
+    director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60.0f);
 
     FileUtils::getInstance()->addSearchPath("res");
 
+    // Spritesheets
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
+        "img/cannonproj.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
+        "img/penguin.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
+        "img/titleuisprites.plist");
+
+    // Register custom loaders
+    CSLoader::getInstance()->registReaderObject("CoolPenguinReader",
+        (ObjectFactory::Instance)TNodeReader<CoolPenguin>::getInstance);
+    CSLoader::getInstance()->registReaderObject("CannonReader",
+        (ObjectFactory::Instance)TNodeReader<Cannon>::getInstance);
+    CSLoader::getInstance()->registReaderObject("PenguinReader",
+        (ObjectFactory::Instance)TNodeReader<Penguin>::getInstance);
+    CSLoader::getInstance()->registReaderObject("HelperPenguinReader",
+        (ObjectFactory::Instance)TNodeReader<HelperPenguin>::getInstance);
+    CSLoader::getInstance()->registReaderObject("TitleScreenReader",
+        (ObjectFactory::Instance)TNodeReader<TitleScreen>::getInstance);
+    CSLoader::getInstance()->registReaderObject("HelpScreenReader",
+        (ObjectFactory::Instance)TNodeReader<HelpScreen>::getInstance);
+
     // create a scene. it's an autorelease object
-    auto scene = CoolPenguin::createScene();
+    auto scene = TitleScreen::createScene();
 
     // run
     director->runWithScene(scene);

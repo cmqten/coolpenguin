@@ -6,26 +6,28 @@
 using namespace cocos2d;
 using namespace std;
 
-PenguinSpawner::PenguinSpawner() : _maxSpawn(1) {
+PenguinSpawner::PenguinSpawner() : _maxSpawn(1), _gameOver(false) {
     // Initializes _spawnSlots as a hashmap with 4 integers from 0 to 3 
     _spawnSlots = new unordered_set<int>();
 
     // Creates as many penguins as there are slots
-    _penguins = new queue<Penguin*>();
+    _penguins = new Penguin*[4];
+    _penguinQueue = new queue<Penguin*>();
 
     for (int i = 0; i < 4; i++) {
         _spawnSlots->insert(i);
-        auto penguin = dynamic_cast<Penguin*>(CSLoader::createNode(
-            "csb/penguin.csb"));
+        auto penguin = (Penguin*)(CSLoader::createNode("csb/penguin.csb"));
         penguin->retain();
-        _penguins->push(penguin);
+        _penguins[i] = penguin;
+        _penguinQueue->push(penguin);
         addChild(penguin);
     }
 }
 
 PenguinSpawner::~PenguinSpawner() {
+    delete[] _penguins;
     delete _spawnSlots;
-    delete _penguins;
+    delete _penguinQueue;
 }
 
 void PenguinSpawner::spawnPenguin() {
@@ -38,8 +40,8 @@ void PenguinSpawner::spawnPenguin() {
     empty or not because there always has to be penguins in the queue, and if
     there are no penguins, the maximum number have been spawned, and the call
     would have return before reaching this part. */
-    auto penguin = _penguins->front();
-    _penguins->pop();
+    auto penguin = _penguinQueue->front();
+    _penguinQueue->pop();
 
     /**
      * Random number generation algorithm:
@@ -83,13 +85,35 @@ void PenguinSpawner::spawnPenguin() {
 
     // Prepares the penguin for dispatch, binds slot to penguin for access 
     // after the penguin has returned
-    penguin->prepareForSpawn(7);
+    penguin->prepareForSpawn(8);
     penguin->setUserData(new int(randomSlot));
     penguin->waddleIn();
 }
 
-void PenguinSpawner::onEnter() {
-    Node::onEnter();
+void PenguinSpawner::reset() {
+    getEventDispatcher()->pauseEventListenersForTarget(this, false);
+    while (!_penguinQueue->empty()) _penguinQueue->pop();
+
+    // Returns all penguins to the queue and spawn slots to the hash tables
+    for (int i = 0; i < 4; i++) {
+        if (_penguins[i]->getUserData() != nullptr) {
+            _spawnSlots->insert(*(int*)_penguins[i]->getUserData());
+            delete (int*)_penguins[i]->getUserData();
+            _penguins[i]->setUserData(nullptr);
+        }
+        _penguins[i]->reset();
+        _penguins[i]->setPosition(0, 0);
+        _penguinQueue->push(_penguins[i]);
+    }
+
+    getEventDispatcher()->resumeEventListenersForTarget(this, false);
+    _gameOver = false;
+    _maxSpawn = 1;
+    spawnPenguin();
+}
+
+bool PenguinSpawner::init() {
+    if (!Node::init()) return false;
 
     /* Listener for any penguins that have returned, so they can be added to 
     the queue again and their slots added back to the hash table. */
@@ -102,7 +126,7 @@ void PenguinSpawner::onEnter() {
             ((Penguin*)event->getUserData())->setUserData(nullptr);
 
             // Adds penguin back to the queue and tries to spawn a new penguin
-            this->_penguins->push((Penguin*)event->getUserData());
+            this->_penguinQueue->push((Penguin*)event->getUserData());
             this->spawnPenguin();
         });
 
@@ -110,31 +134,25 @@ void PenguinSpawner::onEnter() {
     getEventDispatcher()->addCustomEventListener(TIMER_TICK,
         [this](EventCustom* event) {
             switch (*(int*)event->getUserData()) {
-                case 15:
-                    this->_maxSpawn = 2;
-                    this->spawnPenguin();
-                    this->spawnPenguin();
+                case 100: this->_maxSpawn = 2; break;
+                case 80: this->_maxSpawn = 3; break;
+                case 60: this->_maxSpawn = 4; break;
+                case 2: this->_maxSpawn = 0; break;
+                case 0: // Game end
+                    if (this->_gameOver) return;
+                    for (int i = 0; i < 4; i++) {
+                        this->_penguins[i]->waddleOut();
+                    }
+                    this->_gameOver = true;
                     break;
 
-                case 30:
-                    this->_maxSpawn = 3;
-                    this->spawnPenguin();
-                    this->spawnPenguin();
-                    this->spawnPenguin();
-                    break;
-
-                case 45:
-                    this->_maxSpawn = 4;
-                    this->spawnPenguin();
-                    this->spawnPenguin();
-                    this->spawnPenguin();
-                    this->spawnPenguin();
-                    break;
-
-                default: break;
+                default: return;
             }
+
+            for (int i = 0; i < this->_maxSpawn; i++) this->spawnPenguin();
     });
 
     spawnPenguin();
-    spawnPenguin();
+
+    return true;
 }

@@ -4,12 +4,13 @@
 #include <queue>
 #include <unordered_set>
 #include "cocos2d.h"
+#include "IReset.h"
 #include "Penguin.h"
 
 /**
  * Handles spawning penguins at the top of the screen
  */
-class PenguinSpawner : public cocos2d::Node {
+class PenguinSpawner : public cocos2d::Node, public IReset {
 public:
     PenguinSpawner();
 
@@ -19,22 +20,21 @@ public:
 
     void spawnPenguin();
 
-    /**
-     * Action dispatcher for spawned penguin. Tells penguin when to waddle in
-     * or waddle out.
-     * @param penguin : penguin to be dispatched
-     * @param slot : spawn slot where the penguin was spawned
-     */
-    //void penguinDispatcher(Penguin* penguin, int slot);
+    virtual void reset();
 
-    virtual void onEnter() override;
+    virtual bool init() override;
 
 private:
+    bool _gameOver;
+
     /* Maximum number of spawned penguins */
     int _maxSpawn;
 
-    /* Stores penguins that are not dispatched */
-    std::queue<Penguin*>* _penguins;
+    /* Array of all the penguins */
+    Penguin** _penguins;
+
+    /* Stores penguins that are waiting to be dispatched */
+    std::queue<Penguin*>* _penguinQueue;
 
     /* Stores the slots that are not being used */
     std::unordered_set<int>* _spawnSlots;

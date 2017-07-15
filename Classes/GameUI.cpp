@@ -6,16 +6,10 @@
 using namespace cocos2d;
 using namespace std;
 
-GameUI* GameUI::_instance = nullptr;
-
-GameUI* GameUI::getInstance() {
-    if (!_instance) _instance = GameUI::create();
-    return _instance;
-}
-
 void GameUI::incrementTime(float delta) {
     auto timerDisplay = (Label*)getChildByName("timer_display");
-    timerDisplay->setString(to_string(++_time));
+    if (--_time < 0) return;
+    timerDisplay->setString(to_string(_time));
     getEventDispatcher()->dispatchCustomEvent(TIMER_TICK, (void*)&_time);
 }
 
@@ -70,16 +64,26 @@ void GameUI::updateScore(int points) {
     ((Label*)getChildByName("score_display"))->setString(to_string(_score));
 }
 
+void GameUI::reset() {
+    _score = 0;
+    getChildByName<Label*>("score_display")->setString("0");
+
+    _time = 120;
+    unschedule(SEL_SCHEDULE(&GameUI::incrementTime));
+    getChildByName<Label*>("timer_display")->setString("120");
+    schedule(SEL_SCHEDULE(&GameUI::incrementTime), 1.0f);
+}
+
 bool GameUI::init() {
     if (!Layer::init()) return false;
 
     // Background and border
-    Color4B iceBlue(0xd4, 0xf0, 0xff, 0xff);
-    Color4B oceanBlue(0, 0x77, 0xbe, 0xff);
-    auto bgAndBorder = DrawNode::create();
-    bgAndBorder->drawSolidRect(Vec2(0, 0), Vec2(320, 640), Color4F(oceanBlue));
-    bgAndBorder->drawSolidRect(Vec2(16, 16), Vec2(304, 624), Color4F(iceBlue));
-    addChild(bgAndBorder, -2, "bgAndBorder");
+    Color4B green(0x0, 0xaa, 0x61, 0xff);
+    Color4B lightGreen(0x6f, 0xff, 0x79, 0xff);
+    auto bg = DrawNode::create();
+    bg->drawSolidRect(Vec2(0, 0), Vec2(320, 640), Color4F(green));
+    bg->drawSolidRect(Vec2(20, 20), Vec2(300, 620), Color4F(lightGreen));
+    addChild(bg, -2, "bg");
 
     // Lambda for creating labels to remove reptitive code 
     auto createLabel = [this](string text, float size, Vec2 position,
@@ -92,9 +96,9 @@ bool GameUI::init() {
         this->addChild(label, 0, name);
     };
 
-    _time = 0;
+    _time = 120;
     createLabel("TIME", 40.0f, Vec2(24, 588), "timer_label");
-    createLabel("0", 40.0f, Vec2(24, 560), "timer_display");
+    createLabel("120", 40.0f, Vec2(24, 560), "timer_display");
 
     _score = 0;
     createLabel("SCORE", 40.0f, Vec2(24, 504), "score_label");
@@ -106,20 +110,53 @@ bool GameUI::init() {
 
     // Fish reserve display and count
     addChild([]()->Sprite* {
-        auto fishReserve = Sprite::create("img/fish_reserve.png");
+        auto fishReserve = Sprite::createWithSpriteFrameName("img/fish_r.png");
+        fishReserve->setFlippedY(true);
+        fishReserve->setRotation(90.0f);
         fishReserve->setAnchorPoint(Vec2(0, 0));
-        fishReserve->setPosition(24, 272);
+        fishReserve->setPosition(24, 336);
         return fishReserve;
     }());
     createLabel("0", 40.0f, Vec2(88, 284), "fish_display");
 
+    // Ice cream reserve display and count
     addChild([]()->Sprite* {
-        auto iceCreamReserve = Sprite::create("img/ice_cream_reserve.png");
+        auto iceCreamReserve = Sprite::createWithSpriteFrameName(
+            "img/ice_cream_r.png");
         iceCreamReserve->setAnchorPoint(Vec2(0, 0));
         iceCreamReserve->setPosition(24, 208);
         return iceCreamReserve;
     }());
     createLabel("0", 40.0f, Vec2(88, 220), "ice_cream_display");
+
+    // Reset button
+    auto resetButton = ui::Button::create();
+    resetButton->setContentSize(Size(320, 128));
+    resetButton->loadTextures("img/reset_up.png", "img/reset_down.png",
+        "img/reset_disable.png", ui::Widget::TextureResType::PLIST);
+    resetButton->setScale(0.5f);
+    resetButton->setAnchorPoint(Vec2(0, 0));
+    resetButton->setPosition(Vec2(80, 32));
+    resetButton->addClickEventListener([this](Ref* ref) {
+        auto resettableParent = dynamic_cast<IReset*>(this->getParent());
+        if (resettableParent) resettableParent->reset();
+    });
+    addChild(resetButton);
+
+    // Menu button
+    auto menuButton = ui::Button::create();
+    menuButton->setContentSize(Size(320, 128));
+    menuButton->loadTextures("img/menu_up.png", "img/menu_down.png",
+        "img/menu_disable.png", ui::Widget::TextureResType::PLIST);
+    menuButton->setScale(0.5f);
+    menuButton->setAnchorPoint(Vec2(0, 0));
+    menuButton->setPosition(Vec2(80, 112));
+    menuButton->addClickEventListener([](Ref* ref) {
+        Director::getInstance()->popScene();
+    });
+    //menuButton->setBright(false);
+    //menuButton->setTouchEnabled(false);
+    addChild(menuButton);
 
     // Timer increment
     schedule(SEL_SCHEDULE(&GameUI::incrementTime), 1.0f);

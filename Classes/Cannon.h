@@ -4,16 +4,17 @@
 #include "cocos2d.h"
 #include "HelperPenguin.h"
 #include "IAnimated.h"
+#include "IReset.h"
 #include "Projectile.h"
 
 /**
  * Cannon that shoots fish and ice cream
  */
-class Cannon : public cocos2d::Node, public IAnimated {
+class Cannon : public cocos2d::Node, public IAnimated, public IReset {
 public:
-    CREATE_FUNC(Cannon);
+    Cannon();
 
-    static Cannon* getInstance();
+    CREATE_FUNC(Cannon);
 
     inline bool isEnabled() { return _enabled; };
 
@@ -22,6 +23,9 @@ public:
     * the amount of projectiles.
     */
     void updateUI();
+
+    /* Resets cannon to original state */
+    virtual void reset();
 
     /* Called right after node is created */
     virtual bool init() override;
@@ -37,10 +41,6 @@ public:
     void onMouseMove(cocos2d::EventMouse* event);
 
 protected:
-    Cannon();
-
-    static Cannon* _instance;
-
     /* Determines whether cannon can shoot or not */
     bool _enabled;
 

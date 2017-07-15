@@ -2,13 +2,13 @@
 #define __COOL_PENGUIN_H__
 
 #include "cocos2d.h"
-#include "Cannon.h"
 #include "IContact.h"
+#include "IReset.h"
 
 /**
- * Main game
+ * Main game.
  */
-class CoolPenguin : public cocos2d::Layer, public IContact {
+class CoolPenguin : public cocos2d::Layer, public IContact, public IReset {
 public:
     static cocos2d::Scene* createScene();
 
@@ -16,15 +16,16 @@ public:
 
     CREATE_FUNC(CoolPenguin);
 
+    virtual void reset();
+
     /* Called once when this object enters the running game */
+    virtual bool init() override;
+
     virtual void onEnter() override;
 
     /* Called when a key is pressed */
     virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, 
         cocos2d::Event* event) override;
-
-    /* Called when the mouse is moved */
-    void onMouseMove(cocos2d::EventMouse* event);
 
     /**
      * Called when two objects begin contact. Return true to process collision,

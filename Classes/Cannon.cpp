@@ -9,23 +9,29 @@ using namespace cocos2d;
 using namespace CocosDenshion;
 using namespace std;
 
-Cannon* Cannon::_instance = nullptr;
-
-Cannon* Cannon::getInstance() {
-    if (!_instance) _instance = (Cannon*)CSLoader::createNode("csb/cannon.csb");
-    return _instance;
+Cannon::Cannon() : IAnimated("csb/cannon.csb"), _enabled(true), _fishShot(0), 
+    _fishReserve(10), _iceCreamReserve(10), _iceCreamShot(0) {
 }
 
-Cannon::Cannon() : IAnimated("csb/cannon.csb"), _enabled(true), _fishShot(0), 
-    _fishReserve(10), _iceCreamReserve(10), _iceCreamShot(0) {}
-
 void Cannon::updateUI() {
-    GameUI::getInstance()->updateCannonStats(_fishShot, _iceCreamShot,
-        _fishReserve, _iceCreamReserve);
+    getParent()->getChildByName<GameUI*>("ui")->updateCannonStats(_fishShot, 
+        _iceCreamShot, _fishReserve, _iceCreamReserve);
+}
+
+void Cannon::reset() {
+    stopAllActions();
+    getChildByName("peng_clean")->setVisible(false);
+    _enabled = true;
+    _fishShot = 0;
+    _fishReserve = 10;
+    _iceCreamShot = 0;
+    _iceCreamReserve = 10;
+    updateUI();
 }
 
 bool Cannon::init() {
     if (!Node::init()) return false;
+    
     SimpleAudioEngine::getInstance()->preloadEffect("sfx/cannon_shoot.wav");
 
     _timeline->setAnimationEndCallFunc("shoot", [this]() {
@@ -35,9 +41,11 @@ bool Cannon::init() {
         _enabled = abs(_fishShot - _iceCreamShot) < 10;
     });
 
+    // Sets callback for clean animation
     _timeline->setAnimationEndCallFunc("clean", CC_CALLBACK_0(Cannon::clean, 
         this));
 
+    // Creates a listener for helper penguin events
     getEventDispatcher()->addCustomEventListener(HELPER_EVENT, CC_CALLBACK_1(
         Cannon::helperEventCallback, this));
 
@@ -54,24 +62,25 @@ void Cannon::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     switch (keyCode) {
         case EventKeyboard::KeyCode::KEY_J:
         case EventKeyboard::KeyCode::KEY_A:
-            shoot(Projectile::ProjectileType::FISH);
+            shoot(Projectile::ProjectileType::FISH); // shoot fish
             break;
 
         case EventKeyboard::KeyCode::KEY_K:
         case EventKeyboard::KeyCode::KEY_S:
-            shoot(Projectile::ProjectileType::ICECREAM);
+            shoot(Projectile::ProjectileType::ICECREAM); // shoot ice cream
             break;
 
         case EventKeyboard::KeyCode::KEY_SEMICOLON:
         case EventKeyboard::KeyCode::KEY_F:
             if (_fishReserve == 10 && _iceCreamReserve == 10) break;
-            HelperPenguin::getInstance()->gather(Vec2(getPositionX() + 64, 
-                getPositionY()));
+            getParent()->getChildByName<HelperPenguin*>("helper")->gather(
+                Vec2(getPositionX() + 64, getPositionY())); // gather reserve
             break;
 
         case EventKeyboard::KeyCode::KEY_D:
         case EventKeyboard::KeyCode::KEY_L:
-            HelperPenguin::getInstance()->cleanCannon(getPosition());
+            getParent()->getChildByName<HelperPenguin*>("helper")->cleanCannon(
+                getPosition()); // clean
             break;
 
         default: break;
@@ -89,7 +98,8 @@ void Cannon::clean() {
     _enabled = true;
     updateUI();
     getChildByName("peng_clean")->setVisible(false);
-    HelperPenguin::getInstance()->returnFromClean(getPosition());
+    getParent()->getChildByName<HelperPenguin*>("helper")->returnFromClean(
+        getPosition());
 }
 
 void Cannon::helperEventCallback(EventCustom* event) {
@@ -174,7 +184,7 @@ void Cannon::shoot(Projectile::ProjectileType projType) {
 
     // Shoots projectile
     proj->launch(getRotation(), getPosition());
-    getParent()->addChild(proj, -1);
+    getParent()->addChild(proj);
 
     // Cannon effects
     SimpleAudioEngine::getInstance()->playEffect("sfx/cannon_shoot.wav");
