@@ -31,7 +31,7 @@ void Cannon::reset() {
 
 bool Cannon::init() {
     if (!Node::init()) return false;
-    CCLOG("cannon init");
+    
     SimpleAudioEngine::getInstance()->preloadEffect("sfx/cannon_shoot.wav");
 
     _timeline->setAnimationEndCallFunc("shoot", [this]() {

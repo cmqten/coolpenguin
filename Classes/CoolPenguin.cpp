@@ -29,7 +29,6 @@ void CoolPenguin::reset() {
 
 bool CoolPenguin::init() {
     if (!Layer::init()) return false;
-    CCLOG("game init");
 
     // white background
     auto bg = LayerColor::create(Color4B::WHITE, 640, 640);
@@ -46,7 +45,7 @@ bool CoolPenguin::init() {
     auto ui = GameUI::create();
     ui->setAnchorPoint(Vec2(0, 0));
     ui->setPosition(0, 0);
-    addChild(ui, 0, "ui");
+    addChild(ui, 1, "ui");
 
     // spawner
     auto spawner = PenguinSpawner::create();
