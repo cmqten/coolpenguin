@@ -10,6 +10,9 @@ public:
     CREATE_FUNC(HelpScreen);
 
     virtual void onEnter() override;
+
+private:
+    float _scroll;
 };
 
 #endif
