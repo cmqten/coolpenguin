@@ -19,3 +19,4 @@ CMakeCache.txt
 .idea/
 cmake-build-debug/
 cmake-build-release/
+*.zip

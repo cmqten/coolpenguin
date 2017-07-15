@@ -141,7 +141,7 @@ bool PenguinSpawner::init() {
                 case 0: // Game end
                     if (this->_gameOver) return;
                     for (int i = 0; i < 4; i++) {
-                        this->_penguins[i]->waddleOut();
+                        this->_penguins[i]->waddleOut(false);
                     }
                     this->_gameOver = true;
                     break;
