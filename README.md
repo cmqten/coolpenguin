@@ -17,3 +17,15 @@ These penguins are stuck in a lifeless plain and they want fish and ice cream. T
 - [luid101](https://github.com/Luid101) for the penguin sprites
 
 - [backpacker.gr](http://backpacker.gr/) for the pixel typeface
+
+## Todo
+
+- Background music
+
+- Score screen at the end 
+
+- Difficulty option
+
+- Credits, link to repo
+
+- Easter eggs
